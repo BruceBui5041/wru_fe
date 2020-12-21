@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wru_fe/api.dart';
 import 'package:wru_fe/dto/response.dto.dart';
@@ -35,6 +34,7 @@ class UserRepository {
   Future<bool> isValidAccessToken() async {
     try {
       final accessToken = await getStoredAccessToken();
+      if (accessToken == null) return false;
       final res = await postRequest(
         url: VERIFY_TOKEN,
         body: {},
