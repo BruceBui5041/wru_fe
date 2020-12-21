@@ -1,0 +1,28 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "WRU-Dev",
+			"type": "dart",
+			"request": "launch",
+			"args": [
+				"--dart-define",
+				"mode=development",
+				"--dart-define",
+				"MY_OTHER_VAR=MY_OTHER_VALUE"
+			],
+			"flutterMode": "debug",
+			"program": "lib/main.dart"
+		},
+		{
+			"name": "WRU-Prod",
+			"type": "dart",
+			"request": "launch",
+			"args": [
+				"--dart-define",
+				"mode=production"
+			],
+			"program": "lib/main.dart"
+		}
+	]
+}
