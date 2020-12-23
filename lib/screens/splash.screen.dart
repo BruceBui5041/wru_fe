@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wru_fe/cubit/signin_cubit.dart';
+import 'package:wru_fe/screens/home.screen.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -14,8 +15,7 @@ class SplashScreen extends StatelessWidget {
       body: BlocListener<SignInCubit, SignInState>(
         listener: (context, state) {
           if (state is SignedIn) {
-            // TODO: Go to Home screen
-            print("Authorized");
+            Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
           } else if (state is NotSignIn) {
             Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
           }

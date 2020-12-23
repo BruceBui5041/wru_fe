@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wru_fe/cubit/signin_cubit.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/user.repository.dart';
+import 'package:wru_fe/screens/home.screen.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/screens/splash.screen.dart';
 
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
           home: SplashScreen(),
           routes: {
             SignInScreen.routeName: (_) => SignInScreen(),
+            HomeScreen.routeName: (_) => HomeScreen(),
           },
         ),
       ),

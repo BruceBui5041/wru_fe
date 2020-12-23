@@ -2,80 +2,100 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wru_fe/cubit/signin_cubit.dart';
 import 'package:wru_fe/dto/signin.dto.dart';
+import 'package:wru_fe/screens/home.screen.dart';
+import 'package:wru_fe/widgets/signup.dialog.dart';
 
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends StatelessWidget {
   static const routeName = './signin';
 
-  @override
-  _SignInScreenState createState() => _SignInScreenState();
-}
-
-class _SignInScreenState extends State<SignInScreen> {
   final _form = GlobalKey<FormState>();
-  final SignInDto _signInDto = SignInDto(username: '', password: '');
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  void _submitForm(BuildContext context) async {
-    _form.currentState.save();
-    print(_signInDto.username);
-    print(_signInDto.password);
+  void _submitForm(BuildContext context) {
+    final SignInDto signInDto = SignInDto(
+      username: _usernameController.text,
+      password: _passwordController.text,
+    );
 
-    context.read<SignInCubit>().signIn(_signInDto);
+    context.read<SignInCubit>().signIn(signInDto);
+  }
+
+  void _onOpenSignUpDialog(BuildContext context) {
+    showDialog<Null>(
+      context: context,
+      builder: (ctx) => SignUpDialog(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Login"),
-      ),
       body: Container(
         child: BlocConsumer<SignInCubit, SignInState>(
           listener: (context, state) {
             if (state is SignedIn) {
-              // TODO: Go to Home pay
+              Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
             } else if (state is SignInFail) {
               // TODO: state.message is an array of error
+              print(state.message);
             }
           },
           builder: (context, state) {
             return Form(
               key: _form,
-              child: Column(
-                children: [
-                  TextFormField(
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                      labelText: "Email",
-                    ),
-                    onSaved: (newValue) {
-                      setState(() {
-                        _signInDto.username = newValue;
-                      });
-                    },
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: new BoxConstraints(
+                    minHeight: 200,
+                    maxHeight: 300,
                   ),
-                  TextFormField(
-                    textInputAction: TextInputAction.done,
-                    // TODO: Find a way get user's input but not **** characters with obscureText: true
-                    // obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Password",
+                  child: Container(
+                    height: 250,
+                    margin: const EdgeInsets.only(left: 15, right: 15),
+                    padding: const EdgeInsets.only(left: 5, right: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.amberAccent,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
                     ),
-                    onFieldSubmitted: (_) {
-                      _submitForm(context);
-                    },
-                    onSaved: (newValue) {
-                      setState(() {
-                        _signInDto.password = newValue;
-                      });
-                    },
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          textInputAction: TextInputAction.next,
+                          controller: _usernameController,
+                          decoration: InputDecoration(
+                            labelText: "Email",
+                          ),
+                        ),
+                        TextFormField(
+                          textInputAction: TextInputAction.done,
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: "Password",
+                          ),
+                          onFieldSubmitted: (_) {
+                            _submitForm(context);
+                          },
+                        ),
+                        FlatButton(
+                          child: Text("Login"),
+                          onPressed: () {
+                            _submitForm(context);
+                          },
+                        ),
+                        FlatButton(
+                          child: Text("Sign Up"),
+                          onPressed: () {
+                            _onOpenSignUpDialog(context);
+                          },
+                        )
+                      ],
+                    ),
                   ),
-                  FlatButton(
-                    child: Text("Login"),
-                    onPressed: () {
-                      _submitForm(context);
-                    },
-                  )
-                ],
+                ),
               ),
             );
           },

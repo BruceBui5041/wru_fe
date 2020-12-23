@@ -10,10 +10,23 @@ final SIGNIN_API = API_URL + '/auth/signin';
 // ignore: non_constant_identifier_names
 final VERIFY_TOKEN = API_URL + '/auth/verify_token';
 
+Future<http.Response> publicPostRequest({
+  @required String url,
+  @required Map<String, dynamic> body,
+}) {
+  return http.post(
+    url,
+    headers: {
+      "Content-Type": 'application/json',
+    },
+    body: json.encode(body),
+  );
+}
+
 Future<http.Response> postRequest({
   @required String url,
   @required Map<String, dynamic> body,
-  String jwtToken = "",
+  @required String jwtToken,
 }) {
   return http.post(
     url,
