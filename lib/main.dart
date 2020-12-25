@@ -29,9 +29,24 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'WRU-Dev',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            cardTheme: CardTheme(color: Colors.blueGrey[700]),
+            accentIconTheme: IconThemeData(color: Colors.yellow[700]),
+            accentColor: Colors.yellow[700],
+            backgroundColor: Colors.grey[900],
+            buttonColor: Colors.yellow[700],
+            // buttonTheme: ButtonThemeData(
+            //   shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(20.0)),
+            //   buttonColor: Colors.yellow[900],
+            // ),
+            textTheme: TextTheme(
+              button: TextStyle(color: Colors.grey[900]),
+              headline1: TextStyle(color: Colors.yellow[700]),
+              headline4: TextStyle(color: Colors.yellow[700]),
+            ),
           ),
           home: SplashScreen(),
           routes: {
