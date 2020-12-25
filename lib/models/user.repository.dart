@@ -11,7 +11,7 @@ enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 class UserRepository {
   Future<ResponseDto> callSignInApi(SignInDto signInDto) async {
     try {
-      final res = await postRequest(
+      final res = await publicPostRequest(
         url: SIGNIN_API,
         body: {
           'username': signInDto.username,
@@ -42,9 +42,7 @@ class UserRepository {
       );
 
       final resJSON = json.decode(res.body) as Map<String, dynamic>;
-      if (resJSON['statusCode'] != null &&
-          int.parse(resJSON['statusCode']) == HttpStatus.unauthorized)
-        return false;
+      if (resJSON['statusCode'] == HttpStatus.unauthorized) return false;
       return true;
     } catch (err) {
       throw err;

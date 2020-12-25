@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:wru_fe/cubit/signin_cubit.dart';
 import 'package:wru_fe/dto/signin.dto.dart';
+import 'package:wru_fe/screens/home.screen.dart';
+import 'package:wru_fe/widgets/signup.dialog.dart';
 
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends StatelessWidget {
   static const routeName = './signin';
 
-  @override
-  _SignInScreenState createState() => _SignInScreenState();
-}
-
-class _SignInScreenState extends State<SignInScreen> {
   final _form = GlobalKey<FormState>();
-  final SignInDto _signInDto = SignInDto(username: '', password: '');
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  void _submitForm(BuildContext context) async {
-    _form.currentState.save();
-    print("username : " + _signInDto.username);
-    print("password : " + _signInDto.password);
+  void _submitForm(BuildContext context) {
+    final SignInDto signInDto = SignInDto(
+      username: _usernameController.text,
+      password: _passwordController.text,
+    );
 
-    context.read<SignInCubit>().signIn(_signInDto);
+    context.read<SignInCubit>().signIn(signInDto);
+  }
+
+  void _onOpenSignUpDialog(BuildContext context) {
+    showDialog<Null>(
+      context: context,
+      builder: (ctx) => SignUpDialog(),
+    );
   }
 
   @override
@@ -35,9 +40,10 @@ class _SignInScreenState extends State<SignInScreen> {
               child: BlocConsumer<SignInCubit, SignInState>(
                 listener: (context, state) {
                   if (state is SignedIn) {
-                    // TODO: Go to Home pay
+                    Navigator.of(context)
+                        .pushReplacementNamed(HomeScreen.routeName);
                   } else if (state is SignInFail) {
-                    // TODO: state.message is an array of error
+                    print(state.message);
                   }
                 },
                 builder: (context, state) {
@@ -116,6 +122,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                         height: 50.0,
                                       ),
                                       TextFormField(
+                                        controller: _usernameController,
                                         style: TextStyle(
                                             color: Theme.of(context)
                                                 .textTheme
@@ -137,20 +144,15 @@ class _SignInScreenState extends State<SignInScreen> {
                                           ),
                                           labelText: "Email",
                                         ),
-                                        onSaved: (newValue) {
-                                          setState(() {
-                                            _signInDto.username = newValue;
-                                          });
-                                        },
                                       ),
                                       TextFormField(
+                                        controller: _passwordController,
                                         style: TextStyle(
                                             color: Theme.of(context)
                                                 .textTheme
                                                 .headline4
                                                 .color),
                                         textInputAction: TextInputAction.done,
-                                        // TODO: Find a way get user's input but not **** characters with obscureText: true
                                         obscureText: true,
                                         decoration: InputDecoration(
                                           labelText: "Password",
@@ -169,12 +171,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                         ),
                                         onFieldSubmitted: (_) {
                                           _submitForm(context);
-                                        },
-                                        onSaved: (newValue) {
-                                          setState(() {
-                                            print("pass : " + newValue);
-                                            _signInDto.password = newValue;
-                                          });
                                         },
                                       ),
                                       SizedBox(
@@ -198,6 +194,26 @@ class _SignInScreenState extends State<SignInScreen> {
                                         minWidth: double.infinity,
                                         onPressed: () {
                                           _submitForm(context);
+                                        },
+                                      ),
+                                      FlatButton(
+                                        color: Theme.of(context).buttonColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        child: Text(
+                                          "Sign up",
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .button
+                                                  .color,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        minWidth: double.infinity,
+                                        onPressed: () {
+                                          _onOpenSignUpDialog(context);
                                         },
                                       )
                                     ],
