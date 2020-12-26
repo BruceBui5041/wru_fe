@@ -1,6 +1,33 @@
 part of 'signup_cubit.dart';
 
 @immutable
-abstract class SignupState {}
+abstract class SignUpState {
+  const SignUpState();
+}
 
-class SignupInitial extends SignupState {}
+class SignUpInitial extends SignUpState {
+  const SignUpInitial();
+}
+
+class SigningUp extends SignUpState {
+  const SigningUp();
+}
+
+class SignUpSuccessful extends SignUpState {
+  const SignUpSuccessful();
+}
+
+class SignUpFail extends SignUpState {
+  final String message;
+  const SignUpFail(this.message);
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is SignUpFail && o.message == message;
+  }
+
+  @override
+  int get hashCode => message.hashCode;
+}
