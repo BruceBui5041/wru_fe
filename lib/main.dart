@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wru_fe/cubit/signin_cubit.dart';
+import 'package:wru_fe/cubit/signup_cubit.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/auth.repository.dart';
 import 'package:wru_fe/screens/home.screen.dart';
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider<SignInCubit>(
             create: (BuildContext context) => SignInCubit(_authRepository),
+          ),
+          BlocProvider<SignUpCubit>(
+            create: (BuildContext context) => SignUpCubit(_authRepository),
           ),
         ],
         child: MaterialApp(

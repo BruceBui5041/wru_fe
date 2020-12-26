@@ -18,7 +18,10 @@ class SignInCubit extends Cubit<SignInState> {
     emit(SigningIn());
     final resDto = await _authRepository.callSignInApi(signInDto);
     if (resDto.error != null) {
-      emit(SignInFail(resDto.message.toString()));
+      emit(SignInFail(
+        message: resDto.message.toString(),
+        error: resDto.error.toString(),
+      ));
       return;
     }
 

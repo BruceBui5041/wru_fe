@@ -19,7 +19,8 @@ class SignUpSuccessful extends SignUpState {
 
 class SignUpFail extends SignUpState {
   final String message;
-  const SignUpFail(this.message);
+  final String error;
+  const SignUpFail({this.message, this.error});
 
   @override
   bool operator ==(Object o) {

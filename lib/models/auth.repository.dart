@@ -40,6 +40,7 @@ class AuthRepository {
         body: {
           'username': signUpDto.username,
           'password': signUpDto.password,
+          'confirmPassword': signUpDto.confirmPassword,
         },
       );
 
