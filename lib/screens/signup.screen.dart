@@ -38,7 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 50.0,
+                    height: 20.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0, right: 20.0),
@@ -160,6 +160,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ],
                     ),
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        child: Image.asset('assets/images/facebook.png'),
+                      ),
+                      SizedBox(
+                        width: 50,
+                      ),
+                      Container(
+                        width: 50,
+                        height: 50,
+                        child: Image.asset('assets/images/google.png'),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),

@@ -14,20 +14,7 @@ class NotSignIn extends SignInState {
 }
 
 class SigningIn extends SignInState {
-  final SignInDto signInDto;
-  const SigningIn(this.signInDto);
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is SigningIn &&
-        o.signInDto.username == signInDto.username &&
-        o.signInDto.password == signInDto.password;
-  }
-
-  @override
-  int get hashCode => signInDto.hashCode;
+  const SigningIn();
 }
 
 class SignedIn extends SignInState {

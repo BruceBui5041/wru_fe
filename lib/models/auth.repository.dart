@@ -6,9 +6,11 @@ import 'package:wru_fe/dto/response.dto.dart';
 import 'package:wru_fe/dto/signin.dto.dart';
 import 'dart:convert';
 
+import 'package:wru_fe/dto/signup.dto.dart';
+
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
-class UserRepository {
+class AuthRepository {
   Future<ResponseDto> callSignInApi(SignInDto signInDto) async {
     try {
       final res = await publicPostRequest(
@@ -16,6 +18,28 @@ class UserRepository {
         body: {
           'username': signInDto.username,
           'password': signInDto.password,
+        },
+      );
+
+      final resJSON = json.decode(res.body) as Map<String, dynamic>;
+
+      return ResponseDto(
+        error: resJSON['error'],
+        message: resJSON['message'],
+        result: resJSON['accessToken'] as String,
+      );
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<ResponseDto> callSignUpApi(SignUpDto signUpDto) async {
+    try {
+      final res = await publicPostRequest(
+        url: SIGNUP_API,
+        body: {
+          'username': signUpDto.username,
+          'password': signUpDto.password,
         },
       );
 

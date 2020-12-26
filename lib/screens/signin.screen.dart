@@ -64,7 +64,7 @@ class SignInScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            height: 50.0,
+                            height: 20.0,
                           ),
                           Padding(
                             padding:
@@ -73,13 +73,11 @@ class SignInScreen extends StatelessWidget {
                               child: Card(
                                 color: Theme.of(context).cardTheme.color,
                                 elevation: 6,
-                                // margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    // color: Colors.white,
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: Padding(
@@ -105,15 +103,6 @@ class SignInScreen extends StatelessWidget {
                                           SizedBox(
                                             height: 5.0,
                                           ),
-                                          // Container(
-                                          //   decoration: BoxDecoration(
-                                          //     border: Border(
-                                          //       bottom: BorderSide(
-                                          //           width: 1.0,
-                                          //           color: Theme.of(context).accentColor),
-                                          //     ),
-                                          //   ),
-                                          // ),
                                           SizedBox(
                                             height: 50.0,
                                           ),
@@ -180,6 +169,27 @@ class SignInScreen extends StatelessWidget {
                                             ),
                                             child: Text(
                                               "Login",
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .button
+                                                      .color,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            minWidth: double.infinity,
+                                            onPressed: () {
+                                              _submitForm(context);
+                                            },
+                                          ),
+                                          FlatButton(
+                                            color:
+                                                Theme.of(context).buttonColor,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(0),
+                                            ),
+                                            child: Text(
+                                              "Login with guess",
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
