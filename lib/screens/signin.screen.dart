@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wru_fe/cubit/signin_cubit.dart';
 import 'package:wru_fe/dto/signin.dto.dart';
 import 'package:wru_fe/screens/home.screen.dart';
+import 'package:wru_fe/screens/home_test.screen.dart';
 import 'package:wru_fe/screens/signup.screen.dart';
+import 'package:wru_fe/widgets/form_field_custom.widget.dart';
+import 'package:wru_fe/widgets/button_long_custom.widget.dart';
 
 class SignInScreen extends StatelessWidget {
   static const routeName = './signin';
@@ -13,12 +16,14 @@ class SignInScreen extends StatelessWidget {
   final _passwordController = TextEditingController();
 
   void _submitForm(BuildContext context) {
-    final SignInDto signInDto = SignInDto(
-      username: _usernameController.text,
-      password: _passwordController.text,
-    );
+    print("asdas");
+    // final SignInDto signInDto = SignInDto(
+    //   username: _usernameController.text,
+    //   password: _passwordController.text,
+    // );
 
-    context.read<SignInCubit>().signIn(signInDto);
+    // context.read<SignInCubit>().signIn(signInDto);
+    Navigator.pushNamed(context, HomeScreen.routeName);
   }
 
   void _onOpenSignUpDialog(BuildContext context) {
@@ -50,208 +55,107 @@ class SignInScreen extends StatelessWidget {
                       }
                     },
                     builder: (context, state) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: 50,
-                              left: 0,
-                            ),
-                            child: Text(
-                              "WRU",
-                              style: Theme.of(context).textTheme.headline6,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 20.0, right: 20.0),
-                            child: Center(
-                              child: Card(
-                                color: Theme.of(context).cardTheme.color,
-                                elevation: 6,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 30.0,
-                                        left: 20.0,
-                                        bottom: 10.0,
-                                        right: 20.0),
-                                    child: Form(
-                                      key: _form,
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              top: 4,
-                                              left: 0,
-                                            ),
-                                            child: Text("Login Account",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline5),
-                                          ),
-                                          SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          SizedBox(
-                                            height: 50.0,
-                                          ),
-                                          TextFormField(
-                                            controller: _usernameController,
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .headline4
-                                                    .color),
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            decoration: InputDecoration(
-                                              labelStyle: Theme.of(context)
-                                                  .inputDecorationTheme
-                                                  .labelStyle,
-                                              suffixIcon: Icon(
-                                                Icons.email_outlined,
-                                                color: Theme.of(context)
-                                                    .accentIconTheme
-                                                    .color,
-                                              ),
-                                              labelText: "Email",
-                                            ),
-                                          ),
-                                          TextFormField(
-                                            controller: _passwordController,
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .headline4
-                                                    .color),
-                                            textInputAction:
-                                                TextInputAction.done,
-                                            obscureText: true,
-                                            decoration: InputDecoration(
-                                              labelText: "Password",
-                                              focusColor: Colors.white,
-                                              labelStyle: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .headline4
-                                                      .color),
-                                              suffixIcon: Icon(
-                                                Icons.lock_outline,
-                                                color: Theme.of(context)
-                                                    .accentIconTheme
-                                                    .color,
-                                              ),
-                                            ),
-                                            onFieldSubmitted: (_) {
-                                              _submitForm(context);
-                                            },
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                          ),
-                                          FlatButton(
-                                            color:
-                                                Theme.of(context).buttonColor,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(0),
-                                            ),
-                                            child: Text(
-                                              "Login",
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .button
-                                                      .color,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            minWidth: double.infinity,
-                                            onPressed: () {
-                                              _submitForm(context);
-                                            },
-                                          ),
-                                          FlatButton(
-                                            color:
-                                                Theme.of(context).buttonColor,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(0),
-                                            ),
-                                            child: Text(
-                                              "Login with guess",
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .button
-                                                      .color,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            minWidth: double.infinity,
-                                            onPressed: () {
-                                              _submitForm(context);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              child: Center(
+                                child: Text(
+                                  "WRU",
+                                  style: Theme.of(context).textTheme.headline6,
                                 ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 100,
-                                  height: 1,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                Text(
-                                  " OR ",
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor),
-                                ),
-                                Container(
-                                  width: 100,
-                                  height: 1,
-                                  color: Theme.of(context).primaryColor,
-                                )
-                              ],
+                            Form(
+                              key: _form,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.6,
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 20),
+                                          child: Text("Login Account",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline5),
+                                        ),
+                                        FormFieldCustomWidget(
+                                          labelText: "Email",
+                                          controller: _usernameController,
+                                          icon: Icons.email_outlined,
+                                          obscureText: false,
+                                        ),
+                                        FormFieldCustomWidget(
+                                          labelText: "Password",
+                                          controller: _passwordController,
+                                          icon: Icons.lock_outline,
+                                          obscureText: true,
+                                          onFieldSubmitted: (_) {
+                                            _submitForm(context);
+                                          },
+                                        ),
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                        ButtonLongCustomWidget(
+                                          label: "Login",
+                                          onPressed: () {},
+                                        ),
+                                        ButtonLongCustomWidget(
+                                          label: "Login with guess",
+                                          onPressed: () {
+                                            _submitForm(context);
+                                          },
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 30, vertical: 20),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 100,
+                                                height: 1,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                              Text(
+                                                " OR ",
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
+                                              ),
+                                              Container(
+                                                width: 100,
+                                                height: 1,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        ButtonLongCustomWidget(
+                                          label: "Sign up",
+                                          onPressed: () {
+                                            _onOpenSignUpDialog(context);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                          FlatButton(
-                            color: Theme.of(context).buttonColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0),
-                            ),
-                            child: Text(
-                              "Sign up",
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).textTheme.button.color,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            minWidth: 300,
-                            onPressed: () {
-                              _onOpenSignUpDialog(context);
-                            },
-                          )
-                        ],
+                          ],
+                        ),
                       );
                     },
                   ),

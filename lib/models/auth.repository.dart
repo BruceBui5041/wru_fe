@@ -1,32 +1,42 @@
 import 'dart:io';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wru_fe/api.dart';
+import 'package:wru_fe/api/api.dart';
 import 'package:wru_fe/dto/response.dto.dart';
 import 'package:wru_fe/dto/signin.dto.dart';
 import 'dart:convert';
 
 import 'package:wru_fe/dto/signup.dto.dart';
 
+import '../utils.dart';
+
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthRepository {
+  static const tokenKey = 'accessToken';
+  static const messageKey = 'message';
+  static const errorKey = 'error';
+  static const usernameKey = 'username';
+  static const passwordKey = 'password';
+  static const confirmPassworkKey = 'confirmPassword';
+  static const statusCodeKey = 'statusCode';
+
   Future<ResponseDto> callSignInApi(SignInDto signInDto) async {
     try {
       final res = await publicPostRequest(
         url: SIGNIN_API,
         body: {
-          'username': signInDto.username,
-          'password': signInDto.password,
+          usernameKey: signInDto.username,
+          passwordKey: signInDto.password,
         },
       );
 
       final resJSON = json.decode(res.body) as Map<String, dynamic>;
 
       return ResponseDto(
-        error: resJSON['error'],
-        message: resJSON['message'],
-        result: resJSON['accessToken'] as String,
+        errorCode: resJSON[errorKey],
+        message: resJSON[messageKey],
+        result: resJSON[tokenKey] as String,
       );
     } catch (err) {
       throw err;
@@ -38,17 +48,18 @@ class AuthRepository {
       final res = await publicPostRequest(
         url: SIGNUP_API,
         body: {
-          'username': signUpDto.username,
-          'password': signUpDto.password,
+          usernameKey: signUpDto.username,
+          passwordKey: signUpDto.password,
+          confirmPassworkKey: signUpDto.confirmPassword,
         },
       );
 
       final resJSON = json.decode(res.body) as Map<String, dynamic>;
 
       return ResponseDto(
-        error: resJSON['error'],
-        message: resJSON['message'],
-        result: resJSON['accessToken'] as String,
+        errorCode: resJSON[errorKey],
+        message: resJSON[messageKey],
+        result: resJSON[tokenKey] as String,
       );
     } catch (err) {
       throw err;
@@ -66,7 +77,7 @@ class AuthRepository {
       );
 
       final resJSON = json.decode(res.body) as Map<String, dynamic>;
-      if (resJSON['statusCode'] == HttpStatus.unauthorized) return false;
+      if (resJSON[statusCodeKey] == HttpStatus.unauthorized) return false;
       return true;
     } catch (err) {
       throw err;
@@ -74,13 +85,11 @@ class AuthRepository {
   }
 
   Future<String> getStoredAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('accessToken');
+    return getValueFromSharePreference(tokenKey);
   }
 
   Future<void> saveAccessToken(String accessToken) async {
     assert(accessToken.isEmpty == false);
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('accessToken', accessToken);
+    setValueToSharePreference(tokenKey, accessToken);
   }
 }

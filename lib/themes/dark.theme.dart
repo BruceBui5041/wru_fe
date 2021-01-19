@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:wru_fe/styles/style.dart' as style;
 
 class DarkTheme {
-  static var themeDark = ThemeData(
+  static Color colorMain = Colors.blue[600];
+
+  static var themeLight = ThemeData(
     inputDecorationTheme: InputDecorationTheme(
-      labelStyle: TextStyle(color: Colors.yellow[700]),
+      labelStyle: TextStyle(color: colorMain),
     ),
-    cardTheme: style.Style.backgroundCardColor,
-    accentIconTheme: style.Style.iconTheme,
-    backgroundColor: style.Style.backgroundColor,
-    buttonColor: style.Style.buttonColor,
-    primaryColor: style.Style.textColor,
+    cardTheme: CardTheme(color: Colors.blueGrey[700]),
+    accentIconTheme: IconThemeData(color: colorMain),
+    backgroundColor: Colors.white,
+    buttonColor: colorMain,
+    primaryColor: colorMain,
     buttonTheme: ButtonThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      buttonColor: Colors.yellow[900],
-      hoverColor: Colors.yellow[700],
+      buttonColor: colorMain,
+      hoverColor: colorMain,
     ),
     textTheme: TextTheme(
-      button: style.Style.buttonBgColor,
-      headline4: style.Style.textBody,
-      headline5: style.Style.textHeader,
-      headline6: style.Style.textLogo,
+      button: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+      headline4: TextStyle(color: colorMain, fontSize: 16),
+      headline5: TextStyle(
+          color: colorMain, fontSize: 30, fontWeight: FontWeight.bold),
+      headline6: TextStyle(color: colorMain, fontSize: 60),
     ),
   );
 }

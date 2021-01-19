@@ -23,7 +23,9 @@ class SignedIn extends SignInState {
 
 class SignInFail extends SignInState {
   final String message;
-  const SignInFail(this.message);
+  final String error;
+
+  const SignInFail({this.message, this.error});
 
   @override
   bool operator ==(Object o) {
