@@ -13,10 +13,10 @@ class SignUpCubit extends Cubit<SignUpState> {
   Future<void> signUp(SignUpDto signUpDto) async {
     emit(SigningUp());
     final resDto = await _authRepository.callSignUpApi(signUpDto);
-    if (resDto.error != null) {
+    if (resDto.errorCode != null) {
       emit(SignUpFail(
         message: resDto.message.toString(),
-        error: resDto.error.toString(),
+        error: resDto.errorCode.toString(),
       ));
       return;
     }

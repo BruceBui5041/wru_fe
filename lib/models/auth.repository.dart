@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wru_fe/api.dart';
+import 'package:wru_fe/api/api.dart';
 import 'package:wru_fe/dto/response.dto.dart';
 import 'package:wru_fe/dto/signin.dto.dart';
 import 'dart:convert';
 
 import 'package:wru_fe/dto/signup.dto.dart';
+
+import '../utils.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -32,7 +34,7 @@ class AuthRepository {
       final resJSON = json.decode(res.body) as Map<String, dynamic>;
 
       return ResponseDto(
-        error: resJSON[errorKey],
+        errorCode: resJSON[errorKey],
         message: resJSON[messageKey],
         result: resJSON[tokenKey] as String,
       );
@@ -55,7 +57,7 @@ class AuthRepository {
       final resJSON = json.decode(res.body) as Map<String, dynamic>;
 
       return ResponseDto(
-        error: resJSON[errorKey],
+        errorCode: resJSON[errorKey],
         message: resJSON[messageKey],
         result: resJSON[tokenKey] as String,
       );
@@ -83,13 +85,11 @@ class AuthRepository {
   }
 
   Future<String> getStoredAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(tokenKey);
+    return getValueFromSharePreference(tokenKey);
   }
 
   Future<void> saveAccessToken(String accessToken) async {
     assert(accessToken.isEmpty == false);
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(tokenKey, accessToken);
+    setValueToSharePreference(tokenKey, accessToken);
   }
 }
