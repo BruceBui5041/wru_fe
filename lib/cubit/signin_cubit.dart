@@ -11,6 +11,8 @@ class SignInCubit extends Cubit<SignInState> {
   SignInCubit(this._authRepository) : super(SignInInitial()) {
     _authRepository.isValidAccessToken().then((authorizedStatus) {
       authorizedStatus ? emit(SignedIn()) : emit(NotSignIn());
+    }).catchError((error) {
+      print(error);
     });
   }
 

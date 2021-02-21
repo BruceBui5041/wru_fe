@@ -1,4 +1,4 @@
-class UserModel {
+class User {
   String uuid;
 
   String get getUuid => uuid;
@@ -20,9 +20,9 @@ class UserModel {
   set setEmail(String email) => this.email = email;
 
 //-------------------------------------------------------------
-  UserModel({this.uuid, this.username, this.email});
+  User({this.uuid, this.username, this.email});
 
-  UserModel.fromJson(Map<String, dynamic> json)
+  User.fromJson(Map<String, dynamic> json)
       : uuid = json['uuid'],
         username = json['user'],
         email = json['email'];

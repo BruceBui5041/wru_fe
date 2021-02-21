@@ -24,7 +24,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final AuthRepository _authRepository = AuthRepository();
   final GroupRepository _groupRepository =
-      GroupRepository(client: GraphQlUtil.client());
+      GroupRepository(client: GraphQLUtil.client());
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +39,7 @@ class MyApp extends StatelessWidget {
             create: (BuildContext context) => SignUpCubit(_authRepository),
           ),
           BlocProvider<GroupCubit>(
-            create: (BuildContext context) =>
-                GroupCubit(_authRepository, _groupRepository),
+            create: (BuildContext context) => GroupCubit(_groupRepository),
           ),
         ],
         child: MaterialApp(

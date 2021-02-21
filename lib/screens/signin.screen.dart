@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wru_fe/cubit/signin_cubit.dart';
 import 'package:wru_fe/dto/signin.dto.dart';
 import 'package:wru_fe/screens/home.screen.dart';
-import 'package:wru_fe/screens/home_test.screen.dart';
 import 'package:wru_fe/screens/signup.screen.dart';
 import 'package:wru_fe/widgets/form_field_custom.widget.dart';
 import 'package:wru_fe/widgets/button_long_custom.widget.dart';
@@ -16,21 +15,15 @@ class SignInScreen extends StatelessWidget {
   final _passwordController = TextEditingController();
 
   void _submitForm(BuildContext context) {
-    print("asdas");
-    // final SignInDto signInDto = SignInDto(
-    //   username: _usernameController.text,
-    //   password: _passwordController.text,
-    // );
+    final SignInDto signInDto = SignInDto(
+      username: _usernameController.text,
+      password: _passwordController.text,
+    );
 
-    // context.read<SignInCubit>().signIn(signInDto);
-    Navigator.pushNamed(context, HomeScreen.routeName);
+    context.read<SignInCubit>().signIn(signInDto);
   }
 
   void _onOpenSignUpDialog(BuildContext context) {
-    // showDialog<Null>(
-    //   context: context,
-    //   builder: (ctx) => SignUpDialog(),
-    // );
     Navigator.of(context).pushNamed(SignUpScreen.routeName);
   }
 

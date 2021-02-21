@@ -18,7 +18,6 @@ class GroupRepository {
         }
       }
       ''';
-
     /////////////////////////////////////////
 
     final QueryOptions options =
@@ -27,17 +26,18 @@ class GroupRepository {
     QueryResult result = await this.client.query(options);
     if (result.hasException) {
       return ResponseDto(
-          errorCode: result.exception.graphqlErrors[0].extensions.entries
-              .toList()[1]
-              .value['response']['statusCode'],
-          message: result.exception.graphqlErrors[0].message,
-          result: result.data);
+        errorCode: result.exception.graphqlErrors[0].extensions.entries
+            .toList()[1]
+            .value['response']['statusCode'],
+        message: result.exception.graphqlErrors[0].message,
+        result: result.data,
+      );
     }
 
     return ResponseDto(
       errorCode: "200",
       message: "Get data success!",
-      result: result.data as String,
+      result: result.data,
     );
   }
 }

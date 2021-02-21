@@ -1,6 +1,6 @@
 import 'package:wru_fe/models/user.model.dart';
 
-class GroupModel {
+class Group {
   String uuid;
 
   String get getUuid => uuid;
@@ -30,11 +30,11 @@ class GroupModel {
   set setDescription(String description) => this.description = description;
   //------------------------------------------------------------------
 
-  UserModel user;
+  User user;
 
-  UserModel get getUser => user;
+  User get getUser => user;
 
-  set setUser(UserModel user) {
+  set setUser(User user) {
     user = user;
   }
 
@@ -53,14 +53,15 @@ class GroupModel {
 
   set setCreatedAt(String createdAt) => this.createdAt = createdAt;
 
-  GroupModel(
-      {this.user,
-      this.groupName,
-      this.description,
-      this.groupImageUrl,
-      this.uuid});
+  Group({
+    this.user,
+    this.groupName,
+    this.description,
+    this.groupImageUrl,
+    this.uuid,
+  });
 
-  GroupModel.fromJson(Map<String, dynamic> json)
+  Group.fromJson(Map<String, dynamic> json)
       : groupName = json['groupName'],
         description = json['description'],
         groupImageUrl = json['groupImageUrl'],

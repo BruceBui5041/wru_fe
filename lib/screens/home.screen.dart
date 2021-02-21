@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wru_fe/cubit/group/group_cubit.dart';
-import 'package:wru_fe/cubit/signin_cubit.dart';
-import 'package:wru_fe/screens/signin.screen.dart';
+import 'package:wru_fe/screens/groups.screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "/home-screen";
@@ -12,36 +9,55 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static List<Widget> _widgetOptions = <Widget>[
+    GroupsScreen(),
+    Text(
+      'Index 1: Business',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 2: School',
+      style: optionStyle,
+    ),
+  ];
 
-    super.initState();
-    context.read<GroupCubit>().fetchGroup();
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<GroupCubit, GroupState>(
-      listener: (context, state) {
-        if (state is GroupFetchSuccess) {
-          print("sucess!");
-        } else if (state is SignedIn) {
-          Navigator.of(context).pushNamed(SignInScreen.routeName);
-        }
-      },
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text("Home"),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('WRU'),
+      ),
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.group),
+            label: 'Groups',
           ),
-          body: Container(
-            child: Center(
-              child: Text("asda"),
-            ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Jouney',
           ),
-        );
-      },
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle_outlined),
+            label: 'User',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Theme.of(context).accentIconTheme.color,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }

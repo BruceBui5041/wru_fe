@@ -13,13 +13,9 @@ class GroupFetching extends GroupState {
   const GroupFetching();
 }
 
-class GroupFetched extends GroupState {
-  final dynamic data;
-  const GroupFetched({this.data});
-}
-
 class GroupFetchSuccess extends GroupState {
-  const GroupFetchSuccess();
+  final List<Group> groups;
+  const GroupFetchSuccess({this.groups});
 }
 
 class GroupFetchFailed extends GroupState {
