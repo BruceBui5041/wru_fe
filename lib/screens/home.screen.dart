@@ -55,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).accentIconTheme.color,
         onTap: _onItemTapped,
       ),
     );

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:graphql/client.dart';
+import 'package:wru_fe/dto/create_group.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';
 
 class GroupRepository {
@@ -6,13 +9,18 @@ class GroupRepository {
 
   GroupRepository({this.client});
 
-  Future<ResponseDto> fetchGroup() async {
+  Future<ResponseDto> fetchGroup(bool own) async {
     ////////////////////////////////////////
-    const String readRepositories = r'''
-        query{
-        fetchMyGroups(fetchingOptions:{}) {
+    String readRepositories = '''
+      query {
+        fetchMyGroups(fetchingOptions: { own: $own }) {
+          uuid
           groupName
+          createdAt
+          groupImageUrl
+          description
           owner{
+            uuid
             username
           }
         }
@@ -20,10 +28,12 @@ class GroupRepository {
       ''';
     /////////////////////////////////////////
 
-    final QueryOptions options =
-        QueryOptions(documentNode: gql(readRepositories));
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(readRepositories),
+    );
 
     QueryResult result = await this.client.query(options);
+
     if (result.hasException) {
       return ResponseDto(
         errorCode: result.exception.graphqlErrors[0].extensions.entries
@@ -36,7 +46,45 @@ class GroupRepository {
 
     return ResponseDto(
       errorCode: "200",
-      message: "Get data success!",
+      result: result.data,
+    );
+  }
+
+  Future<ResponseDto> createGroup(CreateGroupDto input) async {
+    ////////////////////////////////////////
+    String readRepositories = '''
+      mutation {
+        createGroup(createGroupInput: {
+          groupName: "${input.groupName}", 
+          description: "${input.description}"
+        }){
+          groupName
+          groupImageUrl
+          description
+        }
+      }
+      ''';
+    /////////////////////////////////////////
+
+    print(readRepositories);
+    final MutationOptions options = MutationOptions(
+      documentNode: gql(readRepositories),
+    );
+
+    QueryResult result = await this.client.mutate(options);
+
+    if (result.hasException) {
+      return ResponseDto(
+        errorCode: result.exception.graphqlErrors[0].extensions.entries
+            .toList()[1]
+            .value['response']['statusCode'],
+        message: result.exception.graphqlErrors[0].message,
+        result: result.data,
+      );
+    }
+
+    return ResponseDto(
+      errorCode: "200",
       result: result.data,
     );
   }

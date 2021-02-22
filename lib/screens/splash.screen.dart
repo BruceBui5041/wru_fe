@@ -5,9 +5,7 @@ import 'package:wru_fe/screens/home.screen.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 
 class SplashScreen extends StatelessWidget {
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => SplashScreen());
-  }
+  static const routeName = "/splash-screen";
 
   @override
   Widget build(BuildContext context) {

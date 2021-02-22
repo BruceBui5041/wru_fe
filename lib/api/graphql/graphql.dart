@@ -16,6 +16,7 @@ class GraphQLUtil {
       headerKey: 'Authorization',
       getToken: () async {
         var token = await getValueFromSharePreference(AuthRepository.tokenKey);
+        print(token);
         return 'Bearer $token';
       },
     );

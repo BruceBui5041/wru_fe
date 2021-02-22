@@ -9,7 +9,6 @@ final SIGNUP_API = API_URL + '/auth/signup';
 final SIGNIN_API = API_URL + '/auth/signin';
 // ignore: non_constant_identifier_names
 final VERIFY_TOKEN = API_URL + '/auth/verify_token';
-
 // ignore: non_constant_identifier_names
 final GRAPHQL_API = API_URL + '/graphql';
 

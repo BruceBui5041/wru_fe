@@ -59,6 +59,7 @@ class Group {
     this.description,
     this.groupImageUrl,
     this.uuid,
+    this.createdAt,
   });
 
   Group.fromJson(Map<String, dynamic> json)
@@ -66,5 +67,6 @@ class Group {
         description = json['description'],
         groupImageUrl = json['groupImageUrl'],
         uuid = json['uuid'],
-        user = json['user'];
+        user = json['user'],
+        createdAt = json['createdAt'];
 }

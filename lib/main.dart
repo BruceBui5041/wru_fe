@@ -11,6 +11,7 @@ import 'package:wru_fe/models/group.repository.dart';
 import 'package:wru_fe/screens/home.screen.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/screens/signup.screen.dart';
+import 'package:wru_fe/screens/splash.screen.dart';
 import 'package:wru_fe/themes/light.theme.dart';
 
 void main() async {
@@ -46,11 +47,12 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'WRU-Dev',
           theme: LightTheme.themeLight,
-          home: SignInScreen(),
+          home: SplashScreen(),
           routes: {
             HomeScreen.routeName: (_) => HomeScreen(),
             SignInScreen.routeName: (_) => SignInScreen(),
             SignUpScreen.routeName: (_) => SignUpScreen(),
+            SplashScreen.routeName: (_) => SplashScreen()
           },
         ),
       ),

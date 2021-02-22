@@ -108,6 +108,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         labelText: "Email",
                                         controller: _usernameController,
                                         icon: Icons.email_outlined,
+                                        textInputAction: TextInputAction.next,
                                         obscureText: false,
                                       ),
                                       FormFieldCustomWidget(
@@ -115,12 +116,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         controller: _passwordController,
                                         icon: Icons.lock_outline,
                                         obscureText: true,
+                                        textInputAction: TextInputAction.next,
                                       ),
                                       FormFieldCustomWidget(
                                         labelText: "Confirm Password",
                                         controller: _confirmPasswordController,
                                         icon: Icons.lock_outline,
                                         obscureText: true,
+                                        textInputAction: TextInputAction.done,
                                         onFieldSubmitted: (_) {
                                           _submitSignUp();
                                         },

@@ -83,12 +83,14 @@ class SignInScreen extends StatelessWidget {
                                           labelText: "Email",
                                           controller: _usernameController,
                                           icon: Icons.email_outlined,
+                                          textInputAction: TextInputAction.next,
                                           obscureText: false,
                                         ),
                                         FormFieldCustomWidget(
                                           labelText: "Password",
                                           controller: _passwordController,
                                           icon: Icons.lock_outline,
+                                          textInputAction: TextInputAction.done,
                                           obscureText: true,
                                           onFieldSubmitted: (_) {
                                             _submitForm(context);
