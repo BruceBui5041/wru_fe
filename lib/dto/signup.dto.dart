@@ -3,5 +3,8 @@ class SignUpDto {
   final String password;
   final String confirmPassword;
 
-  SignUpDto({this.username, this.password, this.confirmPassword});
+  SignUpDto(
+      {required this.username,
+      required this.password,
+      required this.confirmPassword});
 }

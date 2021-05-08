@@ -18,8 +18,8 @@ class SignUpSuccessful extends SignUpState {
 }
 
 class SignUpFail extends SignUpState {
-  final String message;
-  final String error;
+  final String? message;
+  final String? error;
   const SignUpFail({this.message, this.error});
 
   @override

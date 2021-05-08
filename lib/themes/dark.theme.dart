@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DarkTheme {
-  static Color colorMain = Colors.blue[600];
+  static Color? colorMain = Colors.blue[600];
 
   static var themeLight = ThemeData(
     inputDecorationTheme: InputDecorationTheme(

@@ -1,27 +1,35 @@
 import 'dart:convert';
-
 import 'package:graphql/client.dart';
 import 'package:wru_fe/dto/create_group.dto.dart';
+import 'package:wru_fe/dto/fetch_group.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';
 
 class GroupRepository {
   final GraphQLClient client;
 
-  GroupRepository({this.client});
+  GroupRepository({required this.client});
 
-  Future<ResponseDto> fetchGroup(bool own) async {
+  Future<ResponseDto> fetchGroup(FetchGroupDto fetchGroupDto) async {
     ////////////////////////////////////////
     String readRepositories = '''
       query {
-        fetchMyGroups(fetchingOptions: { own: $own }) {
+        fetchMyGroups(fetchingOptions: { 
+          own: ${fetchGroupDto.own}, 
+          ids: ${json.encode(fetchGroupDto.ids)} 
+        }) {
           uuid
           groupName
           createdAt
           groupImageUrl
           description
-          owner{
+          owner {
             uuid
             username
+            email
+            profile {
+              uuid
+              avatarUrl
+            }
           }
         }
       }
@@ -45,7 +53,6 @@ class GroupRepository {
     }
 
     return ResponseDto(
-      errorCode: "200",
       result: result.data,
     );
   }
@@ -84,7 +91,6 @@ class GroupRepository {
     }
 
     return ResponseDto(
-      errorCode: "200",
       result: result.data,
     );
   }

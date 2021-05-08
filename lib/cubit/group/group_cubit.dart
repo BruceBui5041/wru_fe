@@ -1,42 +1,77 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:wru_fe/dto/create_group.dto.dart';
+import 'package:wru_fe/dto/fetch_group.dto.dart';
+import 'package:wru_fe/dto/response.dto.dart';
 import 'package:wru_fe/models/group.model.dart';
 import 'package:wru_fe/models/group.repository.dart';
 
 part 'group_state.dart';
 
 class GroupCubit extends Cubit<GroupState> {
+  GroupCubit(this.groupRepository) : super(const GroupInitial());
+
   final GroupRepository groupRepository;
-  GroupCubit(this.groupRepository) : super(GroupInitial());
 
-  void fetchGroups({bool own = false}) async {
-    emit(GroupFetching());
+  Future<void> fetchGroups(FetchGroupDto fetchGroupDto) async {
+    emit(const GroupFetching());
 
-    var res = await groupRepository.fetchGroup(own);
+    final ResponseDto res = await groupRepository.fetchGroup(fetchGroupDto);
 
     if (res.errorCode != null) {
-      emit(GroupFetchFailed(error: res.errorCode, message: res.message));
+      emit(GroupFetchFailed(
+        error: res.errorCode.toString(),
+        message: res.message.toString(),
+      ));
     }
 
-    var groupsJson = res.result['fetchMyGroups'] as List;
-    List<Group> groups =
-        groupsJson.map((groupJson) => Group.fromJson(groupJson)).toList();
+    final List<dynamic> groupsJson =
+        res.result['fetchMyGroups'] as List<dynamic>;
+
+    final List<Group> groups = groupsJson
+        .map((groupJson) => Group.fromJson(groupJson as Map<String, dynamic>))
+        .toList();
 
     emit(GroupFetchSuccess(groups: groups));
   }
 
-  void createGroup(CreateGroupDto input) async {
-    emit(CreatingNewGroup());
+  Future<void> fetchSelectedGroup(FetchGroupDto fetchGroupDto) async {
+    emit(const FetchSelectedGroup());
 
-    var res = await groupRepository.createGroup(input);
+    final ResponseDto res = await groupRepository.fetchGroup(fetchGroupDto);
 
     if (res.errorCode != null) {
-      emit(CreateNewGroupFailed(error: res.errorCode, message: res.message));
+      emit(FetchSelectedGroupFailed(
+        error: res.errorCode.toString(),
+        message: res.message.toString(),
+      ));
     }
 
-    var groupJson = res.result['createGroup'];
-    Group group = Group.fromJson(groupJson);
+    final List<Group> groupsJson = res.result['fetchMyGroups'] as List<Group>;
+    final List<Group> groups = groupsJson
+        .map((groupJson) => Group.fromJson(groupJson as Map<String, dynamic>))
+        .toList();
+
+    print(groups[0].owner.profile);
+    emit(FetchSelectedGroupSuccessed(groups[0]));
+  }
+
+  Future<void> createGroup(CreateGroupDto input) async {
+    emit(const CreatingNewGroup());
+
+    final ResponseDto res = await groupRepository.createGroup(input);
+
+    if (res.errorCode != null) {
+      emit(CreateNewGroupFailed(
+        error: res.errorCode.toString(),
+        message: res.message.toString(),
+      ));
+    }
+
+    final Map<String, dynamic> groupJson =
+        res.result['createGroup'] as Map<String, dynamic>;
+
+    final Group group = Group.fromJson(groupJson);
     emit(CreateNewGroupSuccessed(group));
   }
 }

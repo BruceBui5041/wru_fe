@@ -15,13 +15,28 @@ class GroupFetching extends GroupState {
 
 class GroupFetchSuccess extends GroupState {
   final List<Group> groups;
-  const GroupFetchSuccess({this.groups});
+  const GroupFetchSuccess({this.groups = const []});
 }
 
 class GroupFetchFailed extends GroupState {
-  final String error;
-  final String message;
+  final String? error;
+  final String? message;
   const GroupFetchFailed({this.error, this.message});
+}
+
+class FetchSelectedGroup extends GroupState {
+  const FetchSelectedGroup();
+}
+
+class FetchSelectedGroupFailed extends GroupState {
+  final String? error;
+  final String? message;
+  const FetchSelectedGroupFailed({this.error, this.message});
+}
+
+class FetchSelectedGroupSuccessed extends GroupState {
+  final Group group;
+  const FetchSelectedGroupSuccessed(this.group);
 }
 
 class CreatingNewGroup extends GroupState {
@@ -29,8 +44,8 @@ class CreatingNewGroup extends GroupState {
 }
 
 class CreateNewGroupFailed extends GroupState {
-  final String error;
-  final String message;
+  final String? error;
+  final String? message;
   const CreateNewGroupFailed({this.error, this.message});
 }
 

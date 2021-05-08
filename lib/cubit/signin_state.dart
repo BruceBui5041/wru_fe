@@ -22,8 +22,8 @@ class SignedIn extends SignInState {
 }
 
 class SignInFail extends SignInState {
-  final String message;
-  final String error;
+  final String? message;
+  final String? error;
 
   const SignInFail({this.message, this.error});
 

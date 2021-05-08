@@ -1,29 +1,44 @@
+import 'package:wru_fe/models/user-profile.model.dart';
+
 class User {
-  String uuid;
+  User({required this.uuid, required this.username, this.email, this.profile});
 
-  String get getUuid => uuid;
+  User.fromJson(Map<String, dynamic> json)
+      : uuid = json['uuid'] as String,
+        username = json['username'] as String,
+        profile = json['profile'] != null
+            ? UserProfile.fromJson(json['profile'] as Map<String, dynamic>)
+            : null,
+        email = json['email'] != null ? json['email'] as String : null;
 
-  set setUuid(String uuid) => this.uuid = uuid;
+  final String uuid;
+
+  // String get getUuid => uuid;
+
+  // set setUuid(String uuid) => this.uuid = uuid;
 
 //------------------------------------------------------------
   String username;
 
-  String get getUsername => username;
+  // String get getUsername => username;
 
-  set setUsername(String username) => this.username = username;
+  // set setUsername(String username) => this.username = username;
 //------------------------------------------------------------
 
-  String email;
+  String? email;
 
-  String get getEmail => email;
+  // String? get getEmail => email;
 
-  set setEmail(String email) => this.email = email;
+  // set setEmail(String email) => this.email = email;
+
+//------------------------------------------------------------
+
+  UserProfile? profile;
+
+  // UserProfile? get getProfile => profile;
+
+  // set setEProfile(UserProfile profile) => this.profile = profile;
 
 //-------------------------------------------------------------
-  User({this.uuid, this.username, this.email});
 
-  User.fromJson(Map<String, dynamic> json)
-      : uuid = json['uuid'],
-        username = json['user'],
-        email = json['email'];
 }

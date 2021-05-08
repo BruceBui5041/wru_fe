@@ -1,72 +1,74 @@
 import 'package:wru_fe/models/user.model.dart';
 
 class Group {
-  String uuid;
+  Group({
+    required this.owner,
+    required this.groupName,
+    this.description,
+    this.groupImageUrl,
+    this.updatedAt,
+    required this.uuid,
+    required this.createdAt,
+  });
 
-  String get getUuid => uuid;
+  Group.fromJson(Map<String, dynamic> json)
+      : groupName = json['groupName'] as String,
+        description = json['description'] as String,
+        groupImageUrl = json['groupImageUrl'] as String,
+        uuid = json['uuid'] as String,
+        owner = json['owner'] != null
+            ? User.fromJson(json['owner'] as Map<String, dynamic>)
+            : null,
+        updatedAt = json['updatedAt'] as String,
+        createdAt = json['createdAt'] as String;
 
-  set setUuid(String uuid) => this.uuid = uuid;
+  final String uuid;
+
   //------------------------------------------------------------------
 
   String groupName;
 
-  String get getGroupName => groupName;
+  // String get groupName => _groupName;
 
-  set setGroupName(String groupName) => this.groupName = groupName;
+  // set groupName(String groupName) => _groupName = groupName;
   //------------------------------------------------------------------
 
-  String groupImageUrl;
+  String? groupImageUrl;
 
-  String get getGroupImageUrl => groupImageUrl;
+  // String? get getGroupImageUrl => groupImageUrl;
 
-  set setGroupImageUrl(String groupImageUrl) =>
-      this.groupImageUrl = groupImageUrl;
+  // set setGroupImageUrl(String groupImageUrl) =>
+  //     this.groupImageUrl = groupImageUrl;
   //------------------------------------------------------------------
 
-  String description;
+  String? description;
 
-  String get getDescription => description;
+  // String? get getDescription => description;
 
-  set setDescription(String description) => this.description = description;
+  // set setDescription(String description) => this.description = description;
   //------------------------------------------------------------------
 
-  User user;
+  User? owner;
 
-  User get getUser => user;
+  // User get getOwner => owner;
 
-  set setUser(User user) {
-    user = user;
-  }
+  // set setOwner(User owner) {
+  //   owner = owner;
+  // }
 
   //------------------------------------------------------------------
 
-  String updatedAt;
+  String? updatedAt;
 
-  String get getUpdatedAt => updatedAt;
+  // String? get getUpdatedAt => updatedAt;
 
-  set setUpdatedAt(String updatedAt) => this.updatedAt = updatedAt;
+  // set setUpdatedAt(String updatedAt) => this.updatedAt = updatedAt;
 
   //------------------------------------------------------------------
   String createdAt;
 
-  String get getCreatedAt => createdAt;
+  // String get getCreatedAt => createdAt;
 
-  set setCreatedAt(String createdAt) => this.createdAt = createdAt;
+  // set setCreatedAt(String createdAt) => this.createdAt = createdAt;
 
-  Group({
-    this.user,
-    this.groupName,
-    this.description,
-    this.groupImageUrl,
-    this.uuid,
-    this.createdAt,
-  });
-
-  Group.fromJson(Map<String, dynamic> json)
-      : groupName = json['groupName'],
-        description = json['description'],
-        groupImageUrl = json['groupImageUrl'],
-        uuid = json['uuid'],
-        user = json['user'],
-        createdAt = json['createdAt'];
 }

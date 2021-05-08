@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wru_fe/cubit/group/group_cubit.dart';
 import 'package:wru_fe/cubit/signin_cubit.dart';
+import 'package:wru_fe/dto/fetch_group.dto.dart';
 import 'package:wru_fe/models/group.model.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/widgets/create_group_buttom_sheet.widget.dart';
@@ -18,7 +19,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<GroupCubit>().fetchGroups();
+    context
+        .read<GroupCubit>()
+        .fetchGroups(FetchGroupDto(own: false, ids: null));
   }
 
   Widget _generateGroupListWidget(List<Group> groups) {
@@ -34,15 +37,18 @@ class _GroupsScreenState extends State<GroupsScreen> {
   }
 
   Widget _screenContent(GroupState state) {
-    if (state is GroupFetching) {
-      return Text("Loading ...");
-    } else if (state is GroupFetchFailed) {
-      return Text(state.message);
+    if (state is GroupFetchFailed) {
+      return Text(state.message.toString());
     } else if (state is GroupFetchSuccess) {
       return _generateGroupListWidget(state.groups);
     } else {
-      return Text("Something went wrong !");
+      return Text("Loading ...");
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
