@@ -14,14 +14,14 @@ class GroupFetching extends GroupState {
 }
 
 class GroupFetchSuccess extends GroupState {
-  final List<Group> groups;
   const GroupFetchSuccess({this.groups = const []});
+  final List<Group> groups;
 }
 
 class GroupFetchFailed extends GroupState {
+  const GroupFetchFailed({this.error, this.message});
   final String? error;
   final String? message;
-  const GroupFetchFailed({this.error, this.message});
 }
 
 class FetchSelectedGroup extends GroupState {
@@ -29,14 +29,14 @@ class FetchSelectedGroup extends GroupState {
 }
 
 class FetchSelectedGroupFailed extends GroupState {
+  const FetchSelectedGroupFailed({this.error, this.message});
   final String? error;
   final String? message;
-  const FetchSelectedGroupFailed({this.error, this.message});
 }
 
 class FetchSelectedGroupSuccessed extends GroupState {
-  final Group group;
   const FetchSelectedGroupSuccessed(this.group);
+  final Group group;
 }
 
 class CreatingNewGroup extends GroupState {
@@ -44,12 +44,31 @@ class CreatingNewGroup extends GroupState {
 }
 
 class CreateNewGroupFailed extends GroupState {
+  const CreateNewGroupFailed({this.error, this.message});
   final String? error;
   final String? message;
-  const CreateNewGroupFailed({this.error, this.message});
 }
 
 class CreateNewGroupSuccessed extends GroupState {
-  final Group group;
   const CreateNewGroupSuccessed(this.group);
+  final Group group;
+}
+
+class FetchingMembers extends GroupState {
+  const FetchingMembers();
+}
+
+class FetchingMembersSuccessed extends GroupState {
+  const FetchingMembersSuccessed({this.members = const []});
+  final List<User> members;
+}
+
+class FetchingMembersFailed extends GroupState {
+  const FetchingMembersFailed({this.error, this.message});
+  final String? error;
+  final String? message;
+}
+
+class Unauthorized extends GroupState {
+  const Unauthorized();
 }

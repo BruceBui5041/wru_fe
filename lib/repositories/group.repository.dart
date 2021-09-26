@@ -5,13 +5,11 @@ import 'package:wru_fe/dto/fetch_group.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';
 
 class GroupRepository {
+  GroupRepository({required this.client});
   final GraphQLClient client;
 
-  GroupRepository({required this.client});
-
-  Future<ResponseDto> fetchGroup(FetchGroupDto fetchGroupDto) async {
-    ////////////////////////////////////////
-    String readRepositories = '''
+  String fetchGroupQuery(FetchGroupDto fetchGroupDto) {
+    return '''
       query {
         fetchMyGroups(fetchingOptions: { 
           own: ${fetchGroupDto.own}, 
@@ -34,13 +32,62 @@ class GroupRepository {
         }
       }
       ''';
+  }
+
+  String fetchGroupMembersQuery(List<String> ids) {
+    return '''
+      query {
+        fetchMyGroups(fetchingOptions: { 
+          own: false, 
+          ids: ${json.encode(ids)} 
+        }) {
+          uuid
+          members {
+            uuid
+            username
+            email
+          }
+        }
+      }
+      ''';
+  }
+
+  Future<ResponseDto> fetchGroup(FetchGroupDto fetchGroupDto) async {
+    ////////////////////////////////////////
+    final String readRepositories = fetchGroupQuery(fetchGroupDto);
     /////////////////////////////////////////
 
-    final QueryOptions options = QueryOptions(
-      documentNode: gql(readRepositories),
-    );
+    print(readRepositories);
+    final QueryOptions options =
+        QueryOptions(documentNode: gql(readRepositories));
 
-    QueryResult result = await this.client.query(options);
+    final QueryResult result = await client.query(options);
+
+    if (result.hasException) {
+      return ResponseDto(
+        errorCode: result.exception.graphqlErrors[0].extensions.entries
+            .toList()[1]
+            .value['response']['statusCode'],
+        message: result.exception.graphqlErrors[0].message,
+        result: result.data,
+      );
+    }
+
+    return ResponseDto(
+      result: result.data,
+    );
+  }
+
+  Future<ResponseDto> fetchGroupMembers(List<String> ids) async {
+    ////////////////////////////////////////
+    final String readRepositories = fetchGroupMembersQuery(ids);
+    /////////////////////////////////////////
+
+    print(readRepositories);
+    final QueryOptions options =
+        QueryOptions(documentNode: gql(readRepositories));
+
+    final QueryResult result = await client.query(options);
 
     if (result.hasException) {
       return ResponseDto(
@@ -59,12 +106,13 @@ class GroupRepository {
 
   Future<ResponseDto> createGroup(CreateGroupDto input) async {
     ////////////////////////////////////////
-    String readRepositories = '''
+    final String readRepositories = '''
       mutation {
         createGroup(createGroupInput: {
           groupName: "${input.groupName}", 
           description: "${input.description}"
         }){
+          uuid
           groupName
           groupImageUrl
           description

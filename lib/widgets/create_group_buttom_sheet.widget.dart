@@ -6,9 +6,9 @@ import 'package:wru_fe/screens/group_details.screen.dart';
 import 'package:wru_fe/widgets/form_field_custom.widget.dart';
 
 class CreateGroupBottomSheet extends StatelessWidget {
-  final _form = GlobalKey<FormState>();
-  final _groupNameController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final GlobalKey _form = GlobalKey<FormState>();
+  final TextEditingController _groupNameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   void _submit(BuildContext context) {
     final CreateGroupDto createGroupDto = CreateGroupDto(
@@ -22,15 +22,18 @@ class CreateGroupBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<GroupCubit, GroupState>(
-      listener: (_, state) {
+      listener: (_, GroupState state) {
         if (state is CreateNewGroupSuccessed) {
           // Close the bottom sheet after create group successed
           Navigator.of(context).pop();
 
-          Navigator.of(context).pushNamed(GroupDetailsScreen.routeName);
+          Navigator.of(context).pushReplacementNamed(
+            GroupDetailsScreen.routeName,
+            arguments: state.group.uuid,
+          );
         }
       },
-      child: Container(
+      child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.4,
         child: Card(
           margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wru_fe/screens/groups.screen.dart';
+import 'package:wru_fe/screens/jouney.screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "/home-screen";
@@ -12,12 +13,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     GroupsScreen(),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
+    JouneyScreen(),
     Text(
       'Index 2: School',
       style: optionStyle,

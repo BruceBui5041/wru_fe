@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart';
 import 'package:wru_fe/api/api.dart';
 import 'package:wru_fe/dto/response.dto.dart';
 import 'package:wru_fe/dto/signin.dto.dart';
@@ -13,17 +13,17 @@ import '../utils.dart';
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthRepository {
-  static const tokenKey = 'accessToken';
-  static const messageKey = 'message';
-  static const errorKey = 'error';
-  static const usernameKey = 'username';
-  static const passwordKey = 'password';
-  static const confirmPassworkKey = 'confirmPassword';
-  static const statusCodeKey = 'statusCode';
+  static const String tokenKey = 'accessToken';
+  static const String messageKey = 'message';
+  static const String errorKey = 'error';
+  static const String usernameKey = 'username';
+  static const String passwordKey = 'password';
+  static const String confirmPassworkKey = 'confirmPassword';
+  static const String statusCodeKey = 'statusCode';
 
   Future<ResponseDto> callSignInApi(SignInDto signInDto) async {
     try {
-      final res = await publicPostRequest(
+      final Response res = await publicPostRequest(
         url: SIGNIN_API,
         body: {
           usernameKey: signInDto.username,
@@ -31,7 +31,8 @@ class AuthRepository {
         },
       );
 
-      final resJSON = json.decode(res.body) as Map<String, dynamic>;
+      final Map<String, dynamic> resJSON =
+          json.decode(res.body) as Map<String, dynamic>;
 
       return ResponseDto(
         errorCode: resJSON[errorKey],
@@ -39,7 +40,7 @@ class AuthRepository {
         result: resJSON[tokenKey] as String,
       );
     } catch (err) {
-      throw err;
+      rethrow;
     }
   }
 
@@ -68,19 +69,20 @@ class AuthRepository {
 
   Future<bool> isValidAccessToken() async {
     try {
-      final accessToken = await getStoredAccessToken();
+      final String accessToken = await getStoredAccessToken();
       if (accessToken == null) return false;
-      final res = await postRequest(
+      final Response res = await postRequest(
         url: VERIFY_TOKEN,
         body: {},
         jwtToken: accessToken,
       );
 
-      final resJSON = json.decode(res.body) as Map<String, dynamic>;
+      final Map<String, dynamic> resJSON =
+          json.decode(res.body) as Map<String, dynamic>;
       if (resJSON[statusCodeKey] == HttpStatus.unauthorized) return false;
       return true;
     } catch (err) {
-      throw err;
+      rethrow;
     }
   }
 

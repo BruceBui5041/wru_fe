@@ -1,24 +1,25 @@
-import 'package:wru_fe/models/user-profile.model.dart';
+import 'package:wru_fe/models/user_profile.model.dart';
 
 class User {
   User({required this.uuid, required this.username, this.email, this.profile});
 
-  User.fromJson(Map<String, dynamic> json)
-      : uuid = json['uuid'] as String,
-        username = json['username'] as String,
-        profile = json['profile'] != null
-            ? UserProfile.fromJson(json['profile'] as Map<String, dynamic>)
-            : null,
-        email = json['email'] != null ? json['email'] as String : null;
+  User.fromJson(Map<String, dynamic> json) {
+    uuid = _getStringValue(json['uuid']);
+    username = _getStringValue(json['username']);
+    profile = json['profile'] != null
+        ? UserProfile.fromJson(json['profile'] as Map<String, dynamic>)
+        : null;
+    email = _getStringValue(json['email']);
+  }
 
-  final String uuid;
+  String? uuid;
 
   // String get getUuid => uuid;
 
   // set setUuid(String uuid) => this.uuid = uuid;
 
 //------------------------------------------------------------
-  String username;
+  String? username;
 
   // String get getUsername => username;
 
@@ -40,5 +41,7 @@ class User {
   // set setEProfile(UserProfile profile) => this.profile = profile;
 
 //-------------------------------------------------------------
-
+  String _getStringValue(dynamic nullableValue) {
+    return nullableValue != null ? nullableValue as String : "";
+  }
 }

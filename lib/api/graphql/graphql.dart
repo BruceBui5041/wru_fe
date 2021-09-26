@@ -2,20 +2,21 @@
 
 import 'package:graphql/client.dart';
 import 'package:wru_fe/api/api.dart';
-import 'package:wru_fe/models/auth.repository.dart';
+import 'package:wru_fe/repositories/auth.repository.dart';
 import 'package:wru_fe/utils.dart';
 
 class GraphQLUtil {
   GraphQLUtil();
   static GraphQLClient client() {
-    HttpLink _httpLink = HttpLink(
+    final HttpLink _httpLink = HttpLink(
       uri: GRAPHQL_API,
     );
 
     final AuthLink _authLink = AuthLink(
       headerKey: 'Authorization',
       getToken: () async {
-        var token = await getValueFromSharePreference(AuthRepository.tokenKey);
+        final String token =
+            await getValueFromSharePreference(AuthRepository.tokenKey);
         print(token);
         return 'Bearer $token';
       },
@@ -23,9 +24,18 @@ class GraphQLUtil {
 
     final Link _link = _authLink.concat(_httpLink);
 
+    final Policies policies = Policies(
+      fetch: FetchPolicy.noCache,
+    );
+
     return GraphQLClient(
       cache: InMemoryCache(),
       link: _link,
+      defaultPolicies: DefaultPolicies(
+        watchQuery: policies,
+        query: policies,
+        mutate: policies,
+      ),
     );
   }
 }

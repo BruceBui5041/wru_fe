@@ -3,13 +3,13 @@ import 'package:wru_fe/global_constants.dart';
 import 'dart:convert';
 
 // ignore: non_constant_identifier_names
-final SIGNUP_API = API_URL! + '/auth/signup';
+final String SIGNUP_API = '${API_URL!}/auth/signup';
 // ignore: non_constant_identifier_names
-final SIGNIN_API = API_URL! + '/auth/signin';
+final String SIGNIN_API = '${API_URL!}/auth/signin';
 // ignore: non_constant_identifier_names
-final VERIFY_TOKEN = API_URL! + '/auth/verify_token';
+final String VERIFY_TOKEN = '${API_URL!}/auth/verify_token';
 // ignore: non_constant_identifier_names
-final GRAPHQL_API = API_URL! + '/graphql';
+final String GRAPHQL_API = '${API_URL!}/graphql';
 
 Future<http.Response> publicPostRequest({
   required String url,

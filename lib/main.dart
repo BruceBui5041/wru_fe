@@ -5,19 +5,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:wru_fe/api/graphql/graphql.dart';
 import 'package:wru_fe/cubit/group/group_cubit.dart';
-import 'package:wru_fe/cubit/signin_cubit.dart';
-import 'package:wru_fe/cubit/signup_cubit.dart';
+import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
+import 'package:wru_fe/cubit/signup/signin_cubit.dart';
+import 'package:wru_fe/cubit/signin/signup_cubit.dart';
 import 'package:wru_fe/global_constants.dart';
-import 'package:wru_fe/models/auth.repository.dart';
-import 'package:wru_fe/models/group.repository.dart';
+import 'package:wru_fe/repositories/auth.repository.dart';
+import 'package:wru_fe/repositories/group.repository.dart';
+import 'package:wru_fe/repositories/jouney.repository.dart';
 import 'package:wru_fe/screens/group_details.screen.dart';
 import 'package:wru_fe/screens/home.screen.dart';
+import 'package:wru_fe/screens/jouney.screen.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/screens/signup.screen.dart';
 import 'package:wru_fe/screens/splash.screen.dart';
 import 'package:wru_fe/themes/light.theme.dart';
 
-void main() async {
+Future<void> main() async {
   const isProduction = bool.fromEnvironment('dart.vm.product');
   await DotEnv.load(fileName: isProduction ? 'prod.env' : 'dev.env');
   print(API_URL);
@@ -27,6 +30,8 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final AuthRepository _authRepository = AuthRepository();
+  final JouneyRepository _jouneyRepository =
+      JouneyRepository(client: GraphQLUtil.client());
   final GroupRepository _groupRepository =
       GroupRepository(client: GraphQLUtil.client());
 
@@ -45,6 +50,9 @@ class MyApp extends StatelessWidget {
           BlocProvider<GroupCubit>(
             create: (BuildContext context) => GroupCubit(_groupRepository),
           ),
+          BlocProvider<JouneyCubit>(
+            create: (BuildContext context) => JouneyCubit(_jouneyRepository),
+          ),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -56,7 +64,8 @@ class MyApp extends StatelessWidget {
             GroupDetailsScreen.routeName: (_) => GroupDetailsScreen(),
             SignInScreen.routeName: (_) => SignInScreen(),
             SignUpScreen.routeName: (_) => SignUpScreen(),
-            SplashScreen.routeName: (_) => SplashScreen()
+            SplashScreen.routeName: (_) => SplashScreen(),
+            JouneyScreen.routeName: (_) => JouneyScreen()
           },
         ),
       ),

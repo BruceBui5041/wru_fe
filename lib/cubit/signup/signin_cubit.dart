@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:wru_fe/dto/response.dto.dart';
 import 'package:wru_fe/dto/signin.dto.dart';
-import 'package:wru_fe/models/auth.repository.dart';
+import 'package:wru_fe/repositories/auth.repository.dart';
 
 part 'signin_state.dart';
 
