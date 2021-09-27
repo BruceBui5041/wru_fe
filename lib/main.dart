@@ -2,12 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wru_fe/api/graphql/graphql.dart';
+
 import 'package:wru_fe/cubit/group/group_cubit.dart';
 import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
-import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/cubit/signin/signup_cubit.dart';
+import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/repositories/auth.repository.dart';
 import 'package:wru_fe/repositories/group.repository.dart';
@@ -22,9 +23,8 @@ import 'package:wru_fe/themes/light.theme.dart';
 
 Future<void> main() async {
   const isProduction = bool.fromEnvironment('dart.vm.product');
-  await DotEnv.load(fileName: isProduction ? 'prod.env' : 'dev.env');
+  await dotenv.load(fileName: isProduction ? 'prod.env' : 'dev.env');
   print(API_URL);
-
   return runApp(MyApp());
 }
 

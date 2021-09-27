@@ -28,17 +28,16 @@ class JouneyRepository {
     /////////////////////////////////////////
 
     print(readRepositories);
-    final QueryOptions options =
-        QueryOptions(documentNode: gql(readRepositories));
+    final QueryOptions options = QueryOptions(document: gql(readRepositories));
 
     final QueryResult result = await client.query(options);
 
     if (result.hasException) {
       return ResponseDto(
-        errorCode: result.exception.graphqlErrors[0].extensions.entries
+        errorCode: result.exception?.graphqlErrors[0].extensions?.entries
             .toList()[1]
             .value['response']['statusCode'],
-        message: result.exception.graphqlErrors[0].message,
+        message: result.exception?.graphqlErrors[0].message,
         result: result.data,
       );
     }

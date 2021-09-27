@@ -8,9 +8,7 @@ import 'package:wru_fe/utils.dart';
 class GraphQLUtil {
   GraphQLUtil();
   static GraphQLClient client() {
-    final HttpLink _httpLink = HttpLink(
-      uri: GRAPHQL_API,
-    );
+    final HttpLink _httpLink = HttpLink(GRAPHQL_API);
 
     final AuthLink _authLink = AuthLink(
       headerKey: 'Authorization',
@@ -29,7 +27,7 @@ class GraphQLUtil {
     );
 
     return GraphQLClient(
-      cache: InMemoryCache(),
+      cache: GraphQLCache(),
       link: _link,
       defaultPolicies: DefaultPolicies(
         watchQuery: policies,

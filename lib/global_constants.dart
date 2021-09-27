@@ -1,8 +1,8 @@
 library global_constants;
 
-import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final Map<String, String> _env = dot_env.env;
+final Map<String, String> _env = dotenv.env;
 
 // ignore: non_constant_identifier_names
 final String? API_URL = _env['API_URL'];

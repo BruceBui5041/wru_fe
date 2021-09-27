@@ -3,16 +3,16 @@ import 'package:wru_fe/global_constants.dart';
 import 'dart:convert';
 
 // ignore: non_constant_identifier_names
-final String SIGNUP_API = '${API_URL!}/auth/signup';
+final Uri SIGNUP_API = Uri(host: API_URL, path: "auth/signup");
 // ignore: non_constant_identifier_names
-final String SIGNIN_API = '${API_URL!}/auth/signin';
+final Uri SIGNIN_API = Uri(host: API_URL, path: "auth/signin");
 // ignore: non_constant_identifier_names
-final String VERIFY_TOKEN = '${API_URL!}/auth/verify_token';
+final Uri VERIFY_TOKEN = Uri(host: API_URL, path: "auth/verify_token");
 // ignore: non_constant_identifier_names
 final String GRAPHQL_API = '${API_URL!}/graphql';
 
 Future<http.Response> publicPostRequest({
-  required String url,
+  required Uri url,
   required Map<String, dynamic> body,
 }) {
   return http.post(
@@ -25,7 +25,7 @@ Future<http.Response> publicPostRequest({
 }
 
 Future<http.Response> postRequest({
-  required String url,
+  required Uri url,
   required Map<String, dynamic> body,
   required String jwtToken,
 }) {
