@@ -4,8 +4,6 @@ class Jouney {
   Jouney({
     required this.owner,
     required this.name,
-    required this.uuid,
-    required this.createdAt,
   });
 
   Jouney.fromJson(Map<String, dynamic> json) {
@@ -13,6 +11,7 @@ class Jouney {
     description = _getStringValue(json['description']);
     image = _getStringValue(json['image']);
     uuid = _getStringValue(json['uuid']);
+    markerCount = json['markerCount'] != null ? json['markerCount'] as int : 0;
     owner = json['owner'] != null
         ? User.fromJson(json['owner'] as Map<String, dynamic>)
         : null;
@@ -26,6 +25,7 @@ class Jouney {
   String? image;
   String? visibility;
   User? owner;
+  int? markerCount;
 
   String? updatedAt;
   String? createdAt;

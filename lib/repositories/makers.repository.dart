@@ -1,30 +1,36 @@
 import 'package:graphql/client.dart';
-import 'package:wru_fe/dto/fetch_jouney.dto.dart';
+import 'package:wru_fe/dto/fetch_marker.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';
 
-class JouneyRepository {
-  JouneyRepository({required this.client});
+class MarkerRepository {
+  MarkerRepository({required this.client});
   final GraphQLClient client;
 
-  String fetchJouneyQuery(FetchJouneyDto fetchJouneyDto) {
+  String fetchMarkerQuery(FetchMarkerDto fetchMarkerDto) {
     return '''
       query {
-        jouneys {
+        markers(jouneyId: "${fetchMarkerDto.jouneyId}") {
           uuid
           name
-          createdAt
-          image
-          description
           visibility
-          markerCount
+          description
+          lat
+          lng
+          image
+          image1
+          image2
+          image3
+          image4
+          image5
+          createdAt
         }
       }
       ''';
   }
 
-  Future<ResponseDto> fetchJouney(FetchJouneyDto fetchJouneyDto) async {
+  Future<ResponseDto> fetchMarker(FetchMarkerDto fetchMarkerDto) async {
     ////////////////////////////////////////
-    final String readRepositories = fetchJouneyQuery(fetchJouneyDto);
+    final String readRepositories = fetchMarkerQuery(fetchMarkerDto);
     /////////////////////////////////////////
 
     print(readRepositories);

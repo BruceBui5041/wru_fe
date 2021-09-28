@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
-import 'package:wru_fe/cubit/signup/signin_cubit.dart';
+import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/dto/fetch_jouney.dto.dart';
-import 'package:wru_fe/models/jouney.model.dart';
+import 'package:wru_fe/dto/fetch_marker.dto.dart';
+import 'package:wru_fe/models/marker.model.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
+import 'package:wru_fe/widgets/jouney_list.widget.dart';
 
 class JouneyScreen extends StatefulWidget {
   const JouneyScreen({Key? key}) : super(key: key);
@@ -18,30 +19,34 @@ class _JouneyScreenState extends State<JouneyScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<JouneyCubit>().fetchGroups(FetchJouneyDto());
+    context.read<MarkerCubit>().fetchMarkers(
+          FetchMarkerDto(jouneyId: "2673a2f7-aaf2-444b-a8f5-cec3d52e9b9e"),
+        );
   }
 
-  Widget _generateGroupListWidget(List<Jouney> groups) {
+  Widget _generateGroupListWidget(List<Marker> markers) {
     return ListView.builder(
       itemBuilder: (context, index) {
-        final Jouney jouney = groups[index];
+        final Marker marker = markers[index];
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(jouney.uuid ?? ""),
-            Text(jouney.name ?? ""),
-            Text(jouney.createdAt ?? "")
+            Text(marker.lat.toString()),
+            Text(marker.lng.toString()),
+            Text(marker.name ?? ""),
+            Text(marker.createdAt ?? ""),
           ],
         );
       },
-      itemCount: groups.length,
+      itemCount: markers.length,
     );
   }
 
-  Widget _screenContent(JouneyState state) {
-    if (state is FetchJouneysFailed) {
+  Widget _screenContent(MarkerState state) {
+    if (state is FetchMarkersFailed) {
       return Text(state.message.toString());
-    } else if (state is FetchJouneysSuccessed) {
-      return _generateGroupListWidget(state.jouneys);
+    } else if (state is FetchMarkersSuccessed) {
+      return _generateGroupListWidget(state.markers);
     } else {
       return const Text("Loading ...");
     }
@@ -49,22 +54,35 @@ class _JouneyScreenState extends State<JouneyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<JouneyCubit, JouneyState>(
+    final theme = Theme.of(context);
+    final floatingBtnTheme = theme.floatingActionButtonTheme;
+    final textTheme = theme.textTheme;
+    return BlocConsumer<MarkerCubit, MarkerState>(
       listener: (context, state) {
         if (state is Unauthorized) {
-          Navigator.of(context).pushNamed(SignInScreen.routeName);
+          Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
         }
       },
       builder: (context, state) {
         return Scaffold(
+          appBar: AppBar(),
           body: Container(
             child: _screenContent(state),
           ),
+          drawer: const Drawer(
+            child: JouneyList(),
+          ),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {},
-            label: const Text('Jouney'),
-            icon: const Icon(Icons.add),
-            backgroundColor: Theme.of(context).accentColor,
+            label: Text(
+              'Marker',
+              style: TextStyle(fontSize: textTheme.headline4!.fontSize),
+            ),
+            icon: Icon(
+              Icons.add,
+              size: textTheme.headline4!.fontSize,
+            ),
+            backgroundColor: floatingBtnTheme.backgroundColor,
           ),
         );
       },

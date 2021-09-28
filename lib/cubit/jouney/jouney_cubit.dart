@@ -12,7 +12,7 @@ class JouneyCubit extends Cubit<JouneyState> {
 
   final JouneyRepository jouneyRepository;
 
-  Future<void> fetchGroups(FetchJouneyDto fetchJouneyDto) async {
+  Future<void> fetchJouneys(FetchJouneyDto fetchJouneyDto) async {
     emit(const FetchingJouney());
 
     final ResponseDto res = await jouneyRepository.fetchJouney(fetchJouneyDto);
@@ -30,9 +30,9 @@ class JouneyCubit extends Cubit<JouneyState> {
       return;
     }
 
-    final List<dynamic> groupsJson = res.result['jouneys'] as List<dynamic>;
+    final List<dynamic> jouneysJson = res.result['jouneys'] as List<dynamic>;
 
-    final List<Jouney> jouneys = groupsJson
+    final List<Jouney> jouneys = jouneysJson
         .map((groupJson) => Jouney.fromJson(groupJson as Map<String, dynamic>))
         .toList();
 

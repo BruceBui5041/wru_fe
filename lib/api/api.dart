@@ -3,11 +3,11 @@ import 'package:wru_fe/global_constants.dart';
 import 'dart:convert';
 
 // ignore: non_constant_identifier_names
-final Uri SIGNUP_API = Uri(host: API_URL, path: "auth/signup");
+final Uri SIGNUP_API = Uri.parse('${API_URL!}/auth/signup');
 // ignore: non_constant_identifier_names
-final Uri SIGNIN_API = Uri(host: API_URL, path: "auth/signin");
+final Uri SIGNIN_API = Uri.parse('${API_URL!}/auth/signin');
 // ignore: non_constant_identifier_names
-final Uri VERIFY_TOKEN = Uri(host: API_URL, path: "auth/verify_token");
+final Uri VERIFY_TOKEN = Uri.parse('${API_URL!}/auth/verify_token');
 // ignore: non_constant_identifier_names
 final String GRAPHQL_API = '${API_URL!}/graphql';
 

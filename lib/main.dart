@@ -7,12 +7,14 @@ import 'package:wru_fe/api/graphql/graphql.dart';
 
 import 'package:wru_fe/cubit/group/group_cubit.dart';
 import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
+import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/cubit/signin/signup_cubit.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/repositories/auth.repository.dart';
 import 'package:wru_fe/repositories/group.repository.dart';
 import 'package:wru_fe/repositories/jouney.repository.dart';
+import 'package:wru_fe/repositories/makers.repository.dart';
 import 'package:wru_fe/screens/group_details.screen.dart';
 import 'package:wru_fe/screens/home.screen.dart';
 import 'package:wru_fe/screens/jouney.screen.dart';
@@ -34,6 +36,8 @@ class MyApp extends StatelessWidget {
       JouneyRepository(client: GraphQLUtil.client());
   final GroupRepository _groupRepository =
       GroupRepository(client: GraphQLUtil.client());
+  final MarkerRepository _markerRepository =
+      MarkerRepository(client: GraphQLUtil.client());
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +45,9 @@ class MyApp extends StatelessWidget {
       value: _authRepository,
       child: MultiBlocProvider(
         providers: [
+          BlocProvider<MarkerCubit>(
+            create: (BuildContext context) => MarkerCubit(_markerRepository),
+          ),
           BlocProvider<SignInCubit>(
             create: (BuildContext context) => SignInCubit(_authRepository),
           ),
@@ -65,7 +72,7 @@ class MyApp extends StatelessWidget {
             SignInScreen.routeName: (_) => SignInScreen(),
             SignUpScreen.routeName: (_) => SignUpScreen(),
             SplashScreen.routeName: (_) => SplashScreen(),
-            JouneyScreen.routeName: (_) => JouneyScreen()
+            JouneyScreen.routeName: (_) => const JouneyScreen()
           },
         ),
       ),

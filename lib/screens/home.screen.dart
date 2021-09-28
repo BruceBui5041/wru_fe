@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     GroupsScreen(),
-    JouneyScreen(),
+    const JouneyScreen(),
     Text(
       'Index 2: School',
       style: optionStyle,
@@ -31,9 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

@@ -46,10 +46,14 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final floatingBtnTheme = theme.floatingActionButtonTheme;
+    final textTheme = theme.textTheme;
+
     return BlocConsumer<GroupCubit, GroupState>(
       listener: (context, state) {
         if (state is Unauthorized) {
-          Navigator.of(context).pushNamed(SignInScreen.routeName);
+          Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
         }
       },
       builder: (context, state) {
@@ -66,9 +70,15 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 },
               );
             },
-            label: const Text('New group'),
-            icon: const Icon(Icons.add),
-            backgroundColor: Theme.of(context).accentColor,
+            label: Text(
+              'Group',
+              style: TextStyle(fontSize: textTheme.headline4!.fontSize),
+            ),
+            icon: Icon(
+              Icons.add,
+              size: textTheme.headline4!.fontSize,
+            ),
+            backgroundColor: floatingBtnTheme.backgroundColor,
           ),
         );
       },

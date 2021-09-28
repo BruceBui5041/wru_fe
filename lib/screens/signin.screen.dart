@@ -8,6 +8,7 @@ import 'package:wru_fe/widgets/form_field_custom.widget.dart';
 import 'package:wru_fe/widgets/button_long_custom.widget.dart';
 
 class SignInScreen extends StatelessWidget {
+  SignInScreen({Key? key}) : super(key: key);
   static const routeName = './signin';
 
   final _form = GlobalKey<FormState>();
@@ -29,6 +30,8 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
@@ -54,7 +57,7 @@ class SignInScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              height: MediaQuery.of(context).size.height * 0.3,
+                              height: screenSize.height * 0.2,
                               child: Center(
                                 child: Text(
                                   "WRU",
@@ -66,9 +69,8 @@ class SignInScreen extends StatelessWidget {
                               key: _form,
                               child: Column(
                                 children: [
-                                  Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.6,
+                                  SizedBox(
+                                    height: screenSize.height * 0.8,
                                     child: Column(
                                       children: [
                                         Padding(
@@ -96,7 +98,7 @@ class SignInScreen extends StatelessWidget {
                                             _submitForm(context);
                                           },
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 30,
                                         ),
                                         ButtonLongCustomWidget(
@@ -109,33 +111,11 @@ class SignInScreen extends StatelessWidget {
                                             _submitForm(context);
                                           },
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 30, vertical: 20),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                width: 100,
-                                                height: 1,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                              ),
-                                              Text(
-                                                " OR ",
-                                                style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .primaryColor),
-                                              ),
-                                              Container(
-                                                width: 100,
-                                                height: 1,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                              )
-                                            ],
-                                          ),
+                                        const Divider(
+                                          height: 20,
+                                          thickness: 1,
+                                          indent: 20,
+                                          endIndent: 20,
                                         ),
                                         ButtonLongCustomWidget(
                                           label: "Sign up",

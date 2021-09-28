@@ -5,6 +5,7 @@ import 'package:wru_fe/dto/fetch_group.dto.dart';
 import 'package:wru_fe/screens/home.screen.dart';
 
 class GroupDetailsScreen extends StatefulWidget {
+  const GroupDetailsScreen({Key? key}) : super(key: key);
   static const String routeName = "/group-details-screen";
   @override
   _GroupDetailsScreenState createState() => _GroupDetailsScreenState();
