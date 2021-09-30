@@ -9,7 +9,10 @@ class JouneyItem extends StatelessWidget {
     Key? key,
     required this.jouney,
     required this.markerCubit,
+    required this.setAppbarTitle,
   }) : super(key: key);
+
+  final Function(String?) setAppbarTitle;
   final Jouney jouney;
   final MarkerCubit markerCubit;
 
@@ -90,6 +93,7 @@ class JouneyItem extends StatelessWidget {
           markerCubit.fetchMarkers(
             FetchMarkerDto(jouneyId: jouney.uuid.toString()),
           );
+          setAppbarTitle(jouney.name);
           Navigator.of(context).pop();
         },
       ),

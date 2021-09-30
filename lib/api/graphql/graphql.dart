@@ -12,9 +12,8 @@ class GraphQLUtil {
 
     final AuthLink _authLink = AuthLink(
       headerKey: 'Authorization',
-      getToken: () async {
-        final String token =
-            await getValueFromSharePreference(AuthRepository.tokenKey);
+      getToken: () {
+        final String token = getValueFromStore(AuthRepository.tokenKey);
         print(token);
         return 'Bearer $token';
       },

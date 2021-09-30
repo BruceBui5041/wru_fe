@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:wru_fe/cubit/marker/marker_cubit.dart';
-import 'package:wru_fe/dto/fetch_marker.dto.dart';
-import 'package:wru_fe/models/jouney.model.dart';
 import 'package:wru_fe/models/marker.model.dart';
 
 class MarkerItem extends StatelessWidget {

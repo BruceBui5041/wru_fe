@@ -9,7 +9,12 @@ import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/widgets/jouney.widget.dart';
 
 class JouneyList extends StatefulWidget {
-  const JouneyList({Key? key}) : super(key: key);
+  const JouneyList({
+    Key? key,
+    required this.setAppbarTitle,
+  }) : super(key: key);
+
+  final Function(String?) setAppbarTitle;
 
   @override
   _JouneyListState createState() => _JouneyListState();
@@ -29,6 +34,13 @@ class _JouneyListState extends State<JouneyList> {
     return ListView.builder(
       itemBuilder: (context, index) {
         final Jouney jouney = jouneys[index];
+
+        Widget jouneyItem = JouneyItem(
+          jouney: jouney,
+          markerCubit: markerCubit,
+          setAppbarTitle: widget.setAppbarTitle,
+        );
+
         if (index == 0) {
           return Column(
             children: [
@@ -36,14 +48,11 @@ class _JouneyListState extends State<JouneyList> {
                 height: 50,
                 child: const Text("Drawer header"),
               ),
-              JouneyItem(
-                jouney: jouney,
-                markerCubit: markerCubit,
-              )
+              jouneyItem
             ],
           );
         }
-        return JouneyItem(jouney: jouney, markerCubit: markerCubit);
+        return jouneyItem;
       },
       itemCount: jouneys.length,
     );

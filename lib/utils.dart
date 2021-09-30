@@ -1,12 +1,14 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wru_fe/global_constants.dart';
+import 'package:wru_fe/hive_config.dart';
 
-Future<String> getValueFromSharePreference(String key) async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getString(key);
+String getValueFromStore(String key) {
+  var hiveConfig = getIt<HiveConfig>();
+  return hiveConfig.storeBox == null ? "" : hiveConfig.storeBox!.get(key);
 }
 
-Future<void> setValueToSharePreference(String key, String value) async {
-  assert(value.isEmpty == false);
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString(key, value);
+void setValueToStore(String key, String value) {
+  var hiveConfig = getIt<HiveConfig>();
+  if (hiveConfig.storeBox != null) {
+    hiveConfig.storeBox!.put(key, value);
+  }
 }

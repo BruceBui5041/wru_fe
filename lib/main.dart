@@ -1,8 +1,12 @@
 // @dart=2.9
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:wru_fe/api/graphql/graphql.dart';
 
 import 'package:wru_fe/cubit/group/group_cubit.dart';
@@ -11,6 +15,7 @@ import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/cubit/signin/signup_cubit.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/global_constants.dart';
+import 'package:wru_fe/hive_config.dart';
 import 'package:wru_fe/repositories/auth.repository.dart';
 import 'package:wru_fe/repositories/group.repository.dart';
 import 'package:wru_fe/repositories/jouney.repository.dart';
@@ -26,6 +31,14 @@ import 'package:wru_fe/themes/light.theme.dart';
 Future<void> main() async {
   const isProduction = bool.fromEnvironment('dart.vm.product');
   await dotenv.load(fileName: isProduction ? 'prod.env' : 'dev.env');
+
+  getIt.registerSingleton<HiveConfig>(
+    HiveConfig(),
+    signalsReady: true,
+  );
+
+  await getIt<HiveConfig>().initHive();
+
   print(API_URL);
   return runApp(MyApp());
 }

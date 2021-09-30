@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wru_fe/screens/groups.screen.dart';
 import 'package:wru_fe/screens/jouney.screen.dart';
 
 class HomeScreen extends StatefulWidget {

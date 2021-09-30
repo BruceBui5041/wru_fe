@@ -1,8 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
-import 'package:wru_fe/dto/create_group.dto.dart';
 import 'package:wru_fe/dto/create_marker.dto.dart';
 import 'package:wru_fe/dto/fetch_marker.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';

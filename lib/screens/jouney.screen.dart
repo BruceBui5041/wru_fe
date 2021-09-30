@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
-import 'package:wru_fe/dto/fetch_jouney.dto.dart';
-import 'package:wru_fe/dto/fetch_marker.dto.dart';
 import 'package:wru_fe/enums.dart';
 import 'package:wru_fe/models/marker.model.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
@@ -28,6 +26,7 @@ class _JouneyScreenState extends State<JouneyScreen> {
   double initialZoom = 14.4746;
   Set<Marker> mapMarkers = {};
   String selectedJouneyId = "";
+  String appBarTitle = "";
   EndDrawerComponentName endDrawerComponentName =
       EndDrawerComponentName.markers;
   // TODO Use user location for this
@@ -123,6 +122,12 @@ class _JouneyScreenState extends State<JouneyScreen> {
     });
   }
 
+  void _setAppBarTitle(String? title) {
+    setState(() {
+      appBarTitle = title ?? "";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -141,7 +146,26 @@ class _JouneyScreenState extends State<JouneyScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            title: Center(
+              child: Text(
+                appBarTitle,
+                style: TextStyle(
+                  fontSize: textTheme.headline5!.fontSize,
+                ),
+              ),
+            ),
+            actions: [
+              Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(Icons.room),
+                  onPressed: () => Scaffold.of(context).openEndDrawer(),
+                  tooltip:
+                      MaterialLocalizations.of(context).openAppDrawerTooltip,
+                ),
+              ),
+            ],
+          ),
           body: GoogleMap(
             mapType: MapType.normal,
             markers: mapMarkers,
@@ -150,8 +174,10 @@ class _JouneyScreenState extends State<JouneyScreen> {
               _controller.complete(controller);
             },
           ),
-          drawer: const Drawer(
-            child: JouneyList(),
+          drawer: Drawer(
+            child: JouneyList(
+              setAppbarTitle: _setAppBarTitle,
+            ),
           ),
           endDrawer: Theme(
             data: Theme.of(context).copyWith(

@@ -22,7 +22,7 @@ class CreateMarkerBottomSheet extends StatelessWidget {
       lat: 106.430417,
       lng: 10.521607,
       description: _descriptionController.text,
-      jouneyId: "2673a2f7-aaf2-444b-a8f5-cec3d52e9b9e",
+      jouneyId: jouneyId,
     );
 
     FocusScope.of(context).unfocus();

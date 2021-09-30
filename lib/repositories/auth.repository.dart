@@ -87,11 +87,11 @@ class AuthRepository {
   }
 
   Future<String> getStoredAccessToken() async {
-    return getValueFromSharePreference(tokenKey);
+    return getValueFromStore(tokenKey);
   }
 
   Future<void> saveAccessToken(String accessToken) async {
     assert(accessToken.isEmpty == false);
-    setValueToSharePreference(tokenKey, accessToken);
+    setValueToStore(tokenKey, accessToken);
   }
 }
