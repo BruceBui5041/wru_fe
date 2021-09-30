@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
+import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/dto/fetch_jouney.dto.dart';
 import 'package:wru_fe/models/jouney.model.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
-import 'package:wru_fe/widgets/jouney_item.widget.dart';
+import 'package:wru_fe/widgets/jouney.widget.dart';
 
 class JouneyList extends StatefulWidget {
   const JouneyList({Key? key}) : super(key: key);
@@ -22,10 +23,12 @@ class _JouneyListState extends State<JouneyList> {
   }
 
   Widget _generateJouneyListWidget(
-      List<Jouney> groups, MarkerCubit markerCubit) {
+    List<Jouney> jouneys,
+    MarkerCubit markerCubit,
+  ) {
     return ListView.builder(
       itemBuilder: (context, index) {
-        final Jouney jouney = groups[index];
+        final Jouney jouney = jouneys[index];
         if (index == 0) {
           return Column(
             children: [
@@ -33,16 +36,16 @@ class _JouneyListState extends State<JouneyList> {
                 height: 50,
                 child: const Text("Drawer header"),
               ),
-              JouneyItemWidget(
+              JouneyItem(
                 jouney: jouney,
                 markerCubit: markerCubit,
               )
             ],
           );
         }
-        return JouneyItemWidget(jouney: jouney, markerCubit: markerCubit);
+        return JouneyItem(jouney: jouney, markerCubit: markerCubit);
       },
-      itemCount: groups.length,
+      itemCount: jouneys.length,
     );
   }
 
@@ -50,10 +53,9 @@ class _JouneyListState extends State<JouneyList> {
   Widget build(BuildContext context) {
     return BlocConsumer<JouneyCubit, JouneyState>(
       listener: (context, state) {
-        // TODO Duplicate Unauthorized state
-        // if (state is Unauthorized) {
-        //   Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
-        // }
+        if (state is Unauthorized) {
+          Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
+        }
       },
       builder: (context, state) {
         if (state is FetchJouneysFailed) {

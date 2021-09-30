@@ -14,7 +14,6 @@ class _HomeScreenState extends State<HomeScreen> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
-    GroupsScreen(),
     const JouneyScreen(),
     Text(
       'Index 2: School',
@@ -36,10 +35,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            label: 'Groups',
-          ),
+          // TODO Group
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.group),
+          //   label: 'Groups',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
             label: 'Jouney',

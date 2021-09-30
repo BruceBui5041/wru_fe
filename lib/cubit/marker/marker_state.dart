@@ -14,8 +14,10 @@ class FetchMarker extends MarkerState {
 }
 
 class FetchMarkersSuccessed extends MarkerState {
-  const FetchMarkersSuccessed({this.markers = const []});
-  final List<Marker> markers;
+  const FetchMarkersSuccessed({this.markers = const [], this.jouneyId});
+
+  final String? jouneyId;
+  final List<CustomMarker> markers;
 }
 
 class FetchMarkersFailed extends MarkerState {
@@ -24,6 +26,16 @@ class FetchMarkersFailed extends MarkerState {
   final String? message;
 }
 
-class Unauthorized extends MarkerState {
-  const Unauthorized();
+class CreateMarker extends MarkerState {
+  const CreateMarker();
+}
+
+class CreateMarkerSuccessed extends MarkerState {
+  const CreateMarkerSuccessed();
+}
+
+class CreateMarkerFailed extends MarkerState {
+  const CreateMarkerFailed({this.error, this.message});
+  final String? error;
+  final String? message;
 }

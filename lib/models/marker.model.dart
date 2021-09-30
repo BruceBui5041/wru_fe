@@ -1,14 +1,14 @@
 import 'package:wru_fe/models/group.model.dart';
 import 'package:wru_fe/models/jouney.model.dart';
 
-class Marker {
-  Marker({
+class CustomMarker {
+  CustomMarker({
     required this.jouney,
     required this.lng,
     required this.lat,
   });
 
-  Marker.fromJson(Map<String, dynamic> json) {
+  CustomMarker.fromJson(Map<String, dynamic> json) {
     name = _getStringValue(json['name']);
     lng = _getNumberValue(json['lng']);
     lat = _getNumberValue(json['lat']);

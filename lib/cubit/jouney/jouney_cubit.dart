@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/dto/fetch_jouney.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';
 import 'package:wru_fe/models/jouney.model.dart';

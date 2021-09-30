@@ -23,7 +23,3 @@ class FetchJouneysFailed extends JouneyState {
   final String? error;
   final String? message;
 }
-
-class Unauthorized extends JouneyState {
-  const Unauthorized();
-}

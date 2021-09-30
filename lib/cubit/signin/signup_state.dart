@@ -33,7 +33,3 @@ class SignUpFail extends SignUpState {
   @override
   int get hashCode => message.hashCode;
 }
-
-class Unauthorized extends SignUpState {
-  const Unauthorized();
-}

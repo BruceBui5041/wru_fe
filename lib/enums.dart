@@ -1,0 +1,4 @@
+enum EndDrawerComponentName {
+  addMarker,
+  markers,
+}

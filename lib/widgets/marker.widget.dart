@@ -3,21 +3,23 @@ import 'package:intl/intl.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/dto/fetch_marker.dto.dart';
 import 'package:wru_fe/models/jouney.model.dart';
+import 'package:wru_fe/models/marker.model.dart';
 
-class JouneyItemWidget extends StatelessWidget {
-  const JouneyItemWidget({
+class MarkerItem extends StatelessWidget {
+  const MarkerItem({
     Key? key,
-    required this.jouney,
-    required this.markerCubit,
+    required this.marker,
+    required this.moveMapCameraTo,
   }) : super(key: key);
-  final Jouney jouney;
-  final MarkerCubit markerCubit;
+
+  final CustomMarker marker;
+  final Function(CustomMarker marker) moveMapCameraTo;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final createdAt = DateFormat('MM/dd/yyyy, hh:mm a')
-        .format(DateTime.parse(jouney.createdAt ?? ""));
+        .format(DateTime.parse(marker.createdAt ?? ""));
 
     return Card(
       color: Colors.white70,
@@ -28,7 +30,7 @@ class JouneyItemWidget extends StatelessWidget {
       child: ListTile(
         isThreeLine: true,
         title: Text(
-          jouney.name ?? "",
+          marker.name ?? "",
           style: TextStyle(
             fontSize: textTheme.headline4!.fontSize,
           ),
@@ -37,7 +39,7 @@ class JouneyItemWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              jouney.description ?? "",
+              marker.description ?? "",
               style: TextStyle(
                 fontSize: textTheme.headline3!.fontSize,
               ),
@@ -48,30 +50,40 @@ class JouneyItemWidget extends StatelessWidget {
                 fontSize: textTheme.headline3!.fontSize,
               ),
             ),
-            Text(
-              jouney.markerCount.toString(),
-              style: TextStyle(
-                fontSize: textTheme.headline3!.fontSize,
-              ),
-            ),
           ],
         ),
         trailing: SizedBox(
           width: 110,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(3),
-            child: jouney.image == null
+            child: marker.image == null
                 ? const Text("Img")
                 : Image.network(
-                    jouney.image.toString(),
+                    marker.image.toString(),
                     fit: BoxFit.cover,
+                    loadingBuilder: (
+                      BuildContext context,
+                      Widget child,
+                      ImageChunkEvent? loadingProgress,
+                    ) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1.5,
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
                   ),
           ),
         ),
         onTap: () {
-          markerCubit.fetchMarkers(
-            FetchMarkerDto(jouneyId: jouney.uuid.toString()),
-          );
+          moveMapCameraTo(marker);
           Navigator.of(context).pop();
         },
       ),

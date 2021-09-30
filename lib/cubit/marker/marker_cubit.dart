@@ -1,5 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
+import 'package:wru_fe/cubit/signup/signin_cubit.dart';
+import 'package:wru_fe/dto/create_group.dto.dart';
+import 'package:wru_fe/dto/create_marker.dto.dart';
 import 'package:wru_fe/dto/fetch_marker.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';
 import 'package:wru_fe/models/marker.model.dart';
@@ -32,10 +36,41 @@ class MarkerCubit extends Cubit<MarkerState> {
 
     final List<dynamic> markersJson = res.result['markers'] as List<dynamic>;
 
-    final List<Marker> markers = markersJson
-        .map((groupJson) => Marker.fromJson(groupJson as Map<String, dynamic>))
+    final List<CustomMarker> markers = markersJson
+        .map((groupJson) =>
+            CustomMarker.fromJson(groupJson as Map<String, dynamic>))
         .toList();
 
-    emit(FetchMarkersSuccessed(markers: markers));
+    emit(FetchMarkersSuccessed(
+      markers: markers,
+      jouneyId: fetchMarkerDto.jouneyId,
+    ));
+  }
+
+  Future<void> createMarker(CreateMarkerDto createMarkerDto) async {
+    emit(const CreateMarker());
+
+    final ResponseDto res =
+        await markerRepository.createMarker(createMarkerDto);
+
+    if (res.errorCode != null) {
+      emit(CreateMarkerFailed(
+        error: res.errorCode.toString(),
+        message: res.message.toString(),
+      ));
+
+      if (res.errorCode == 401) {
+        emit(const Unauthorized());
+      }
+
+      return;
+    }
+
+    // final List<dynamic> markersJson = res.result['markers'] as List<dynamic>;
+
+    // final CustomMarker marker =
+    //     CustomMarker.fromJson(markersJson as Map<String, dynamic>);
+
+    emit(const CreateMarkerSuccessed());
   }
 }

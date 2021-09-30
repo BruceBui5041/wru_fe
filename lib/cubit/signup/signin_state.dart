@@ -37,3 +37,7 @@ class SignInFail extends SignInState {
   @override
   int get hashCode => message.hashCode;
 }
+
+class Unauthorized implements GroupState, JouneyState, MarkerState {
+  const Unauthorized();
+}

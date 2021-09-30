@@ -68,7 +68,3 @@ class FetchingMembersFailed extends GroupState {
   final String? error;
   final String? message;
 }
-
-class Unauthorized extends GroupState {
-  const Unauthorized();
-}

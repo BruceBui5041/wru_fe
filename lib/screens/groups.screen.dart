@@ -52,9 +52,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
     return BlocConsumer<GroupCubit, GroupState>(
       listener: (context, state) {
-        if (state is Unauthorized) {
-          Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
-        }
+        // if (state is Unauthorized) {
+        //   Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
+        // }
       },
       builder: (context, state) {
         return Scaffold(
