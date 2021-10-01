@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/marker.model.dart';
+import 'package:wru_fe/utils.dart';
 
 class MarkerItem extends StatelessWidget {
   const MarkerItem({
@@ -10,7 +13,7 @@ class MarkerItem extends StatelessWidget {
   }) : super(key: key);
 
   final CustomMarker marker;
-  final Function(CustomMarker marker) moveMapCameraTo;
+  final Function(CameraPosition cameraPosition) moveMapCameraTo;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +83,15 @@ class MarkerItem extends StatelessWidget {
           ),
         ),
         onTap: () {
-          moveMapCameraTo(marker);
+          double lat = marker.lat as double;
+          double lng = marker.lng as double;
+
+          CameraPosition cameraPosition = CameraPosition(
+            target: LatLng(lat, lng),
+            zoom: 14.4746,
+          );
+
+          moveMapCameraTo(cameraPosition);
           Navigator.of(context).pop();
         },
       ),

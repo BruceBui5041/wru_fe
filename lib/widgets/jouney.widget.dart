@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/dto/fetch_marker.dto.dart';
+import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/jouney.model.dart';
+import 'package:wru_fe/utils.dart';
 
 class JouneyItem extends StatelessWidget {
   const JouneyItem({
@@ -90,6 +92,7 @@ class JouneyItem extends StatelessWidget {
           ),
         ),
         onTap: () {
+          setValueToStore(LAST_SEEN_JOUNEY, jouney.uuid.toString());
           markerCubit.fetchMarkers(
             FetchMarkerDto(jouneyId: jouney.uuid.toString()),
           );

@@ -22,6 +22,27 @@ class JouneyRepository {
       ''';
   }
 
+  String fetchJouneyByIdQuery(String jouneyId) {
+    return '''
+      query {
+        jouney (id: "$jouneyId") {
+          uuid
+          name
+          markerCount
+          markers {
+            uuid
+            name
+            visibility
+            description
+            lat
+            lng
+            image
+          }
+        }
+      }
+      ''';
+  }
+
   Future<ResponseDto> fetchJouney(FetchJouneyDto fetchJouneyDto) async {
     ////////////////////////////////////////
     final String readRepositories = fetchJouneyQuery(fetchJouneyDto);
@@ -33,6 +54,33 @@ class JouneyRepository {
     final QueryResult result = await client.query(options);
 
     if (result.hasException) {
+      assert(result.hasException);
+      return ResponseDto(
+        errorCode: result.exception?.graphqlErrors[0].extensions?.entries
+            .toList()[1]
+            .value['response']['statusCode'],
+        message: result.exception?.graphqlErrors[0].message,
+        result: result.data,
+      );
+    }
+
+    return ResponseDto(
+      result: result.data,
+    );
+  }
+
+  Future<ResponseDto> fetchJouneyById(String jouneyId) async {
+    ////////////////////////////////////////
+    final String readRepositories = fetchJouneyByIdQuery(jouneyId);
+    /////////////////////////////////////////
+
+    print(readRepositories);
+    final QueryOptions options = QueryOptions(document: gql(readRepositories));
+
+    final QueryResult result = await client.query(options);
+
+    if (result.hasException) {
+      assert(result.hasException);
       return ResponseDto(
         errorCode: result.exception?.graphqlErrors[0].extensions?.entries
             .toList()[1]

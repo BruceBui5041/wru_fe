@@ -35,8 +35,8 @@ class MarkerRepository {
         createMarker(
           jouneyId: "${createMarkerDto.jouneyId}",
           marker: {
-              lng: ${createMarkerDto.lat}, 
-              lat: ${createMarkerDto.lng}, 
+              lng: ${createMarkerDto.lng}, 
+              lat: ${createMarkerDto.lat}, 
               name: "${createMarkerDto.name}", 
               description: "${createMarkerDto.description}",
               image: ${createMarkerDto.image == null ? null : "${createMarkerDto.image}"}
@@ -62,6 +62,7 @@ class MarkerRepository {
     final QueryResult result = await client.mutate(options);
 
     if (result.hasException) {
+      assert(result.hasException);
       return ResponseDto(
         errorCode: result.exception?.graphqlErrors[0].extensions?.entries
             .toList()[1]

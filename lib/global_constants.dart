@@ -12,3 +12,9 @@ final String? API_URL = _env['API_URL'];
 final String? GOOGLE_MAP_KEY = _env['GOOGLE_MAP_KEY'];
 
 GetIt getIt = GetIt.instance;
+
+const String USER_LOCATION_KEY = "useLocation";
+
+const String LAST_SEEN_MARKER = "lastSeenMarker";
+
+const String LAST_SEEN_JOUNEY = "lastSeenJouney";

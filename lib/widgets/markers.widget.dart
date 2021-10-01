@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/models/marker.model.dart';
@@ -12,7 +13,7 @@ class MarkerList extends StatefulWidget {
     required this.moveMapCameraTo,
   }) : super(key: key);
 
-  final Function(CustomMarker marker) moveMapCameraTo;
+  final Function(CameraPosition cameraPosition) moveMapCameraTo;
 
   @override
   _MarkerListState createState() => _MarkerListState();
@@ -21,7 +22,7 @@ class MarkerList extends StatefulWidget {
 class _MarkerListState extends State<MarkerList> {
   Widget _generateJouneyListWidget(
     List<CustomMarker> markers,
-    Function(CustomMarker marker) moveMapCameraTo,
+    Function(CameraPosition cameraPosition) moveMapCameraTo,
   ) {
     return ListView.builder(
       itemBuilder: (context, index) {
@@ -34,6 +35,7 @@ class _MarkerListState extends State<MarkerList> {
                 child: const Text("Drawer header"),
               ),
               MarkerItem(
+                key: Key(marker.uuid.toString()),
                 marker: marker,
                 moveMapCameraTo: moveMapCameraTo,
               ),
@@ -41,6 +43,7 @@ class _MarkerListState extends State<MarkerList> {
           );
         }
         return MarkerItem(
+          key: Key(marker.uuid.toString()),
           marker: marker,
           moveMapCameraTo: moveMapCameraTo,
         );

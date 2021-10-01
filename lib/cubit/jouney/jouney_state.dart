@@ -23,3 +23,18 @@ class FetchJouneysFailed extends JouneyState {
   final String? error;
   final String? message;
 }
+
+class FetchJouneyById extends JouneyState {
+  const FetchJouneyById();
+}
+
+class FetchJouneyByIdSuccessed extends JouneyState {
+  const FetchJouneyByIdSuccessed({required this.jouney});
+  final Jouney jouney;
+}
+
+class FetchJouneyByIdFailed extends JouneyState {
+  const FetchJouneyByIdFailed({this.error, this.message});
+  final String? error;
+  final String? message;
+}

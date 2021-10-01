@@ -5,8 +5,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 import 'package:wru_fe/api/graphql/graphql.dart';
 
 import 'package:wru_fe/cubit/group/group_cubit.dart';
@@ -27,6 +25,7 @@ import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/screens/signup.screen.dart';
 import 'package:wru_fe/screens/splash.screen.dart';
 import 'package:wru_fe/themes/light.theme.dart';
+import 'package:wru_fe/utils.dart';
 
 Future<void> main() async {
   const isProduction = bool.fromEnvironment('dart.vm.product');
@@ -85,7 +84,7 @@ class MyApp extends StatelessWidget {
             SignInScreen.routeName: (_) => SignInScreen(),
             SignUpScreen.routeName: (_) => SignUpScreen(),
             SplashScreen.routeName: (_) => SplashScreen(),
-            JouneyScreen.routeName: (_) => const JouneyScreen()
+            JouneyScreen.routeName: (_) => JouneyScreen()
           },
         ),
       ),

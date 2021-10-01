@@ -36,6 +36,7 @@ class _JouneyListState extends State<JouneyList> {
         final Jouney jouney = jouneys[index];
 
         Widget jouneyItem = JouneyItem(
+          key: Key(jouney.uuid.toString()),
           jouney: jouney,
           markerCubit: markerCubit,
           setAppbarTitle: widget.setAppbarTitle,

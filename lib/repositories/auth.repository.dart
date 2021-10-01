@@ -69,7 +69,7 @@ class AuthRepository {
 
   Future<bool> isValidAccessToken() async {
     try {
-      final String accessToken = await getStoredAccessToken();
+      final String accessToken = getStoredAccessToken();
       if (accessToken == null) return false;
       final Response res = await postRequest(
         url: VERIFY_TOKEN,
@@ -86,11 +86,11 @@ class AuthRepository {
     }
   }
 
-  Future<String> getStoredAccessToken() async {
-    return getValueFromStore(tokenKey);
+  String getStoredAccessToken() {
+    return getValueFromStore(tokenKey).toString();
   }
 
-  Future<void> saveAccessToken(String accessToken) async {
+  void saveAccessToken(String accessToken) {
     assert(accessToken.isEmpty == false);
     setValueToStore(tokenKey, accessToken);
   }

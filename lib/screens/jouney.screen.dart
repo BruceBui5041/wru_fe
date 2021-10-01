@@ -2,85 +2,147 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/enums.dart';
+import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/marker.model.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
+import 'package:wru_fe/utils.dart';
 import 'package:wru_fe/widgets/create_marker_drawer.widget.dart';
 import 'package:wru_fe/widgets/jouneys.widget.dart';
 import 'package:wru_fe/widgets/markers.widget.dart';
 
 class JouneyScreen extends StatefulWidget {
-  const JouneyScreen({Key? key}) : super(key: key);
+  JouneyScreen({Key? key, this.lastKnowUserLocation}) : super(key: key);
   static const routeName = "/jouney-screen";
+  Position? lastKnowUserLocation;
 
   @override
   _JouneyScreenState createState() => _JouneyScreenState();
 }
 
 class _JouneyScreenState extends State<JouneyScreen> {
+  _JouneyScreenState({this.lastKnowUserLocation});
   Completer<GoogleMapController> _controller = Completer();
 
   double initialZoom = 14.4746;
-  Set<Marker> mapMarkers = {};
+  Set<Marker> checkinMarkers = {};
+  Set<Marker> allMarker = {};
+  Marker userMarker = Marker(
+    markerId: MarkerId("userLocationId"),
+    visible: false,
+  );
   String selectedJouneyId = "";
   String appBarTitle = "";
   EndDrawerComponentName endDrawerComponentName =
       EndDrawerComponentName.markers;
-  // TODO Use user location for this
-  CameraPosition kGooglePlex = const CameraPosition(
-    target: LatLng(0, 0),
-    zoom: 14.4746,
-  );
+
+  Position? lastKnowUserLocation;
 
   @override
   void initState() {
     super.initState();
+    loadLastSeenJouney();
+    loadUserLocation();
   }
 
-  Set<Marker> _generateGGMaker(List<CustomMarker> markers) {
+  void loadLastSeenJouney() async {
+    dynamic lastSeenJouneyId = getValueFromStore(LAST_SEEN_JOUNEY);
+    if (lastSeenJouneyId != null) {
+      var jouney = await context
+          .read<JouneyCubit>()
+          .fetchJouneyById(lastSeenJouneyId.toString());
+
+      if (jouney != null) {
+        _setAppBarTitle(jouney.name);
+
+        var markers = _generateGGCheckinMakers(
+          jouney.markers as List<CustomMarker>,
+        );
+
+        setState(() {
+          selectedJouneyId = jouney.uuid.toString();
+          checkinMarkers = markers;
+        });
+      }
+    }
+  }
+
+  void loadUserLocation() async {
+    Position userLocation = await getUserLocation();
+    double lat = userLocation.latitude;
+    double lng = userLocation.longitude;
+
+    var userPinIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(
+        size: Size(48, 48),
+      ),
+      'assets/images/user_location_pin.png',
+    );
+
+    var marker = Marker(
+      markerId: userMarker.mapsId,
+      position: LatLng(lat, lng),
+      flat: false,
+      icon: userPinIcon,
+      visible: true,
+    );
+
+    setState(() {
+      userMarker = marker;
+    });
+
+    CameraPosition cameraPosition = CameraPosition(
+      target: LatLng(lat, lng),
+      zoom: initialZoom,
+    );
+
+    _moveCameraTo(cameraPosition);
+  }
+
+  Set<Marker> _generateGGCheckinMakers(List<CustomMarker> markers) {
     Set<Marker> newMarkers = {};
     for (CustomMarker appMarker in markers) {
       double latitude = appMarker.lat as double;
       double longitude = appMarker.lng as double;
-      MarkerId markerId = MarkerId(appMarker.uuid.toString());
+
       Marker marker = Marker(
-        markerId: markerId,
+        markerId: MarkerId(appMarker.uuid.toString()),
         position: LatLng(latitude, longitude),
       );
+
       newMarkers.add(marker);
     }
     return newMarkers;
   }
 
-  Widget _screenContent(MarkerState state) {
-    if (state is FetchMarkersFailed) {
-      return Text(state.message.toString());
-    } else if (state is FetchMarkersSuccessed) {
-      return GoogleMap(
-        mapType: MapType.normal,
-        markers: mapMarkers,
-        initialCameraPosition: kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      );
-    } else {
-      return const Text("Loading ...");
-    }
+  Widget _screenContent(MarkerState state, Set<Marker> allMarker) {
+    double lat =
+        lastKnowUserLocation != null ? lastKnowUserLocation!.latitude : 0;
+    double lng =
+        lastKnowUserLocation != null ? lastKnowUserLocation!.longitude : 0;
+
+    var initCameraPosition = CameraPosition(
+      target: LatLng(lat, lng),
+    );
+
+    return GoogleMap(
+      mapType: MapType.normal,
+      markers: allMarker,
+      initialCameraPosition: initCameraPosition,
+      onMapCreated: (GoogleMapController controller) {
+        _controller.complete(controller);
+      },
+    );
   }
 
-  Future<void> _moveCameraTo(CustomMarker marker) async {
-    double latitude = marker.lat as double;
-    double longitude = marker.lng as double;
-
+  Future<void> _moveCameraTo(CameraPosition cameraPosition) async {
     final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-      target: LatLng(latitude, longitude),
-      zoom: initialZoom,
-    )));
+    controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
   Widget _endDrawerComponent() {
@@ -111,14 +173,20 @@ class _JouneyScreenState extends State<JouneyScreen> {
     );
   }
 
-  void _updateMapData(List<CustomMarker> markers) {
+  void _updateMapMarkers(List<CustomMarker> markers) {
     if (markers.length > 0) {
       final lastMarker = markers[0];
-      _moveCameraTo(lastMarker);
+      double lat = lastMarker.lat as double;
+      double lng = lastMarker.lng as double;
+      CameraPosition cameraPosition = CameraPosition(
+        target: LatLng(lat, lng),
+        zoom: initialZoom,
+      );
+      _moveCameraTo(cameraPosition);
     }
 
     setState(() {
-      mapMarkers = _generateGGMaker(markers);
+      checkinMarkers = _generateGGCheckinMakers(markers);
     });
   }
 
@@ -133,12 +201,14 @@ class _JouneyScreenState extends State<JouneyScreen> {
     final theme = Theme.of(context);
     final floatingBtnTheme = theme.floatingActionButtonTheme;
     final textTheme = theme.textTheme;
+    var allMarker = checkinMarkers..add(userMarker);
+
     return BlocConsumer<MarkerCubit, MarkerState>(
       listener: (context, state) {
         if (state is Unauthorized) {
           Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
         } else if (state is FetchMarkersSuccessed) {
-          _updateMapData(state.markers);
+          _updateMapMarkers(state.markers);
           setState(() {
             selectedJouneyId = state.jouneyId as String;
           });
@@ -166,14 +236,7 @@ class _JouneyScreenState extends State<JouneyScreen> {
               ),
             ],
           ),
-          body: GoogleMap(
-            mapType: MapType.normal,
-            markers: mapMarkers,
-            initialCameraPosition: kGooglePlex,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-          ),
+          body: _screenContent(state, allMarker),
           drawer: Drawer(
             child: JouneyList(
               setAppbarTitle: _setAppBarTitle,

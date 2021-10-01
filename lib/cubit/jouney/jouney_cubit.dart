@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/dto/fetch_jouney.dto.dart';
@@ -38,5 +39,31 @@ class JouneyCubit extends Cubit<JouneyState> {
         .toList();
 
     emit(FetchJouneysSuccessed(jouneys: jouneys));
+  }
+
+  Future<Jouney?> fetchJouneyById(String jouneyId) async {
+    emit(const FetchJouneyById());
+
+    final ResponseDto res = await jouneyRepository.fetchJouneyById(jouneyId);
+
+    if (res.errorCode != null) {
+      emit(FetchJouneyByIdFailed(
+        error: res.errorCode.toString(),
+        message: res.message.toString(),
+      ));
+
+      if (res.errorCode == 401) {
+        emit(const Unauthorized());
+      }
+
+      return null;
+    }
+
+    final dynamic jouneyJson = res.result['jouney'] as dynamic;
+
+    final Jouney jouney = Jouney.fromJson(jouneyJson as Map<String, dynamic>);
+
+    emit(FetchJouneyByIdSuccessed(jouney: jouney));
+    return jouney;
   }
 }

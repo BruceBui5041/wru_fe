@@ -13,7 +13,8 @@ class GraphQLUtil {
     final AuthLink _authLink = AuthLink(
       headerKey: 'Authorization',
       getToken: () {
-        final String token = getValueFromStore(AuthRepository.tokenKey);
+        final String token =
+            getValueFromStore(AuthRepository.tokenKey).toString();
         print(token);
         return 'Bearer $token';
       },
