@@ -13,7 +13,6 @@ class GroupDetailsScreen extends StatefulWidget {
 class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     String? groupId = ModalRoute.of(context)?.settings.arguments.toString();
     context
         .read<GroupCubit>()

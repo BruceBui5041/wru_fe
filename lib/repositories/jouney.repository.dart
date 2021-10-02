@@ -54,7 +54,7 @@ class JouneyRepository {
     final QueryResult result = await client.query(options);
 
     if (result.hasException) {
-      assert(result.hasException);
+      assert(!result.hasException);
       return ResponseDto(
         errorCode: result.exception?.graphqlErrors[0].extensions?.entries
             .toList()[1]

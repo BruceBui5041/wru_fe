@@ -35,7 +35,7 @@ class FormFieldCustomWidget extends StatelessWidget {
         ),
         suffixIcon: Icon(
           icon,
-          color: Theme.of(context).accentIconTheme.color,
+          color: Theme.of(context).primaryColor,
         ),
       ),
       onFieldSubmitted: onFieldSubmitted,

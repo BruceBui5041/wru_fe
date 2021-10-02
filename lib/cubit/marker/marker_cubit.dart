@@ -10,14 +10,14 @@ import 'package:wru_fe/repositories/makers.repository.dart';
 part 'marker_state.dart';
 
 class MarkerCubit extends Cubit<MarkerState> {
-  MarkerCubit(this.markerRepository) : super(const MarkerInitial());
+  MarkerCubit(this._markerRepository) : super(const MarkerInitial());
 
-  final MarkerRepository markerRepository;
+  final MarkerRepository _markerRepository;
 
   Future<void> fetchMarkers(FetchMarkerDto fetchMarkerDto) async {
     emit(const FetchMarker());
 
-    final ResponseDto res = await markerRepository.fetchMarker(fetchMarkerDto);
+    final ResponseDto res = await _markerRepository.fetchMarker(fetchMarkerDto);
 
     if (res.errorCode != null) {
       emit(FetchMarkersFailed(
@@ -49,7 +49,7 @@ class MarkerCubit extends Cubit<MarkerState> {
     emit(const CreateMarker());
 
     final ResponseDto res =
-        await markerRepository.createMarker(createMarkerDto);
+        await _markerRepository.createMarker(createMarkerDto);
 
     if (res.errorCode != null) {
       emit(CreateMarkerFailed(
@@ -64,11 +64,10 @@ class MarkerCubit extends Cubit<MarkerState> {
       return;
     }
 
-    // final List<dynamic> markersJson = res.result['markers'] as List<dynamic>;
+    final dynamic markerJson = res.result['createMarker'] as dynamic;
+    final CustomMarker marker =
+        CustomMarker.fromJson(markerJson as Map<String, dynamic>);
 
-    // final CustomMarker marker =
-    //     CustomMarker.fromJson(markersJson as Map<String, dynamic>);
-
-    emit(const CreateMarkerSuccessed());
+    emit(CreateMarkerSuccessed(jouneyid: marker.jouney!.uuid));
   }
 }

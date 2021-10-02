@@ -45,6 +45,9 @@ class MarkerRepository {
           uuid
           lat
           lng
+          jouney {
+            uuid
+          }
         }
       }
       ''';

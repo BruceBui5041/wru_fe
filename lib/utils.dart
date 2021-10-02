@@ -63,3 +63,24 @@ Future<Position> getUserLocation() async {
     throw Future.error(err);
   }
 }
+
+class SetAction {
+  final dynamic object;
+  final String id;
+  SetAction(this.object, this.id);
+
+  call() => object;
+
+  int get hashCode => id.hashCode;
+
+  @override
+  bool operator ==(other) {
+    if (other is! SetAction) {
+      return false;
+    }
+    return id == (other).id;
+  }
+
+  @override
+  String toString() => id;
+}

@@ -11,10 +11,10 @@ import 'package:wru_fe/widgets/jouney.widget.dart';
 class JouneyList extends StatefulWidget {
   const JouneyList({
     Key? key,
-    required this.setAppbarTitle,
+    required this.onJouneySelected,
   }) : super(key: key);
 
-  final Function(String?) setAppbarTitle;
+  final Function(String?) onJouneySelected;
 
   @override
   _JouneyListState createState() => _JouneyListState();
@@ -27,10 +27,7 @@ class _JouneyListState extends State<JouneyList> {
     context.read<JouneyCubit>().fetchJouneys(FetchJouneyDto());
   }
 
-  Widget _generateJouneyListWidget(
-    List<Jouney> jouneys,
-    MarkerCubit markerCubit,
-  ) {
+  Widget _generateJouneyListWidget(List<Jouney> jouneys) {
     return ListView.builder(
       itemBuilder: (context, index) {
         final Jouney jouney = jouneys[index];
@@ -38,21 +35,9 @@ class _JouneyListState extends State<JouneyList> {
         Widget jouneyItem = JouneyItem(
           key: Key(jouney.uuid.toString()),
           jouney: jouney,
-          markerCubit: markerCubit,
-          setAppbarTitle: widget.setAppbarTitle,
+          onJouneySelected: widget.onJouneySelected,
         );
 
-        if (index == 0) {
-          return Column(
-            children: [
-              Container(
-                height: 50,
-                child: const Text("Drawer header"),
-              ),
-              jouneyItem
-            ],
-          );
-        }
         return jouneyItem;
       },
       itemCount: jouneys.length,
@@ -72,7 +57,8 @@ class _JouneyListState extends State<JouneyList> {
           return Text(state.message.toString());
         } else if (state is FetchJouneysSuccessed) {
           return _generateJouneyListWidget(
-              state.jouneys, context.read<MarkerCubit>());
+            state.jouneys,
+          );
         } else {
           return const Text("Loading ...");
         }

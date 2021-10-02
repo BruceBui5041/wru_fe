@@ -31,7 +31,8 @@ class CreateMarker extends MarkerState {
 }
 
 class CreateMarkerSuccessed extends MarkerState {
-  const CreateMarkerSuccessed();
+  const CreateMarkerSuccessed({this.jouneyid});
+  final String? jouneyid;
 }
 
 class CreateMarkerFailed extends MarkerState {

@@ -40,11 +40,10 @@ dependencies:
 
   http: ^0.13.0
   intl: ^0.16.1
-  # path_provider: ^1.6.28
-  # shared_preferences: ^0.5.12+4
   get_it: ^7.2.0
   path_provider: ^2.0.5
   hive: ^2.0.4
+  badges: ^2.0.1
   google_maps_flutter: ^2.0.10
   geolocator: ^7.6.0
 

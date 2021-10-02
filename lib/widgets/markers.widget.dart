@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
+import 'package:wru_fe/dto/fetch_marker.dto.dart';
 import 'package:wru_fe/models/marker.model.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/widgets/marker.widget.dart';
@@ -11,8 +12,10 @@ class MarkerList extends StatefulWidget {
   const MarkerList({
     Key? key,
     required this.moveMapCameraTo,
+    required this.jouneyId,
   }) : super(key: key);
 
+  final String jouneyId;
   final Function(CameraPosition cameraPosition) moveMapCameraTo;
 
   @override
@@ -20,6 +23,15 @@ class MarkerList extends StatefulWidget {
 }
 
 class _MarkerListState extends State<MarkerList> {
+  @override
+  void initState() {
+    context
+        .read<MarkerCubit>()
+        .fetchMarkers(FetchMarkerDto(jouneyId: widget.jouneyId));
+
+    super.initState();
+  }
+
   Widget _generateJouneyListWidget(
     List<CustomMarker> markers,
     Function(CameraPosition cameraPosition) moveMapCameraTo,
@@ -27,21 +39,7 @@ class _MarkerListState extends State<MarkerList> {
     return ListView.builder(
       itemBuilder: (context, index) {
         final CustomMarker marker = markers[index];
-        if (index == 0) {
-          return Column(
-            children: [
-              Container(
-                height: 50,
-                child: const Text("Drawer header"),
-              ),
-              MarkerItem(
-                key: Key(marker.uuid.toString()),
-                marker: marker,
-                moveMapCameraTo: moveMapCameraTo,
-              ),
-            ],
-          );
-        }
+
         return MarkerItem(
           key: Key(marker.uuid.toString()),
           marker: marker,
