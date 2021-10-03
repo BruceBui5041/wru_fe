@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wru_fe/global_constants.dart';
@@ -86,32 +87,23 @@ class JouneyItem extends StatelessWidget {
                 child: SizedBox(
                   width: 110,
                   height: 80,
-                  child: jouney.image == null
-                      ? const Text("Img")
-                      : Image.network(
-                          jouney.image.toString(),
-                          fit: BoxFit.cover,
-                          loadingBuilder: (
-                            BuildContext context,
-                            Widget child,
-                            ImageChunkEvent? loadingProgress,
-                          ) {
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-
-                            return Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 1.5,
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                        ),
+                  child: CachedNetworkImage(
+                    imageUrl: jouney.image.toString(),
+                    fit: BoxFit.cover,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1.5,
+                        value: downloadProgress.totalSize != null
+                            ? downloadProgress.downloaded /
+                                downloadProgress.totalSize!
+                            : null,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => const Icon(
+                      Icons.error,
+                    ),
+                  ),
                 ),
               ),
             )

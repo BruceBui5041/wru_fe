@@ -1,4 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/marker.model.dart';
 import 'package:wru_fe/models/user.model.dart';
 
@@ -11,7 +12,7 @@ class Jouney {
   Jouney.fromJson(Map<String, dynamic> json) {
     name = _getStringValue(json['name']);
     description = _getStringValue(json['description']);
-    image = _getStringValue(json['image']);
+    image = _getImageURL(json['image']);
     uuid = _getStringValue(json['uuid']);
     markerCount = json['markerCount'] != null ? json['markerCount'] as int : 0;
     markers = json['markers'] != null
@@ -41,5 +42,9 @@ class Jouney {
 
   String? _getStringValue(dynamic nullableValue) {
     return nullableValue != null ? nullableValue as String : null;
+  }
+
+  String? _getImageURL(dynamic filename) {
+    return filename != null ? "$IMAGE_URL/$filename" : null;
   }
 }

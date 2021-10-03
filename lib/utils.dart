@@ -1,6 +1,13 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/hive_config.dart';
+import 'package:path/path.dart';
+import 'package:async/async.dart';
+import 'package:http/http.dart' as http;
 
 dynamic getValueFromStore(String key) {
   var hiveConfig = getIt<HiveConfig>();
@@ -64,23 +71,33 @@ Future<Position> getUserLocation() async {
   }
 }
 
-class SetAction {
-  final dynamic object;
-  final String id;
-  SetAction(this.object, this.id);
+class Upload {
+  Upload();
 
-  call() => object;
+  static Future<Stream>? uploadSingleImage(XFile image) async {
+    var hiveConfig = getIt<HiveConfig>();
+    String token = hiveConfig.storeBox!.get(ACCESS_TOKEN_KEY);
 
-  int get hashCode => id.hashCode;
+    var stream = http.ByteStream(DelegatingStream.typed(image.openRead()));
+    var length = await image.length();
 
-  @override
-  bool operator ==(other) {
-    if (other is! SetAction) {
-      return false;
-    }
-    return id == (other).id;
+    var uri = Uri.parse(UPLOAD_IMAGE_URL);
+
+    Map<String, String> headers = {
+      'Content-Type': 'multipart/form-data',
+      "Authorization": "Bearer $token"
+    };
+    var request = http.MultipartRequest("POST", uri);
+    request.headers.addAll(headers);
+    var multipartFile = http.MultipartFile(
+      'image',
+      stream,
+      length,
+      filename: basename(image.path),
+    );
+    request.files.add(multipartFile);
+    var response = await request.send();
+    print(response.statusCode);
+    return response.stream.transform(utf8.decoder);
   }
-
-  @override
-  String toString() => id;
 }

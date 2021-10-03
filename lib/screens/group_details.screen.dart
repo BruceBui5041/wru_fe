@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wru_fe/cubit/group/group_cubit.dart';
@@ -61,9 +62,22 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height * 0.25,
                   child: state.group.groupImageUrl != null
-                      ? Image.network(
-                          state.group.groupImageUrl.toString(),
-                          fit: BoxFit.fill,
+                      ? CachedNetworkImage(
+                          imageUrl: state.group.groupImageUrl.toString(),
+                          progressIndicatorBuilder: (
+                            context,
+                            url,
+                            downloadProgress,
+                          ) =>
+                              CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                          ),
+                          errorWidget: (
+                            context,
+                            url,
+                            error,
+                          ) =>
+                              const Icon(Icons.error),
                         )
                       : const Text("No Image"),
                 ),

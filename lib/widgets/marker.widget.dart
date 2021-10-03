@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -56,30 +57,23 @@ class MarkerItem extends StatelessWidget {
           width: 110,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(3),
-            child: marker.image == null
-                ? const Text("Img")
-                : Image.network(
-                    marker.image.toString(),
-                    fit: BoxFit.cover,
-                    loadingBuilder: (
-                      BuildContext context,
-                      Widget child,
-                      ImageChunkEvent? loadingProgress,
-                    ) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 1.5,
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                  ),
+            child: CachedNetworkImage(
+              imageUrl: marker.image.toString(),
+              fit: BoxFit.cover,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 1.5,
+                  value: downloadProgress.totalSize != null
+                      ? downloadProgress.downloaded /
+                          downloadProgress.totalSize!
+                      : null,
+                ),
+              ),
+              errorWidget: (context, url, error) => const Icon(
+                Icons.error,
+              ),
+            ),
           ),
         ),
         onTap: () {
