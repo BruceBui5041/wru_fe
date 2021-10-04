@@ -1,7 +1,5 @@
 // @dart=2.9
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -25,7 +23,6 @@ import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/screens/signup.screen.dart';
 import 'package:wru_fe/screens/splash.screen.dart';
 import 'package:wru_fe/themes/light.theme.dart';
-import 'package:wru_fe/utils.dart';
 
 Future<void> main() async {
   const isProduction = bool.fromEnvironment('dart.vm.product');

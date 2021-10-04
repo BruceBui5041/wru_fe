@@ -74,7 +74,10 @@ Future<Position> getUserLocation() async {
 class Upload {
   Upload();
 
-  static Future<Stream>? uploadSingleImage(XFile image) async {
+  static Future<String?> uploadSingleImage(
+    XFile image,
+    Function(String?) callback,
+  ) async {
     var hiveConfig = getIt<HiveConfig>();
     String token = hiveConfig.storeBox!.get(ACCESS_TOKEN_KEY);
 
@@ -98,6 +101,11 @@ class Upload {
     request.files.add(multipartFile);
     var response = await request.send();
     print(response.statusCode);
-    return response.stream.transform(utf8.decoder);
+    if (response.statusCode != 201) {}
+
+    response.stream.transform(utf8.decoder).listen((event) {
+      final resJSON = json.decode(event) as Map<String, dynamic>;
+      callback(resJSON['filename']);
+    });
   }
 }

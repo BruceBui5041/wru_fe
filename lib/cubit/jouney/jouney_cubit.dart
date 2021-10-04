@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
+import 'package:wru_fe/dto/create_group.dto.dart';
+import 'package:wru_fe/dto/create_jouney.dto.dart';
 import 'package:wru_fe/dto/fetch_jouney.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';
 import 'package:wru_fe/models/jouney.model.dart';
@@ -64,6 +66,32 @@ class JouneyCubit extends Cubit<JouneyState> {
     final Jouney jouney = Jouney.fromJson(jouneyJson as Map<String, dynamic>);
 
     emit(FetchJouneyByIdSuccessed(jouney: jouney));
+    return jouney;
+  }
+
+  Future<Jouney?> createJouney(CreateJouneyDto createJouneyDto) async {
+    emit(const CreateJouney());
+
+    final ResponseDto res =
+        await jouneyRepository.createJouney(createJouneyDto);
+
+    if (res.errorCode != null) {
+      emit(CreateJouneyFailed(
+        error: res.errorCode.toString(),
+        message: res.message.toString(),
+      ));
+
+      if (res.errorCode == 401) {
+        emit(const Unauthorized());
+      }
+
+      return null;
+    }
+
+    final dynamic jouneyJson = res.result['createJouney'] as dynamic;
+    final Jouney jouney = Jouney.fromJson(jouneyJson as Map<String, dynamic>);
+
+    emit(CreateJouneySuccessed(jouney: jouney));
     return jouney;
   }
 }

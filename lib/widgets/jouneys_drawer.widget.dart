@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:wru_fe/utils.dart';
+import 'package:wru_fe/widgets/create_jouney_dialog.widget.dart';
 import 'package:wru_fe/widgets/jouneys.widget.dart';
 import 'package:wru_fe/widgets/jouneys_drawer_topbar.widget.dart';
 
@@ -58,7 +61,20 @@ class _JouneyDrawerState extends State<JouneyDrawer> {
             ),
             floatingActionButton: FloatingActionButton(
               mini: true,
-              onPressed: () {},
+              onPressed: () async {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => CreateJouneyDialog(),
+                );
+                // final ImagePicker _picker = ImagePicker();
+                // final XFile? image =
+                //     await _picker.pickImage(source: ImageSource.gallery);
+                // if (image != null) {
+                //   Upload.uploadSingleImage(image, (String? filename) {
+                //     print(filename);
+                //   });
+                // }
+              },
               elevation: 4.0,
               child: Icon(
                 Icons.add,
