@@ -11,6 +11,9 @@ final String? API_URL = _env['API_URL'];
 // ignore: non_constant_identifier_names
 final String? GOOGLE_MAP_KEY = _env['GOOGLE_MAP_KEY'];
 
+// ignore: non_constant_identifier_names
+final String? RSA_PUBLIC_KEY = _env['RSA_PUBLIC_KEY'];
+
 final String IMAGE_URL = "$API_URL/uploads/";
 
 final String UPLOAD_IMAGE_URL = "$API_URL/file/upload";

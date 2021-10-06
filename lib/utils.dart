@@ -1,12 +1,17 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
+import 'package:encrypt/encrypt.dart';
+import 'package:encrypt/encrypt_io.dart';
+import 'package:pointycastle/src/platform_check/platform_check.dart';
+import 'package:pointycastle/api.dart' as pointycastle;
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pointycastle/export.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/hive_config.dart';
 import 'package:path/path.dart';
 import 'package:async/async.dart';
+
 import 'package:http/http.dart' as http;
 
 dynamic getValueFromStore(String key) {
@@ -107,5 +112,78 @@ class Upload {
       final resJSON = json.decode(event) as Map<String, dynamic>;
       callback(resJSON['filename']);
     });
+  }
+}
+
+class EncrytionManager {
+  // -----BEGIN RSA PRIVATE KEY-----
+  // MIIBOgIBAAJBAJsKyNf7BlLHVRbyq3J2/GacBTPcrj4+Rv1aZfIM/meB9WcV9f6V
+  // 2qEP2+ee5zK4VR7+rNLgMXC9eplHartVVj0CAwEAAQJBAJIGJUXugnUikoyrgDit
+  // wmluFyRSe7XZ+AiUxKGmBVI8SDS3gkijnWt/RoFVNE/sdpE8PszqbUCgzhJ7lxhp
+  // +4ECIQDJeK1ts87XExmN+BHvYvelfl8yxzzNExsiGXKUPhaEHQIhAMUBKxemx7w8
+  // IndblHWxmQBczhO8bPK0jCRAxFqDqUChAiArFmQA0jOqS6trcWJkkAXmnuA9O98E
+  // /NEQueCHU7/9AQIgV6bwbGKJRcgfsalugXsWTyH7kq5obwhDvjGO65Le8GECIC69
+  // fFb9LaBizkaU7SN3ExSsrd+N3LaeaZ0wfA/tUscm
+  // -----END RSA PRIVATE KEY-----
+
+  // Future<String> encrypt(String data) async {
+  //   final encrypter = Encrypter(RSA(publicKey: publicKey));
+
+  //   var encryptedData = encrypter.encrypt(data);
+
+  //   RSAPublicKey(BigInt.from(512), BigInt.from(512));
+
+  //   return Future.value(encryptedData.base64);
+  // }
+
+  Future<String> decrypt(String data) async {
+    final publicKey = await parseKeyFromFile<RSAPublicKey>('rsa_pub_key.pem');
+    final encrypter = Encrypter(RSA(publicKey: publicKey));
+
+    var encryptedData = encrypter.encrypt(data);
+
+    return Future.value(encryptedData.base64);
+  }
+
+  void keyGen() {
+    final pair = _generateRSAkeyPair(_exampleSecureRandom());
+    final public = pair.publicKey;
+    final private = pair.privateKey;
+
+    print("${public}");
+  }
+
+  pointycastle.AsymmetricKeyPair<RSAPublicKey, RSAPrivateKey>
+      _generateRSAkeyPair(
+    pointycastle.SecureRandom secureRandom, {
+    int bitLength = 2048,
+  }) {
+    // Create an RSA key generator and initialize it
+    final keyGen = RSAKeyGenerator()
+      ..init(ParametersWithRandom(
+        RSAKeyGeneratorParameters(
+          BigInt.parse('65537'),
+          bitLength,
+          64,
+        ),
+        secureRandom,
+      ));
+
+    // Use the generator
+    final pair = keyGen.generateKeyPair();
+
+    // Cast the generated key pair into the RSA key types
+    final myPublic = pair.publicKey as RSAPublicKey;
+    final myPrivate = pair.privateKey as RSAPrivateKey;
+
+    return AsymmetricKeyPair<RSAPublicKey, RSAPrivateKey>(myPublic, myPrivate);
+  }
+
+  pointycastle.SecureRandom _exampleSecureRandom() {
+    final secureRandom = pointycastle.SecureRandom('Fortuna')
+      ..seed(
+        KeyParameter(Platform.instance.platformEntropySource().getBytes(32)),
+      );
+    return secureRandom;
   }
 }

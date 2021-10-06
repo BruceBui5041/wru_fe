@@ -67,8 +67,8 @@ class GroupRepository {
       assert(result.hasException);
       return ResponseDto(
         errorCode: result.exception?.graphqlErrors[0].extensions?.entries
-            .toList()[0]
-            .value,
+            .toList()[1]
+            .value["statusCode"],
         message: result.exception?.graphqlErrors[0].message,
         result: result.data,
       );
@@ -95,8 +95,8 @@ class GroupRepository {
       assert(result.hasException);
       return ResponseDto(
         errorCode: result.exception?.graphqlErrors[0].extensions?.entries
-            .toList()[0]
-            .value,
+            .toList()[1]
+            .value["statusCode"],
         message: result.exception?.graphqlErrors[0].message,
         result: result.data,
       );
@@ -137,8 +137,8 @@ class GroupRepository {
       assert(result.hasException);
       return ResponseDto(
         errorCode: result.exception?.graphqlErrors[0].extensions?.entries
-            .toList()[0]
-            .value,
+            .toList()[1]
+            .value["statusCode"],
         message: result.exception?.graphqlErrors[0].message,
         result: result.data,
       );

@@ -39,7 +39,7 @@ class MarkerRepository {
               lat: ${createMarkerDto.lat}, 
               name: "${createMarkerDto.name}", 
               description: "${createMarkerDto.description}",
-              image: ${createMarkerDto.image == null ? null : "${createMarkerDto.image}"}
+              image: ${createMarkerDto.image == null ? null : "\"${createMarkerDto.image}\""}
             }
         ) {
           uuid
@@ -67,8 +67,8 @@ class MarkerRepository {
     if (result.hasException) {
       return ResponseDto(
         errorCode: result.exception?.graphqlErrors[0].extensions?.entries
-            .toList()[0]
-            .value,
+            .toList()[1]
+            .value["statusCode"],
         message: result.exception?.graphqlErrors[0].message,
         result: result.data,
       );
@@ -92,8 +92,8 @@ class MarkerRepository {
     if (result.hasException) {
       return ResponseDto(
         errorCode: result.exception?.graphqlErrors[0].extensions?.entries
-            .toList()[0]
-            .value,
+            .toList()[1]
+            .value["statusCode"],
         message: result.exception?.graphqlErrors[0].message,
         result: result.data,
       );

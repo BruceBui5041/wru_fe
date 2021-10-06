@@ -48,28 +48,42 @@ class MyApp extends StatelessWidget {
   final MarkerRepository _markerRepository =
       MarkerRepository(client: GraphQLUtil.client());
 
+  List<BlocProvider> providers() {
+    return [
+      BlocProvider<MarkerCubit>(
+        create: (BuildContext context) => MarkerCubit(_markerRepository),
+      ),
+      BlocProvider<SignInCubit>(
+        create: (BuildContext context) => SignInCubit(_authRepository),
+      ),
+      BlocProvider<SignUpCubit>(
+        create: (BuildContext context) => SignUpCubit(_authRepository),
+      ),
+      BlocProvider<GroupCubit>(
+        create: (BuildContext context) => GroupCubit(_groupRepository),
+      ),
+      BlocProvider<JouneyCubit>(
+        create: (BuildContext context) => JouneyCubit(_jouneyRepository),
+      ),
+      BlocProvider<FetchJouneyByIdCubit>(
+        create: (BuildContext context) => FetchJouneyByIdCubit(
+          _jouneyRepository,
+        ),
+      ),
+      BlocProvider<CreateJouneyCubit>(
+        create: (BuildContext context) => CreateJouneyCubit(
+          _jouneyRepository,
+        ),
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
       value: _authRepository,
       child: MultiBlocProvider(
-        providers: [
-          BlocProvider<MarkerCubit>(
-            create: (BuildContext context) => MarkerCubit(_markerRepository),
-          ),
-          BlocProvider<SignInCubit>(
-            create: (BuildContext context) => SignInCubit(_authRepository),
-          ),
-          BlocProvider<SignUpCubit>(
-            create: (BuildContext context) => SignUpCubit(_authRepository),
-          ),
-          BlocProvider<GroupCubit>(
-            create: (BuildContext context) => GroupCubit(_groupRepository),
-          ),
-          BlocProvider<JouneyCubit>(
-            create: (BuildContext context) => JouneyCubit(_jouneyRepository),
-          ),
-        ],
+        providers: providers(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'WRU-Dev',

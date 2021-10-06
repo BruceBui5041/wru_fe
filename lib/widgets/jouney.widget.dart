@@ -9,10 +9,8 @@ class JouneyItem extends StatelessWidget {
   const JouneyItem({
     Key? key,
     required this.jouney,
-    required this.onJouneySelected,
   }) : super(key: key);
 
-  final Function(String?) onJouneySelected;
   final Jouney jouney;
 
   @override
@@ -22,7 +20,7 @@ class JouneyItem extends StatelessWidget {
         .format(DateTime.parse(jouney.createdAt ?? ""));
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 8, 5, 0),
+      margin: const EdgeInsets.fromLTRB(0, 3, 5, 5),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -41,7 +39,6 @@ class JouneyItem extends StatelessWidget {
       child: InkWell(
         onTap: () {
           setValueToStore(LAST_SEEN_JOUNEY, jouney.uuid.toString());
-          onJouneySelected(jouney.name);
           Navigator.of(context).pop();
         },
         child: Row(
@@ -89,6 +86,7 @@ class JouneyItem extends StatelessWidget {
                   height: 80,
                   child: CachedNetworkImage(
                     imageUrl: jouney.image.toString(),
+                    // httpHeaders: ,
                     fit: BoxFit.cover,
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Center(
@@ -100,8 +98,10 @@ class JouneyItem extends StatelessWidget {
                             : null,
                       ),
                     ),
-                    errorWidget: (context, url, error) => const Icon(
-                      Icons.error,
+                    errorWidget: (context, url, error) => const Center(
+                      child: Icon(
+                        Icons.error,
+                      ),
                     ),
                   ),
                 ),

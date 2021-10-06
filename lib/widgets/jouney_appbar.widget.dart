@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:wru_fe/widgets/create_jouney_dialog.widget.dart';
 
 class JouneyAppBar extends StatelessWidget with PreferredSizeWidget {
   const JouneyAppBar({
@@ -10,6 +11,13 @@ class JouneyAppBar extends StatelessWidget with PreferredSizeWidget {
 
   final String appBarTitle;
   final int markerCount;
+
+  void _openCreateJouneyDialog(BuildContext context) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => const CreateJouneyDialog(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +31,28 @@ class JouneyAppBar extends StatelessWidget with PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.menu),
-              color: theme.primaryColor,
-              onPressed: () => Scaffold.of(context).openDrawer(),
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            builder: (context) => TextButton(
+              child: Text(
+                "Jouneys",
+                style: TextStyle(
+                  fontSize: theme.textTheme.headline4!.fontSize,
+                ),
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+                // if (appBarTitle == "") {
+                //   _openCreateJouneyDialog(context);
+                // } else {
+                //   Scaffold.of(context).openDrawer();
+                // }
+              },
             ),
           ),
           Text(
             appBarTitle,
             style: TextStyle(
-              fontSize: textTheme.headline5!.fontSize,
-              color: theme.primaryColor,
+              fontSize: textTheme.headline6!.fontSize,
+              color: Colors.purple,
             ),
           ),
           Badge(

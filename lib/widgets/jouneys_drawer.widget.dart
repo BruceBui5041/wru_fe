@@ -8,16 +8,20 @@ import 'package:wru_fe/widgets/jouneys_drawer_topbar.widget.dart';
 class JouneyDrawer extends StatefulWidget {
   const JouneyDrawer({
     Key? key,
-    required this.onJouneySelected,
   }) : super(key: key);
-
-  final Function(String?) onJouneySelected;
 
   @override
   _JouneyDrawerState createState() => _JouneyDrawerState();
 }
 
 class _JouneyDrawerState extends State<JouneyDrawer> {
+  void _openCreateJouneyDialog(BuildContext context) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => CreateJouneyDialog(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -55,25 +59,12 @@ class _JouneyDrawerState extends State<JouneyDrawer> {
                 ),
               ),
               margin: const EdgeInsets.fromLTRB(0, 0, 4, 2),
-              child: JouneyList(
-                onJouneySelected: widget.onJouneySelected,
-              ),
+              child: JouneyList(),
             ),
             floatingActionButton: FloatingActionButton(
               mini: true,
-              onPressed: () async {
-                showDialog<String>(
-                  context: context,
-                  builder: (BuildContext context) => CreateJouneyDialog(),
-                );
-                // final ImagePicker _picker = ImagePicker();
-                // final XFile? image =
-                //     await _picker.pickImage(source: ImageSource.gallery);
-                // if (image != null) {
-                //   Upload.uploadSingleImage(image, (String? filename) {
-                //     print(filename);
-                //   });
-                // }
+              onPressed: () {
+                _openCreateJouneyDialog(context);
               },
               elevation: 4.0,
               child: Icon(

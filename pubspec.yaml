@@ -48,6 +48,8 @@ dependencies:
   geolocator: ^7.6.0
   image_picker: ^0.8.4+2
   cached_network_image: ^3.1.0
+  encrypt: ^5.0.1
+  pointycastle: ^3.3.4
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +82,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/images/user_location_pin.png
+    - rsa_pub_key.pem
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

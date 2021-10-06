@@ -16,7 +16,7 @@ class JouneyCubit extends Cubit<JouneyState> {
 
   final JouneyRepository jouneyRepository;
 
-  Future<void> fetchJouneys(FetchJouneyDto fetchJouneyDto) async {
+  Future<void> fetchJouneys(FetchJouneyDto? fetchJouneyDto) async {
     emit(const FetchingJouney());
 
     final ResponseDto res = await jouneyRepository.fetchJouney(fetchJouneyDto);
@@ -42,6 +42,13 @@ class JouneyCubit extends Cubit<JouneyState> {
 
     emit(FetchJouneysSuccessed(jouneys: jouneys));
   }
+}
+
+class FetchJouneyByIdCubit extends Cubit<FetchJouneyByIdState> {
+  FetchJouneyByIdCubit(this.jouneyRepository)
+      : super(const FetchJouneyByIdInitial());
+
+  final JouneyRepository jouneyRepository;
 
   Future<Jouney?> fetchJouneyById(String jouneyId) async {
     emit(const FetchJouneyById());
@@ -68,6 +75,12 @@ class JouneyCubit extends Cubit<JouneyState> {
     emit(FetchJouneyByIdSuccessed(jouney: jouney));
     return jouney;
   }
+}
+
+class CreateJouneyCubit extends Cubit<CreateJouneyState> {
+  CreateJouneyCubit(this.jouneyRepository) : super(const CreateJouneyInitial());
+
+  final JouneyRepository jouneyRepository;
 
   Future<Jouney?> createJouney(CreateJouneyDto createJouneyDto) async {
     emit(const CreateJouney());

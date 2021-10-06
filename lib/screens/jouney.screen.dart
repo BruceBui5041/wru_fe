@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hive/hive.dart';
 import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/enums.dart';
 import 'package:wru_fe/global_constants.dart';
+import 'package:wru_fe/hive_config.dart';
 import 'package:wru_fe/models/marker.model.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/utils.dart';
@@ -43,11 +45,28 @@ class _JouneyScreenState extends State<JouneyScreen> {
   EndDrawerComponentName endDrawerComponentName =
       EndDrawerComponentName.markers;
 
+  StreamSubscription<BoxEvent>? watchLastSeenJouney;
+
   @override
   void initState() {
     _loadLastSeenJouney();
     _loadUserLocation();
+
+    var hiveConfig = getIt<HiveConfig>();
+    watchLastSeenJouney =
+        hiveConfig.storeBox!.watch(key: LAST_SEEN_JOUNEY).listen((event) {
+      _loadLastSeenJouney();
+    });
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (watchLastSeenJouney != null) {
+      watchLastSeenJouney!.cancel();
+    }
+    super.dispose();
   }
 
   void _loadLastSeenJouney() async {
@@ -56,7 +75,7 @@ class _JouneyScreenState extends State<JouneyScreen> {
 
     if (lastSeenJouneyId != null) {
       var jouney = await context
-          .read<JouneyCubit>()
+          .read<FetchJouneyByIdCubit>()
           .fetchJouneyById(lastSeenJouneyId.toString());
 
       if (jouney != null) {
@@ -204,10 +223,6 @@ class _JouneyScreenState extends State<JouneyScreen> {
     );
   }
 
-  void _onJouneySelected(String? title) {
-    _loadLastSeenJouney();
-  }
-
   Set<Marker> _getAllMarker() {
     Set<Marker> markers = {};
     markers.addAll(checkinMarkers);
@@ -249,9 +264,7 @@ class _JouneyScreenState extends State<JouneyScreen> {
                   data: theme.copyWith(
                     canvasColor: Colors.transparent,
                   ),
-                  child: JouneyDrawer(
-                    onJouneySelected: _onJouneySelected,
-                  ),
+                  child: JouneyDrawer(),
                 ),
                 endDrawer: Theme(
                   data: theme.copyWith(
@@ -275,6 +288,7 @@ class _JouneyScreenState extends State<JouneyScreen> {
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerFloat,
                 floatingActionButton: Builder(builder: (context) {
+                  if (selectedJouneyId == "") return Container();
                   return FloatingActionButton(
                     onPressed: () {
                       Scaffold.of(context).openEndDrawer();

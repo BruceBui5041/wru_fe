@@ -31,7 +31,6 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(

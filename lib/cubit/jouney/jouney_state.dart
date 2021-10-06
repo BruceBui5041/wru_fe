@@ -24,31 +24,49 @@ class FetchJouneysFailed extends JouneyState {
   final String? message;
 }
 
-class FetchJouneyById extends JouneyState {
+@immutable
+abstract class FetchJouneyByIdState {
+  const FetchJouneyByIdState();
+}
+
+class FetchJouneyByIdInitial extends FetchJouneyByIdState {
+  const FetchJouneyByIdInitial();
+}
+
+class FetchJouneyById extends FetchJouneyByIdState {
   const FetchJouneyById();
 }
 
-class FetchJouneyByIdSuccessed extends JouneyState {
+class FetchJouneyByIdSuccessed extends FetchJouneyByIdState {
   const FetchJouneyByIdSuccessed({required this.jouney});
   final Jouney jouney;
 }
 
-class FetchJouneyByIdFailed extends JouneyState {
+class FetchJouneyByIdFailed extends FetchJouneyByIdState {
   const FetchJouneyByIdFailed({this.error, this.message});
   final String? error;
   final String? message;
 }
 
-class CreateJouney extends JouneyState {
+@immutable
+abstract class CreateJouneyState {
+  const CreateJouneyState();
+}
+
+class CreateJouneyInitial extends CreateJouneyState {
+  const CreateJouneyInitial();
+}
+
+class CreateJouney extends CreateJouneyState {
   const CreateJouney();
 }
 
-class CreateJouneySuccessed extends JouneyState {
+class CreateJouneySuccessed extends CreateJouneyState {
   const CreateJouneySuccessed({required this.jouney});
   final Jouney jouney;
 }
 
-class CreateJouneyFailed extends JouneyState {
+class CreateJouneyFailed extends CreateJouneyState {
   const CreateJouneyFailed({this.error, this.message});
   final String? error;
   final String? message;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class JouneyDrawerTopBar extends StatefulWidget {
   JouneyDrawerTopBar({Key? key}) : super(key: key);
-  final List<bool> _isSelected = [false, false];
+  final List<bool> _isSelected = [true, false];
 
   @override
   _JouneyDrawerTopBarState createState() => _JouneyDrawerTopBarState();
@@ -16,20 +16,15 @@ class _JouneyDrawerTopBarState extends State<JouneyDrawerTopBar> {
 
     return Row(
       children: [
-        const Expanded(
+        Expanded(
           flex: 2,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(3, 8, 3, 8),
-            child: TextField(
-              maxLines: 1,
-              decoration: InputDecoration(
-                focusColor: Colors.red,
-                prefixIcon: Icon(
-                  Icons.search,
-                  size: 20,
-                ),
-                border: OutlineInputBorder(),
-                labelText: 'Search',
+            padding: const EdgeInsets.fromLTRB(5, 8, 3, 8),
+            child: Text(
+              isSelected[0] == true ? "My jouney" : "Shared jouney",
+              style: TextStyle(
+                fontSize: theme.textTheme.headline4!.fontSize,
+                color: Colors.purple,
               ),
             ),
           ),

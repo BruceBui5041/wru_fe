@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
 import 'package:wru_fe/dto/create_jouney.dto.dart';
+import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/utils.dart';
 
 class CreateJouneyDialog extends StatefulWidget {
@@ -18,14 +19,67 @@ class _CreateJouneyDialogState extends State<CreateJouneyDialog> {
   String? localImagePath;
   String? uploadedFileName;
 
+  static final _form = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _descriptionController = TextEditingController();
+
+  Widget _imageSelector(String? localImagePath) {
+    return InkWell(
+      onTap: _selectImage,
+      splashColor: Colors.brown.withOpacity(0.5),
+      child: SizedBox(
+        height: 150,
+        width: 200,
+        child: Stack(
+          children: [
+            const Center(
+              child: Icon(
+                Icons.add_a_photo,
+                color: Colors.purple,
+              ),
+            ),
+            localImagePath == null
+                ? Container()
+                : Center(
+                    child: Image.file(
+                      File(
+                        localImagePath,
+                      ),
+                    ),
+                  ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _selectImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (image != null) {
+      Upload.uploadSingleImage(image, (
+        String? filename,
+      ) {
+        setState(() {
+          uploadedFileName = filename;
+        });
+      });
+    }
+
+    if (image?.path != null) {
+      setState(() {
+        localImagePath = image!.path;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-
-    final _form = GlobalKey<FormState>();
-    final _nameController = TextEditingController();
-    final _descriptionController = TextEditingController();
 
     return BlocConsumer<JouneyCubit, JouneyState>(
       listener: (context, state) {
@@ -34,13 +88,15 @@ class _CreateJouneyDialogState extends State<CreateJouneyDialog> {
       builder: (context, state) {
         return AlertDialog(
           elevation: 0,
+          scrollable: true,
           content: SizedBox(
             height: screenHeight * 0.5,
             width: screenWidth * 1,
             child: Form(
-              // key: _form,
+              key: _form,
               child: Column(
                 children: [
+                  _imageSelector(localImagePath),
                   TextField(
                     maxLines: 1,
                     controller: _nameController,
@@ -58,62 +114,25 @@ class _CreateJouneyDialogState extends State<CreateJouneyDialog> {
                       labelText: 'Description',
                     ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: localImagePath == null
-                            ? Container()
-                            : Image.file(
-                                File(
-                                  localImagePath as String,
-                                ),
-                                width: 100,
-                                height: 100,
-                              ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: TextButton(
-                          child: const Text("Image"),
-                          onPressed: () async {
-                            final ImagePicker _picker = ImagePicker();
-                            final XFile? image = await _picker.pickImage(
-                              source: ImageSource.gallery,
-                            );
-
-                            if (image != null) {
-                              Upload.uploadSingleImage(image,
-                                  (String? filename) {
-                                print(filename);
-
-                                setState(() {
-                                  uploadedFileName = filename;
-                                });
-                              });
-                            }
-
-                            if (image?.path != null) {
-                              setState(() {
-                                localImagePath = image!.path;
-                              });
-                            }
-                          },
-                        ),
-                      )
-                    ],
-                  ),
                   TextButton(
                     child: const Text("Create Jouney"),
                     onPressed: () {
                       var createJouneyDto = CreateJouneyDto(
-                          // name: _nameController.text,
-                          // description: _descriptionController.text,
-                          name: "AAAABBBB",
-                          description: "asdqqqqqqq",
-                          image: uploadedFileName);
+                        name: _nameController.text,
+                        description: _descriptionController.text,
+                        image: uploadedFileName,
+                      );
 
-                      context.read<JouneyCubit>().createJouney(createJouneyDto);
+                      context
+                          .read<CreateJouneyCubit>()
+                          .createJouney(createJouneyDto)
+                          .then((jouney) {
+                        setValueToStore(
+                          LAST_SEEN_JOUNEY,
+                          jouney!.uuid.toString(),
+                        );
+                        Navigator.of(context).pop();
+                      });
                     },
                   ),
                 ],

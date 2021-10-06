@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/dto/create_marker.dto.dart';
@@ -8,8 +11,8 @@ import 'package:wru_fe/dto/fetch_marker.dto.dart';
 import 'package:wru_fe/utils.dart';
 import 'package:wru_fe/widgets/form_field_custom.widget.dart';
 
-class CreateMarkerBottomSheet extends StatelessWidget {
-  CreateMarkerBottomSheet({
+class CreateMarkerBottomSheet extends StatefulWidget {
+  const CreateMarkerBottomSheet({
     Key? key,
     required this.jouneyId,
     required this.loadLastSeenJouney,
@@ -17,11 +20,24 @@ class CreateMarkerBottomSheet extends StatelessWidget {
 
   final String jouneyId;
   final Function loadLastSeenJouney;
-  final GlobalKey _form = GlobalKey<FormState>();
+
+  @override
+  _CreateMarkerBottomSheetState createState() =>
+      _CreateMarkerBottomSheetState();
+}
+
+class _CreateMarkerBottomSheetState extends State<CreateMarkerBottomSheet> {
+  _CreateMarkerBottomSheetState();
+
+  static final GlobalKey _form = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
-  void _submit(BuildContext context) async {
+  String? localImagePath;
+  String? uploadedFileName;
+
+  void _submit(BuildContext context, String jouneyId,
+      Function loadLastSeenJouney) async {
     Position useLocation = await getUserLocation();
 
     final CreateMarkerDto createMarkerDto = CreateMarkerDto(
@@ -30,6 +46,7 @@ class CreateMarkerBottomSheet extends StatelessWidget {
       lng: useLocation.longitude,
       description: _descriptionController.text,
       jouneyId: jouneyId,
+      image: uploadedFileName,
     );
 
     FocusScope.of(context).unfocus();
@@ -39,41 +56,87 @@ class CreateMarkerBottomSheet extends StatelessWidget {
     });
   }
 
+  Widget _imageSelector(String? localImagePath) {
+    return InkWell(
+      onTap: _selectImage,
+      splashColor: Colors.brown.withOpacity(0.5),
+      child: SizedBox(
+        height: 150,
+        width: 200,
+        child: Stack(
+          children: [
+            const Center(child: Icon(Icons.add_a_photo)),
+            localImagePath == null
+                ? Container()
+                : Center(
+                    child: Image.file(
+                      File(
+                        localImagePath,
+                      ),
+                    ),
+                  ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _selectImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (image != null) {
+      Upload.uploadSingleImage(image, (
+        String? filename,
+      ) {
+        setState(() {
+          uploadedFileName = filename;
+        });
+      });
+    }
+
+    if (image?.path != null) {
+      setState(() {
+        localImagePath = image!.path;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _form,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            "Checkin",
-            style: Theme.of(context).textTheme.headline5,
-          ),
-          FormFieldCustomWidget(
-            textInputAction: TextInputAction.next,
-            labelText: "Name",
-            controller: _nameController,
-            obscureText: false,
-          ),
-          FormFieldCustomWidget(
-            textInputAction: TextInputAction.done,
-            labelText: "Description",
-            controller: _descriptionController,
-            obscureText: false,
-            onFieldSubmitted: (_) {
-              _submit(context);
-            },
-          ),
-          const Text("Image"),
-          ElevatedButton(
-            child: const Text('Submit'),
-            onPressed: () {
-              _submit(context);
-            },
-          )
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Form(
+        key: _form,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            _imageSelector(localImagePath),
+            FormFieldCustomWidget(
+              textInputAction: TextInputAction.next,
+              labelText: "Name",
+              controller: _nameController,
+              obscureText: false,
+            ),
+            FormFieldCustomWidget(
+              textInputAction: TextInputAction.done,
+              labelText: "Description",
+              controller: _descriptionController,
+              obscureText: false,
+              onFieldSubmitted: (_) {
+                _submit(context, widget.jouneyId, widget.loadLastSeenJouney);
+              },
+            ),
+            TextButton(
+              child: const Text('Checkin'),
+              onPressed: () {
+                _submit(context, widget.jouneyId, widget.loadLastSeenJouney);
+              },
+            )
+          ],
+        ),
       ),
     );
   }

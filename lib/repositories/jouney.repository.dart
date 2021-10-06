@@ -7,7 +7,7 @@ class JouneyRepository {
   JouneyRepository({required this.client});
   final GraphQLClient client;
 
-  String fetchJouneyQuery(FetchJouneyDto fetchJouneyDto) {
+  String fetchJouneyQuery(FetchJouneyDto? fetchJouneyDto) {
     return '''
       query {
         jouneys {
@@ -62,7 +62,7 @@ class JouneyRepository {
       ''';
   }
 
-  Future<ResponseDto> fetchJouney(FetchJouneyDto fetchJouneyDto) async {
+  Future<ResponseDto> fetchJouney(FetchJouneyDto? fetchJouneyDto) async {
     ////////////////////////////////////////
     final String readRepositories = fetchJouneyQuery(fetchJouneyDto);
     /////////////////////////////////////////
@@ -75,8 +75,8 @@ class JouneyRepository {
     if (result.hasException) {
       return ResponseDto(
         errorCode: result.exception?.graphqlErrors[0].extensions?.entries
-            .toList()[0]
-            .value,
+            .toList()[1]
+            .value["statusCode"],
         message: result.exception?.graphqlErrors[0].message,
         result: result.data,
       );
@@ -100,8 +100,8 @@ class JouneyRepository {
     if (result.hasException) {
       return ResponseDto(
         errorCode: result.exception?.graphqlErrors[0].extensions?.entries
-            .toList()[0]
-            .value,
+            .toList()[1]
+            .value["statusCode"],
         message: result.exception?.graphqlErrors[0].message,
         result: result.data,
       );
@@ -127,8 +127,8 @@ class JouneyRepository {
     if (result.hasException) {
       return ResponseDto(
         errorCode: result.exception?.graphqlErrors[0].extensions?.entries
-            .toList()[0]
-            .value,
+            .toList()[1]
+            .value["statusCode"],
         message: result.exception?.graphqlErrors[0].message,
         result: result.data,
       );
