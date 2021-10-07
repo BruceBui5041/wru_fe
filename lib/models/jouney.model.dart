@@ -1,4 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:wru_fe/enums.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/marker.model.dart';
 import 'package:wru_fe/models/user.model.dart';
@@ -14,6 +15,7 @@ class Jouney {
     description = _getStringValue(json['description']);
     image = _getImageURL(json['image']);
     uuid = _getStringValue(json['uuid']);
+    visibility = _getVisibility(json['visibility']);
     markerCount = json['markerCount'] != null ? json['markerCount'] as int : 0;
     markers = json['markers'] != null
         ? json['markers']
@@ -32,7 +34,8 @@ class Jouney {
   String? name;
   String? description;
   String? image;
-  String? visibility;
+  String? imageName;
+  JouneyVisibility visibility = JouneyVisibility.private;
   User? owner;
   int? markerCount;
   List<CustomMarker> markers = [];
@@ -45,6 +48,16 @@ class Jouney {
   }
 
   String? _getImageURL(dynamic filename) {
+    imageName = filename;
     return filename != null ? "$IMAGE_URL$filename" : null;
+  }
+
+  JouneyVisibility _getVisibility(dynamic visibility) {
+    if (visibility == null) {
+      return JouneyVisibility.private;
+    }
+    return visibility.toString() == "0"
+        ? JouneyVisibility.private
+        : JouneyVisibility.public;
   }
 }

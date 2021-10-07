@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/dto/create_marker.dto.dart';
-import 'package:wru_fe/dto/fetch_marker.dto.dart';
 import 'package:wru_fe/utils.dart';
 import 'package:wru_fe/widgets/form_field_custom.widget.dart';
 
@@ -35,6 +33,13 @@ class _CreateMarkerBottomSheetState extends State<CreateMarkerBottomSheet> {
 
   String? localImagePath;
   String? uploadedFileName;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   void _submit(BuildContext context, String jouneyId,
       Function loadLastSeenJouney) async {

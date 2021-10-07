@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/marker.model.dart';
 import 'package:wru_fe/utils.dart';
+import 'package:wru_fe/widgets/custom_cached_image.widget.dart';
 
 class MarkerItem extends StatelessWidget {
   const MarkerItem({
@@ -57,25 +58,7 @@ class MarkerItem extends StatelessWidget {
           width: 110,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(3),
-            child: CachedNetworkImage(
-              imageUrl: marker.image.toString(),
-              fit: BoxFit.cover,
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 1.5,
-                  value: downloadProgress.totalSize != null
-                      ? downloadProgress.downloaded /
-                          downloadProgress.totalSize!
-                      : null,
-                ),
-              ),
-              errorWidget: (context, url, error) => const Center(
-                child: Icon(
-                  Icons.error,
-                ),
-              ),
-            ),
+            child: CustomCachedImage(imageUrl: marker.image),
           ),
         ),
         onTap: () {

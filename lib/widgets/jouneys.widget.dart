@@ -10,7 +10,9 @@ import 'package:wru_fe/dto/fetch_jouney.dto.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/hive_config.dart';
 import 'package:wru_fe/models/jouney.model.dart';
+import 'package:wru_fe/screens/jouney_details.screen.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
+import 'package:wru_fe/utils.dart';
 import 'package:wru_fe/widgets/jouney.widget.dart';
 
 class JouneyList extends StatefulWidget {
@@ -66,9 +68,7 @@ class _JouneyListState extends State<JouneyList> {
                     size: 17,
                     color: Colors.white,
                   ),
-                  () {
-                    print(jouney.uuid);
-                  },
+                  () {},
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5, right: 2),
@@ -79,7 +79,11 @@ class _JouneyListState extends State<JouneyList> {
                       color: Colors.white,
                     ),
                     () {
-                      print(jouney.uuid);
+                      Navigator.of(context).push(routeSlideFromBottomToTop(
+                        JouneyDetailScreen(
+                          jouneyId: jouney.uuid.toString(),
+                        ),
+                      ));
                     },
                   ),
                 ),
@@ -122,12 +126,7 @@ class _JouneyListState extends State<JouneyList> {
           return Text(state.message.toString());
         } else if (state is FetchJouneysSuccessed) {
           return _generateJouneyListWidget(state.jouneys, theme);
-        } else if (state is FetchingJouney) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
         } else {
-          context.read<JouneyCubit>().fetchJouneys(FetchJouneyDto());
           return const Center(
             child: CircularProgressIndicator(),
           );

@@ -13,16 +13,10 @@ class MarkerRepository {
         markers(jouneyId: "${fetchMarkerDto.jouneyId}") {
           uuid
           name
-          visibility
           description
           lat
           lng
           image
-          image1
-          image2
-          image3
-          image4
-          image5
           createdAt
         }
       }

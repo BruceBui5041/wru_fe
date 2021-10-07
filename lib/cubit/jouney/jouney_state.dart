@@ -71,3 +71,27 @@ class CreateJouneyFailed extends CreateJouneyState {
   final String? error;
   final String? message;
 }
+
+@immutable
+abstract class UpdateJouneyState {
+  const UpdateJouneyState();
+}
+
+class UpdateJouneyInitial extends UpdateJouneyState {
+  const UpdateJouneyInitial();
+}
+
+class UpdateJouney extends UpdateJouneyState {
+  const UpdateJouney();
+}
+
+class UpdateJouneySuccessed extends UpdateJouneyState {
+  const UpdateJouneySuccessed({required this.jouney});
+  final Jouney jouney;
+}
+
+class UpdateJouneyFailed extends UpdateJouneyState {
+  const UpdateJouneyFailed({this.error, this.message});
+  final String? error;
+  final String? message;
+}

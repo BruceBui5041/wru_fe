@@ -1,5 +1,4 @@
 import 'package:wru_fe/global_constants.dart';
-import 'package:wru_fe/models/group.model.dart';
 import 'package:wru_fe/models/jouney.model.dart';
 
 class CustomMarker {
@@ -47,6 +46,7 @@ class CustomMarker {
   }
 
   double _getNumberValue(dynamic nullableValue) {
+    if (nullableValue == null) return 999;
     return double.parse(nullableValue.toString());
   }
 

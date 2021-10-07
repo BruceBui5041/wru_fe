@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/jouney.model.dart';
 import 'package:wru_fe/utils.dart';
+import 'package:wru_fe/widgets/custom_cached_image.widget.dart';
 
 class JouneyItem extends StatelessWidget {
   const JouneyItem({
@@ -49,9 +50,7 @@ class JouneyItem extends StatelessWidget {
                 children: [
                   Text(
                     jouney.name ?? "",
-                    style: TextStyle(
-                      fontSize: textTheme.headline4!.fontSize,
-                    ),
+                    style: textTheme.headline4,
                   ),
                   Text(
                     jouney.description ?? "",
@@ -84,26 +83,7 @@ class JouneyItem extends StatelessWidget {
                 child: SizedBox(
                   width: 110,
                   height: 80,
-                  child: CachedNetworkImage(
-                    imageUrl: jouney.image.toString(),
-                    // httpHeaders: ,
-                    fit: BoxFit.cover,
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) => Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 1.5,
-                        value: downloadProgress.totalSize != null
-                            ? downloadProgress.downloaded /
-                                downloadProgress.totalSize!
-                            : null,
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => const Center(
-                      child: Icon(
-                        Icons.error,
-                      ),
-                    ),
-                  ),
+                  child: CustomCachedImage(imageUrl: jouney.image),
                 ),
               ),
             )

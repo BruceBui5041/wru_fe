@@ -6,6 +6,7 @@ import 'package:wru_fe/dto/create_group.dto.dart';
 import 'package:wru_fe/dto/create_jouney.dto.dart';
 import 'package:wru_fe/dto/fetch_jouney.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';
+import 'package:wru_fe/dto/update_jouney.dto.dart';
 import 'package:wru_fe/models/jouney.model.dart';
 import 'package:wru_fe/repositories/jouney.repository.dart';
 
@@ -50,10 +51,15 @@ class FetchJouneyByIdCubit extends Cubit<FetchJouneyByIdState> {
 
   final JouneyRepository jouneyRepository;
 
-  Future<Jouney?> fetchJouneyById(String jouneyId) async {
+  Future<Jouney?> fetchJouneyById(
+    String jouneyId, {
+    bool details = false,
+  }) async {
     emit(const FetchJouneyById());
 
-    final ResponseDto res = await jouneyRepository.fetchJouneyById(jouneyId);
+    final ResponseDto res = await (details
+        ? jouneyRepository.fetchJouneyDetailsById(jouneyId)
+        : jouneyRepository.fetchJouneyById(jouneyId));
 
     if (res.errorCode != null) {
       emit(FetchJouneyByIdFailed(
@@ -105,6 +111,38 @@ class CreateJouneyCubit extends Cubit<CreateJouneyState> {
     final Jouney jouney = Jouney.fromJson(jouneyJson as Map<String, dynamic>);
 
     emit(CreateJouneySuccessed(jouney: jouney));
+    return jouney;
+  }
+}
+
+class UpdateJouneyCubit extends Cubit<UpdateJouneyState> {
+  UpdateJouneyCubit(this.jouneyRepository) : super(const UpdateJouneyInitial());
+
+  final JouneyRepository jouneyRepository;
+
+  Future<Jouney?> updateJouney(UpdateJouneyDto updateJouneyDto) async {
+    emit(const UpdateJouney());
+
+    final ResponseDto res =
+        await jouneyRepository.updateJouney(updateJouneyDto);
+
+    if (res.errorCode != null) {
+      emit(UpdateJouneyFailed(
+        error: res.errorCode.toString(),
+        message: res.message.toString(),
+      ));
+
+      if (res.errorCode == 401) {
+        emit(const Unauthorized());
+      }
+
+      return null;
+    }
+
+    final dynamic jouneyJson = res.result['updateJouney'] as dynamic;
+    final Jouney jouney = Jouney.fromJson(jouneyJson as Map<String, dynamic>);
+
+    emit(UpdateJouneySuccessed(jouney: jouney));
     return jouney;
   }
 }

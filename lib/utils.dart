@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:encrypt/encrypt.dart';
 import 'package:encrypt/encrypt_io.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:pointycastle/src/platform_check/platform_check.dart';
 import 'package:pointycastle/api.dart' as pointycastle;
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pointycastle/export.dart';
+import 'package:wru_fe/enums.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/hive_config.dart';
 import 'package:path/path.dart';
@@ -186,4 +188,32 @@ class EncrytionManager {
       );
     return secureRandom;
   }
+}
+
+Route routeSlideFromBottomToTop(Widget page) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
+String? transformString(String key, String? data) {
+  if (data == null) return "";
+  return "$key: ${"\"$data\""},";
+}
+
+String transformVisibility(JouneyVisibility? jouneyVisibility) {
+  if (jouneyVisibility == null) return "";
+  return "visibility: ${jouneyVisibility == JouneyVisibility.private ? "PRIVATE" : "PUBLIC"},";
 }

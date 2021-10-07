@@ -23,6 +23,13 @@ class _CreateJouneyDialogState extends State<CreateJouneyDialog> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
   Widget _imageSelector(String? localImagePath) {
     return InkWell(
       onTap: _selectImage,

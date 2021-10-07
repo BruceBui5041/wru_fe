@@ -19,6 +19,7 @@ import 'package:wru_fe/repositories/makers.repository.dart';
 import 'package:wru_fe/screens/group_details.screen.dart';
 import 'package:wru_fe/screens/home.screen.dart';
 import 'package:wru_fe/screens/jouney.screen.dart';
+import 'package:wru_fe/screens/jouney_details.screen.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/screens/signup.screen.dart';
 import 'package:wru_fe/screens/splash.screen.dart';
@@ -70,6 +71,11 @@ class MyApp extends StatelessWidget {
           _jouneyRepository,
         ),
       ),
+      BlocProvider<UpdateJouneyCubit>(
+        create: (BuildContext context) => UpdateJouneyCubit(
+          _jouneyRepository,
+        ),
+      ),
       BlocProvider<CreateJouneyCubit>(
         create: (BuildContext context) => CreateJouneyCubit(
           _jouneyRepository,
@@ -90,12 +96,13 @@ class MyApp extends StatelessWidget {
           theme: LightTheme.themeLight,
           home: SplashScreen(),
           routes: {
-            HomeScreen.routeName: (_) => HomeScreen(),
+            HomeScreen.routeName: (_) => const HomeScreen(),
             GroupDetailsScreen.routeName: (_) => GroupDetailsScreen(),
             SignInScreen.routeName: (_) => SignInScreen(),
             SignUpScreen.routeName: (_) => SignUpScreen(),
             SplashScreen.routeName: (_) => SplashScreen(),
-            JouneyScreen.routeName: (_) => JouneyScreen()
+            JouneyScreen.routeName: (_) => JouneyScreen(),
+            JouneyDetailScreen.routeName: (_) => JouneyDetailScreen()
           },
         ),
       ),

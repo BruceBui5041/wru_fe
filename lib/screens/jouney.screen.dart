@@ -290,6 +290,7 @@ class _JouneyScreenState extends State<JouneyScreen> {
                 floatingActionButton: Builder(builder: (context) {
                   if (selectedJouneyId == "") return Container();
                   return FloatingActionButton(
+                    heroTag: "endDrawer",
                     onPressed: () {
                       Scaffold.of(context).openEndDrawer();
 

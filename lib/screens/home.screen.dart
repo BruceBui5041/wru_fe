@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:wru_fe/screens/jouney.screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
   static const routeName = "/home-screen";
 
   @override

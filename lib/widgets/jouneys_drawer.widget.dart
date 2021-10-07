@@ -62,6 +62,7 @@ class _JouneyDrawerState extends State<JouneyDrawer> {
               child: JouneyList(),
             ),
             floatingActionButton: FloatingActionButton(
+              heroTag: "createJouney",
               mini: true,
               onPressed: () {
                 _openCreateJouneyDialog(context);

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wru_fe/cubit/group/group_cubit.dart';
 import 'package:wru_fe/dto/fetch_group.dto.dart';
 import 'package:wru_fe/screens/home.screen.dart';
+import 'package:wru_fe/widgets/custom_cached_image.widget.dart';
 
 class GroupDetailsScreen extends StatefulWidget {
   static const String routeName = "/group-details-screen";
@@ -61,25 +62,7 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
                 SizedBox(
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height * 0.25,
-                  child: state.group.groupImageUrl != null
-                      ? CachedNetworkImage(
-                          imageUrl: state.group.groupImageUrl.toString(),
-                          progressIndicatorBuilder: (
-                            context,
-                            url,
-                            downloadProgress,
-                          ) =>
-                              CircularProgressIndicator(
-                            value: downloadProgress.progress,
-                          ),
-                          errorWidget: (
-                            context,
-                            url,
-                            error,
-                          ) =>
-                              const Icon(Icons.error),
-                        )
-                      : const Text("No Image"),
+                  child: CustomCachedImage(imageUrl: state.group.groupImageUrl),
                 ),
                 Positioned(
                   left: 0,

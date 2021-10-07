@@ -44,6 +44,7 @@ class Unauthorized
         JouneyState,
         MarkerState,
         FetchJouneyByIdState,
-        CreateJouneyState {
+        CreateJouneyState,
+        UpdateJouneyState {
   const Unauthorized();
 }
