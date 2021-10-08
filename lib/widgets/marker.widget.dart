@@ -23,56 +23,64 @@ class MarkerItem extends StatelessWidget {
     final createdAt = DateFormat('MM/dd/yyyy, hh:mm a')
         .format(DateTime.parse(marker.createdAt ?? ""));
 
-    return Card(
-      color: Colors.white70,
-      margin: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 4,
-      ),
-      child: ListTile(
-        isThreeLine: true,
-        title: Text(
-          marker.name ?? "",
-          style: TextStyle(
-            fontSize: textTheme.headline4!.fontSize,
-          ),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              marker.description ?? "",
-              style: TextStyle(
-                fontSize: textTheme.headline3!.fontSize,
-              ),
-            ),
-            Text(
-              createdAt,
-              style: TextStyle(
-                fontSize: textTheme.headline3!.fontSize,
-              ),
-            ),
-          ],
-        ),
-        trailing: SizedBox(
-          width: 110,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(3),
-            child: CustomCachedImage(imageUrl: marker.image),
-          ),
-        ),
-        onTap: () {
-          double lat = marker.lat as double;
-          double lng = marker.lng as double;
+    return InkWell(
+      splashColor: Colors.brown.withOpacity(0.5),
+      onTap: () {
+        double lat = marker.lat as double;
+        double lng = marker.lng as double;
 
-          CameraPosition cameraPosition = CameraPosition(
-            target: LatLng(lat, lng),
-            zoom: 14.4746,
-          );
+        CameraPosition cameraPosition = CameraPosition(
+          target: LatLng(lat, lng),
+          zoom: 14.4746,
+        );
 
-          moveMapCameraTo(cameraPosition);
-          Navigator.of(context).pop();
-        },
+        moveMapCameraTo(cameraPosition);
+        Navigator.of(context).pop();
+      },
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      marker.name ?? "",
+                      style: TextStyle(
+                        fontSize: textTheme.headline4!.fontSize,
+                      ),
+                    ),
+                    Text(
+                      marker.description ?? "",
+                      style: TextStyle(
+                        fontSize: textTheme.bodyText1!.fontSize,
+                      ),
+                    ),
+                    Text(
+                      createdAt,
+                      style: textTheme.subtitle1,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(5),
+                    bottomRight: Radius.circular(5),
+                  ),
+                  child: SizedBox(
+                    width: 110,
+                    height: 80,
+                    child: CustomCachedImage(imageUrl: marker.image),
+                  ),
+                ),
+              )
+            ],
+          ),
+          const Divider()
+        ],
       ),
     );
   }

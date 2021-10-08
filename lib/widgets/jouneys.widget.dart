@@ -26,12 +26,13 @@ class JouneyList extends StatefulWidget {
 
 class _JouneyListState extends State<JouneyList> {
   StreamSubscription<BoxEvent>? watchLastSeenJouney;
+  var hiveConfig = getIt<HiveConfig>();
+  var selectedJouneyId = getIt<HiveConfig>().storeBox!.get(LAST_SEEN_JOUNEY);
 
   @override
   void initState() {
     super.initState();
     context.read<JouneyCubit>().fetchJouneys(FetchJouneyDto());
-    var hiveConfig = getIt<HiveConfig>();
     watchLastSeenJouney =
         hiveConfig.storeBox!.watch(key: LAST_SEEN_JOUNEY).listen((event) {
       context.read<JouneyCubit>().fetchJouneys(FetchJouneyDto());
@@ -46,59 +47,57 @@ class _JouneyListState extends State<JouneyList> {
     super.dispose();
   }
 
+  Widget customJouneyItem(Jouney jouney) {
+    return Stack(
+      key: Key(jouney.uuid.toString()),
+      children: [
+        JouneyItem(jouney: jouney, selected: jouney.uuid == selectedJouneyId),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            _chip(
+              const Icon(
+                Icons.share,
+                size: 17,
+                color: Colors.white,
+              ),
+              () {},
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 5, right: 2),
+              child: _chip(
+                const Icon(
+                  Icons.edit,
+                  size: 17,
+                  color: Colors.white,
+                ),
+                () {
+                  Navigator.of(context).push(routeSlideFromBottomToTop(
+                    JouneyDetailScreen(
+                      jouneyId: jouney.uuid.toString(),
+                    ),
+                  ));
+                },
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
   Widget _generateJouneyListWidget(List<Jouney> jouneys, ThemeData theme) {
     return ListView.builder(
       itemBuilder: (context, index) {
         final Jouney jouney = jouneys[index];
-
-        Widget jouneyItem = Stack(
-          key: Key(jouney.uuid.toString()),
-          alignment: AlignmentDirectional.bottomEnd,
-          children: [
-            JouneyItem(
-              jouney: jouney,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                chip(
-                  const Icon(
-                    Icons.share,
-                    size: 17,
-                    color: Colors.white,
-                  ),
-                  () {},
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5, right: 2),
-                  child: chip(
-                    const Icon(
-                      Icons.edit,
-                      size: 17,
-                      color: Colors.white,
-                    ),
-                    () {
-                      Navigator.of(context).push(routeSlideFromBottomToTop(
-                        JouneyDetailScreen(
-                          jouneyId: jouney.uuid.toString(),
-                        ),
-                      ));
-                    },
-                  ),
-                ),
-              ],
-            )
-          ],
-        );
-
-        return jouneyItem;
+        return customJouneyItem(jouney);
       },
       itemCount: jouneys.length,
     );
   }
 
-  Widget chip(Icon icon, Function() onClick) {
+  Widget _chip(Icon icon, Function() onClick) {
     return InkWell(
       onTap: onClick,
       splashColor: Colors.brown.withOpacity(0.5),
@@ -125,6 +124,10 @@ class _JouneyListState extends State<JouneyList> {
         if (state is FetchJouneysFailed) {
           return Text(state.message.toString());
         } else if (state is FetchJouneysSuccessed) {
+          var selectedJouney = state.jouneys.firstWhere((jouney) {
+            return jouney.uuid == selectedJouneyId;
+          });
+
           return _generateJouneyListWidget(state.jouneys, theme);
         } else {
           return const Center(

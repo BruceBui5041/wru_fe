@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -40,13 +41,47 @@ class _MarkerListState extends State<MarkerList> {
       itemBuilder: (context, index) {
         final CustomMarker marker = markers[index];
 
-        return MarkerItem(
-          key: Key(marker.uuid.toString()),
-          marker: marker,
-          moveMapCameraTo: moveMapCameraTo,
+        return Stack(
+          children: [
+            MarkerItem(
+              key: Key(marker.uuid.toString()),
+              marker: marker,
+              moveMapCameraTo: moveMapCameraTo,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _chip(
+                  const Icon(
+                    Icons.edit_location_alt_outlined,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                  () {
+                    print(marker.uuid);
+                  },
+                ),
+              ],
+            )
+          ],
         );
       },
       itemCount: markers.length,
+    );
+  }
+
+  Widget _chip(Icon icon, Function() onClick) {
+    return InkWell(
+      onTap: onClick,
+      splashColor: Colors.brown.withOpacity(0.5),
+      child: Badge(
+        toAnimate: false,
+        shape: BadgeShape.square,
+        borderRadius: BorderRadius.circular(8),
+        badgeColor: Colors.purple,
+        badgeContent: icon,
+      ),
     );
   }
 

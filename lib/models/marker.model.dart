@@ -51,6 +51,6 @@ class CustomMarker {
   }
 
   String? _getImageURL(dynamic filename) {
-    return filename != null ? "$IMAGE_URL/$filename" : null;
+    return filename != null ? "$IMAGE_URL$filename" : null;
   }
 }

@@ -7,12 +7,11 @@ import 'package:wru_fe/utils.dart';
 import 'package:wru_fe/widgets/custom_cached_image.widget.dart';
 
 class JouneyItem extends StatelessWidget {
-  const JouneyItem({
-    Key? key,
-    required this.jouney,
-  }) : super(key: key);
+  const JouneyItem({Key? key, required this.jouney, this.selected = false})
+      : super(key: key);
 
   final Jouney jouney;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +21,14 @@ class JouneyItem extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 3, 5, 5),
+      padding: const EdgeInsets.only(left: 5),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: const Alignment(0.8, 0.0),
-          colors: <Color>[
-            Colors.blue[200] ?? Colors.blue,
-            Colors.blue[50] ?? Colors.white
+          colors: [
+            selected ? Colors.purple[200]! : Colors.blue[200]!,
+            selected ? Colors.purple[50]! : Colors.blue[50]!
           ],
           tileMode: TileMode.clamp,
         ),
@@ -39,7 +39,7 @@ class JouneyItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          setValueToStore(LAST_SEEN_JOUNEY, jouney.uuid.toString());
+          setValueToStore(LAST_SEEN_JOUNEY, jouney.uuid!);
           Navigator.of(context).pop();
         },
         child: Row(
@@ -47,6 +47,7 @@ class JouneyItem extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     jouney.name ?? "",
@@ -54,15 +55,11 @@ class JouneyItem extends StatelessWidget {
                   ),
                   Text(
                     jouney.description ?? "",
-                    style: TextStyle(
-                      fontSize: textTheme.headline3!.fontSize,
-                    ),
+                    style: textTheme.bodyText1,
                   ),
                   Text(
                     createdAt,
-                    style: TextStyle(
-                      fontSize: textTheme.headline3!.fontSize,
-                    ),
+                    style: textTheme.subtitle1,
                   ),
                   Text(
                     jouney.markerCount.toString(),

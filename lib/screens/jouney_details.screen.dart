@@ -70,6 +70,7 @@ class _JouneyDetailScreenState extends State<JouneyDetailScreen> {
                 File(
                   localImagePath!,
                 ),
+                fit: BoxFit.cover,
               )
             : CustomCachedImage(imageUrl: jouney!.image),
       ),

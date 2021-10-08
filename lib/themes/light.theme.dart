@@ -25,30 +25,19 @@ class LightTheme {
         selectedItemColor: _colorMain,
       ),
       textTheme: TextTheme(
-        button: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w700,
-        ),
+        button:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
         headline3: TextStyle(
-          color: _colorMain,
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-        ),
+            color: _colorMain, fontSize: 15, fontWeight: FontWeight.bold),
         headline4: TextStyle(
-          color: _colorMain,
-          fontSize: 17,
-          fontWeight: FontWeight.bold,
-        ),
+            color: _colorMain, fontSize: 17, fontWeight: FontWeight.bold),
         headline5: TextStyle(
-          color: _colorMain,
-          fontSize: 21,
-          fontWeight: FontWeight.bold,
-        ),
+            color: _colorMain, fontSize: 21, fontWeight: FontWeight.bold),
         headline6: TextStyle(
-          color: _colorMain,
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
-        ),
+            color: _colorMain, fontSize: 25, fontWeight: FontWeight.bold),
+        bodyText1: const TextStyle(fontSize: 11),
+        bodyText2: const TextStyle(fontSize: 14),
+        subtitle1: const TextStyle(fontSize: 9, fontStyle: FontStyle.italic),
       ),
       floatingActionButtonTheme:
           FloatingActionButtonThemeData(backgroundColor: _colorMain));
