@@ -50,6 +50,7 @@ dependencies:
   cached_network_image: ^3.1.0
   encrypt: ^5.0.1
   pointycastle: ^3.3.4
+  rsa_encrypt: ^2.0.0
 
 dev_dependencies:
   flutter_test:

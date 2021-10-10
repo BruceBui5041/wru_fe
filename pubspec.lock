@@ -499,6 +499,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.1"
+  rsa_encrypt:
+    dependency: "direct main"
+    description:
+      name: rsa_encrypt
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   rxdart:
     dependency: transitive
     description:

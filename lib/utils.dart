@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:encrypt/encrypt.dart';
 import 'package:encrypt/encrypt_io.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:rsa_encrypt/rsa_encrypt.dart' as rsa_encrypt;
 import 'package:pointycastle/src/platform_check/platform_check.dart';
 import 'package:pointycastle/api.dart' as pointycastle;
 import 'package:geolocator/geolocator.dart';
@@ -17,6 +17,8 @@ import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 
 dynamic getValueFromStore(String key) {
+  abcd();
+
   var hiveConfig = getIt<HiveConfig>();
   return hiveConfig.storeBox == null ? "" : hiveConfig.storeBox!.get(key);
 }
@@ -26,6 +28,11 @@ void setValueToStore(String key, dynamic value) {
   if (hiveConfig.storeBox != null) {
     hiveConfig.storeBox!.put(key, value);
   }
+}
+
+void abcd() {
+  var encryptManager = EncrytionManager();
+  encryptManager.keyGen();
 }
 
 Future<bool> checkUserLocationPermission() async {
@@ -128,65 +135,44 @@ class EncrytionManager {
   // fFb9LaBizkaU7SN3ExSsrd+N3LaeaZ0wfA/tUscm
   // -----END RSA PRIVATE KEY-----
 
-  // Future<String> encrypt(String data) async {
-  //   final encrypter = Encrypter(RSA(publicKey: publicKey));
+  RSAPublicKey? _clientPublicKey;
+  String? _clientPublicKeyAsString;
+  RSAPrivateKey? _clientPrivateKey;
+  var helper = rsa_encrypt.RsaKeyHelper();
 
-  //   var encryptedData = encrypter.encrypt(data);
-
-  //   RSAPublicKey(BigInt.from(512), BigInt.from(512));
-
-  //   return Future.value(encryptedData.base64);
-  // }
-
-  Future<String> decrypt(String data) async {
+  Future<String> encrypt(String data) async {
     final publicKey = await parseKeyFromFile<RSAPublicKey>('rsa_pub_key.pem');
-    final encrypter = Encrypter(RSA(publicKey: publicKey));
 
-    var encryptedData = encrypter.encrypt(data);
-
-    return Future.value(encryptedData.base64);
+    var encryptedData = rsa_encrypt.encrypt(data, publicKey);
+    return Future.value(encryptedData);
   }
 
-  void keyGen() {
-    final pair = _generateRSAkeyPair(_exampleSecureRandom());
-    final public = pair.publicKey;
-    final private = pair.privateKey;
+  String decrypt(String data) {
+    if (_clientPrivateKey == null) {
+      throw ErrorDescription("Client private key is null");
+    }
 
-    print("${public}");
+    var decryptedData = rsa_encrypt.decrypt(data, _clientPrivateKey!);
+
+    return decryptedData;
   }
 
-  pointycastle.AsymmetricKeyPair<RSAPublicKey, RSAPrivateKey>
-      _generateRSAkeyPair(
-    pointycastle.SecureRandom secureRandom, {
-    int bitLength = 2048,
-  }) {
-    // Create an RSA key generator and initialize it
-    final keyGen = RSAKeyGenerator()
-      ..init(ParametersWithRandom(
-        RSAKeyGeneratorParameters(
-          BigInt.parse('65537'),
-          bitLength,
-          64,
-        ),
-        secureRandom,
-      ));
+  void keyGen() async {
+    final keyPair = await getKeyPair();
+    _clientPublicKey = keyPair.publicKey as RSAPublicKey;
+    _clientPrivateKey = keyPair.privateKey as RSAPrivateKey;
 
-    // Use the generator
-    final pair = keyGen.generateKeyPair();
+    var pubKey = helper.encodePublicKeyToPemPKCS1(_clientPublicKey!);
+    _clientPublicKeyAsString = helper.removePemHeaderAndFooter(pubKey);
 
-    // Cast the generated key pair into the RSA key types
-    final myPublic = pair.publicKey as RSAPublicKey;
-    final myPrivate = pair.privateKey as RSAPrivateKey;
-
-    return AsymmetricKeyPair<RSAPublicKey, RSAPrivateKey>(myPublic, myPrivate);
+    var priKey = helper.encodePrivateKeyToPemPKCS1(_clientPrivateKey!);
+    print("$_clientPublicKeyAsString $priKey");
   }
 
-  pointycastle.SecureRandom _exampleSecureRandom() {
-    final secureRandom = pointycastle.SecureRandom('Fortuna')
-      ..seed(
-        KeyParameter(Platform.instance.platformEntropySource().getBytes(32)),
-      );
-    return secureRandom;
+  Future<
+      pointycastle.AsymmetricKeyPair<pointycastle.PublicKey,
+          pointycastle.PrivateKey>> getKeyPair() {
+    return helper.computeRSAKeyPair(helper.getSecureRandom());
   }
 }
 
