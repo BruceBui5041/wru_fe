@@ -1,5 +1,5 @@
-class CreateJouneyDto {
-  CreateJouneyDto({required this.name, this.description, this.image});
+class CreateJourneyDto {
+  CreateJourneyDto({required this.name, this.description, this.image});
 
   String name;
   String? description;

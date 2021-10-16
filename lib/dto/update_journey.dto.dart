@@ -1,17 +1,17 @@
 import 'package:wru_fe/enums.dart';
 
-class UpdateJouneyDto {
-  UpdateJouneyDto({
-    required this.jouneyId,
+class UpdateJourneyDto {
+  UpdateJourneyDto({
+    required this.journeyId,
     this.name,
     this.description,
     this.image,
     this.visibility,
   });
 
-  String jouneyId;
+  String journeyId;
   String? name;
   String? description;
   String? image;
-  JouneyVisibility? visibility;
+  JourneyVisibility? visibility;
 }

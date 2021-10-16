@@ -3,19 +3,19 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
+import 'package:wru_fe/cubit/journey/journey_cubit.dart';
 import 'package:wru_fe/dto/create_jouney.dto.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/utils.dart';
 
-class CreateJouneyDialog extends StatefulWidget {
-  const CreateJouneyDialog({Key? key}) : super(key: key);
+class CreateJourneyDialog extends StatefulWidget {
+  const CreateJourneyDialog({Key? key}) : super(key: key);
 
   @override
-  _CreateJouneyDialogState createState() => _CreateJouneyDialogState();
+  _CreateJourneyDialogState createState() => _CreateJourneyDialogState();
 }
 
-class _CreateJouneyDialogState extends State<CreateJouneyDialog> {
+class _CreateJourneyDialogState extends State<CreateJourneyDialog> {
   String? localImagePath;
   String? uploadedFileName;
 
@@ -88,7 +88,7 @@ class _CreateJouneyDialogState extends State<CreateJouneyDialog> {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
 
-    return BlocConsumer<JouneyCubit, JouneyState>(
+    return BlocConsumer<JourneyCubit, JourneyState>(
       listener: (context, state) {
         // TODO: implement listener
       },
@@ -122,21 +122,21 @@ class _CreateJouneyDialogState extends State<CreateJouneyDialog> {
                     ),
                   ),
                   TextButton(
-                    child: const Text("Create Jouney"),
+                    child: const Text("Create Journey"),
                     onPressed: () {
-                      var createJouneyDto = CreateJouneyDto(
+                      var createJourneyDto = CreateJourneyDto(
                         name: _nameController.text,
                         description: _descriptionController.text,
                         image: uploadedFileName,
                       );
 
                       context
-                          .read<CreateJouneyCubit>()
-                          .createJouney(createJouneyDto)
-                          .then((jouney) {
+                          .read<CreateJourneyCubit>()
+                          .createJourney(createJourneyDto)
+                          .then((journey) {
                         setValueToStore(
-                          LAST_SEEN_JOUNEY,
-                          jouney!.uuid.toString(),
+                          LAST_SEEN_JOURNEY,
+                          journey!.uuid.toString(),
                         );
                         Navigator.of(context).pop();
                       });

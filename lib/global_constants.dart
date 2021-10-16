@@ -24,6 +24,6 @@ const String USER_LOCATION_KEY = "useLocation";
 
 const String LAST_SEEN_MARKER = "lastSeenMarker";
 
-const String LAST_SEEN_JOUNEY = "lastSeenJouney";
+const String LAST_SEEN_JOURNEY = "lastSeenJourney";
 
 const String ACCESS_TOKEN_KEY = 'accessToken';

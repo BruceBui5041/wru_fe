@@ -1,5 +1,5 @@
 class FetchMarkerDto {
-  FetchMarkerDto({required this.jouneyId});
+  FetchMarkerDto({required this.journeyId});
 
-  final String jouneyId;
+  final String journeyId;
 }

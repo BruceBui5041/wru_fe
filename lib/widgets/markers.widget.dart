@@ -13,10 +13,10 @@ class MarkerList extends StatefulWidget {
   const MarkerList({
     Key? key,
     required this.moveMapCameraTo,
-    required this.jouneyId,
+    required this.journeyId,
   }) : super(key: key);
 
-  final String jouneyId;
+  final String journeyId;
   final Function(CameraPosition cameraPosition) moveMapCameraTo;
 
   @override
@@ -28,12 +28,12 @@ class _MarkerListState extends State<MarkerList> {
   void initState() {
     context
         .read<MarkerCubit>()
-        .fetchMarkers(FetchMarkerDto(jouneyId: widget.jouneyId));
+        .fetchMarkers(FetchMarkerDto(journeyId: widget.journeyId));
 
     super.initState();
   }
 
-  Widget _generateJouneyListWidget(
+  Widget _generateJourneyListWidget(
     List<CustomMarker> markers,
     Function(CameraPosition cameraPosition) moveMapCameraTo,
   ) {
@@ -95,7 +95,7 @@ class _MarkerListState extends State<MarkerList> {
       },
       builder: (context, state) {
         if (state is FetchMarkersSuccessed) {
-          return _generateJouneyListWidget(
+          return _generateJourneyListWidget(
             state.markers,
             widget.moveMapCameraTo,
           );

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class JouneyDrawerTopBar extends StatefulWidget {
-  JouneyDrawerTopBar({Key? key}) : super(key: key);
+class JourneyDrawerTopBar extends StatefulWidget {
+  JourneyDrawerTopBar({Key? key}) : super(key: key);
   final List<bool> _isSelected = [true, false];
 
   @override
-  _JouneyDrawerTopBarState createState() => _JouneyDrawerTopBarState();
+  _JourneyDrawerTopBarState createState() => _JourneyDrawerTopBarState();
 }
 
-class _JouneyDrawerTopBarState extends State<JouneyDrawerTopBar> {
+class _JourneyDrawerTopBarState extends State<JourneyDrawerTopBar> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -21,7 +21,7 @@ class _JouneyDrawerTopBarState extends State<JouneyDrawerTopBar> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(5, 8, 3, 8),
             child: Text(
-              isSelected[0] == true ? "My jouney" : "Shared jouney",
+              isSelected[0] == true ? "My journey" : "Shared journey",
               style: TextStyle(
                 fontSize: theme.textTheme.headline4!.fontSize,
                 color: Colors.purple,

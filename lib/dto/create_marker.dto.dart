@@ -1,6 +1,6 @@
 class CreateMarkerDto {
   CreateMarkerDto({
-    required this.jouneyId,
+    required this.journeyId,
     required this.lat,
     required this.lng,
     required this.name,
@@ -8,7 +8,7 @@ class CreateMarkerDto {
     this.image,
   });
 
-  final String jouneyId;
+  final String journeyId;
 
   final double lat;
   final double lng;

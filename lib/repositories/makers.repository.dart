@@ -10,7 +10,7 @@ class MarkerRepository {
   String fetchMarkerQuery(FetchMarkerDto fetchMarkerDto) {
     return '''
       query {
-        markers(jouneyId: "${fetchMarkerDto.jouneyId}") {
+        markers(jouneyId: "${fetchMarkerDto.journeyId}") {
           uuid
           name
           description
@@ -27,7 +27,7 @@ class MarkerRepository {
     return '''
       mutation {
         createMarker(
-          jouneyId: "${createMarkerDto.jouneyId}",
+          jouneyId: "${createMarkerDto.journeyId}",
           marker: {
               lng: ${createMarkerDto.lng}, 
               lat: ${createMarkerDto.lat}, 

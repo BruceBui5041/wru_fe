@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wru_fe/utils.dart';
-import 'package:wru_fe/widgets/create_jouney_dialog.widget.dart';
-import 'package:wru_fe/widgets/jouneys.widget.dart';
-import 'package:wru_fe/widgets/jouneys_drawer_topbar.widget.dart';
+import 'package:wru_fe/widgets/create_journey_dialog.widget.dart';
+import 'package:wru_fe/widgets/journeys.widget.dart';
+import 'package:wru_fe/widgets/journeys_drawer_topbar.widget.dart';
 
-class JouneyDrawer extends StatefulWidget {
-  const JouneyDrawer({
+class JourneyDrawer extends StatefulWidget {
+  const JourneyDrawer({
     Key? key,
   }) : super(key: key);
 
   @override
-  _JouneyDrawerState createState() => _JouneyDrawerState();
+  _JourneyDrawerState createState() => _JourneyDrawerState();
 }
 
-class _JouneyDrawerState extends State<JouneyDrawer> {
-  void _openCreateJouneyDialog(BuildContext context) {
+class _JourneyDrawerState extends State<JourneyDrawer> {
+  void _openCreateJourneyDialog(BuildContext context) {
     showDialog<String>(
       context: context,
-      builder: (BuildContext context) => CreateJouneyDialog(),
+      builder: (BuildContext context) => CreateJourneyDialog(),
     );
   }
 
@@ -47,7 +47,7 @@ class _JouneyDrawerState extends State<JouneyDrawer> {
                 decoration: const BoxDecoration(
                   color: Colors.transparent,
                 ),
-                child: JouneyDrawerTopBar(),
+                child: JourneyDrawerTopBar(),
               ),
             ),
             body: Container(
@@ -59,13 +59,13 @@ class _JouneyDrawerState extends State<JouneyDrawer> {
                 ),
               ),
               margin: const EdgeInsets.fromLTRB(0, 0, 4, 2),
-              child: JouneyList(),
+              child: const JourneyList(),
             ),
             floatingActionButton: FloatingActionButton(
-              heroTag: "createJouney",
+              heroTag: "createJourney",
               mini: true,
               onPressed: () {
-                _openCreateJouneyDialog(context);
+                _openCreateJourneyDialog(context);
               },
               elevation: 4.0,
               child: Icon(

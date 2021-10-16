@@ -17,8 +17,6 @@ import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 
 dynamic getValueFromStore(String key) {
-  abcd();
-
   var hiveConfig = getIt<HiveConfig>();
   return hiveConfig.storeBox == null ? "" : hiveConfig.storeBox!.get(key);
 }
@@ -28,11 +26,6 @@ void setValueToStore(String key, dynamic value) {
   if (hiveConfig.storeBox != null) {
     hiveConfig.storeBox!.put(key, value);
   }
-}
-
-void abcd() {
-  var encryptManager = EncrytionManager();
-  encryptManager.keyGen();
 }
 
 Future<bool> checkUserLocationPermission() async {
@@ -199,7 +192,7 @@ String? transformString(String key, String? data) {
   return "$key: ${"\"$data\""},";
 }
 
-String transformVisibility(JouneyVisibility? jouneyVisibility) {
-  if (jouneyVisibility == null) return "";
-  return "visibility: ${jouneyVisibility == JouneyVisibility.private ? "PRIVATE" : "PUBLIC"},";
+String transformVisibility(JourneyVisibility? journeyVisibility) {
+  if (journeyVisibility == null) return "";
+  return "visibility: ${journeyVisibility == JourneyVisibility.private ? "PRIVATE" : "PUBLIC"},";
 }

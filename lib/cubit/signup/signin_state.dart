@@ -41,10 +41,10 @@ class SignInFail extends SignInState {
 class Unauthorized
     implements
         GroupState,
-        JouneyState,
+        JourneyState,
         MarkerState,
-        FetchJouneyByIdState,
-        CreateJouneyState,
-        UpdateJouneyState {
+        FetchJourneyByIdState,
+        CreateJourneyState,
+        UpdateJourneyState {
   const Unauthorized();
 }

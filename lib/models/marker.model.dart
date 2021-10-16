@@ -1,9 +1,9 @@
 import 'package:wru_fe/global_constants.dart';
-import 'package:wru_fe/models/jouney.model.dart';
+import 'package:wru_fe/models/journey.model.dart';
 
 class CustomMarker {
   CustomMarker({
-    required this.jouney,
+    required this.journey,
     required this.lng,
     required this.lat,
   });
@@ -17,8 +17,8 @@ class CustomMarker {
     uuid = _getStringValue(json['uuid']);
     updatedAt = _getStringValue(json['updatedAt']);
     createdAt = _getStringValue(json['createdAt']);
-    jouney = json['jouney'] != null
-        ? Jouney.fromJson(json['jouney'] as Map<String, dynamic>)
+    journey = json['jouney'] != null
+        ? Journey.fromJson(json['jouney'] as Map<String, dynamic>)
         : null;
   }
 
@@ -26,7 +26,7 @@ class CustomMarker {
   String? name;
   String? description;
   String? visibility;
-  Jouney? jouney;
+  Journey? journey;
 
   double? lng;
   double? lat;

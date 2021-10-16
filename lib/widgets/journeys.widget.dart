@@ -4,54 +4,59 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
-import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
+import 'package:wru_fe/cubit/journey/journey_cubit.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
-import 'package:wru_fe/dto/fetch_jouney.dto.dart';
+import 'package:wru_fe/dto/fetch_journey.dto.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/hive_config.dart';
-import 'package:wru_fe/models/jouney.model.dart';
-import 'package:wru_fe/screens/jouney_details.screen.dart';
+import 'package:wru_fe/models/journey.model.dart';
+import 'package:wru_fe/screens/journey_details.screen.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/utils.dart';
-import 'package:wru_fe/widgets/jouney.widget.dart';
+import 'package:wru_fe/widgets/journey.widget.dart';
+import 'package:wru_fe/widgets/share_journey.widget.dart';
 
-class JouneyList extends StatefulWidget {
-  const JouneyList({
+class JourneyList extends StatefulWidget {
+  const JourneyList({
     Key? key,
   }) : super(key: key);
 
   @override
-  _JouneyListState createState() => _JouneyListState();
+  _JourneyListState createState() => _JourneyListState();
 }
 
-class _JouneyListState extends State<JouneyList> {
-  StreamSubscription<BoxEvent>? watchLastSeenJouney;
+class _JourneyListState extends State<JourneyList> {
+  StreamSubscription<BoxEvent>? watchLastSeenJourney;
   var hiveConfig = getIt<HiveConfig>();
-  var selectedJouneyId = getIt<HiveConfig>().storeBox!.get(LAST_SEEN_JOUNEY);
+  var selectedJourneyId = getIt<HiveConfig>().storeBox!.get(LAST_SEEN_JOURNEY);
 
   @override
   void initState() {
     super.initState();
-    context.read<JouneyCubit>().fetchJouneys(FetchJouneyDto());
-    watchLastSeenJouney =
-        hiveConfig.storeBox!.watch(key: LAST_SEEN_JOUNEY).listen((event) {
-      context.read<JouneyCubit>().fetchJouneys(FetchJouneyDto());
+    context.read<JourneyCubit>().fetchJourneys(FetchJourneyDto());
+    watchLastSeenJourney =
+        hiveConfig.storeBox!.watch(key: LAST_SEEN_JOURNEY).listen((event) {
+      context.read<JourneyCubit>().fetchJourneys(FetchJourneyDto());
+      setState(() {
+        selectedJourneyId = event.value;
+      });
     });
   }
 
   @override
   void dispose() {
-    if (watchLastSeenJouney != null) {
-      watchLastSeenJouney!.cancel();
+    if (watchLastSeenJourney != null) {
+      watchLastSeenJourney!.cancel();
     }
     super.dispose();
   }
 
-  Widget customJouneyItem(Jouney jouney) {
+  Widget customJourneyItem(Journey journey) {
     return Stack(
-      key: Key(jouney.uuid.toString()),
+      key: Key(journey.uuid.toString()),
       children: [
-        JouneyItem(jouney: jouney, selected: jouney.uuid == selectedJouneyId),
+        JourneyItem(
+            journey: journey, selected: journey.uuid == selectedJourneyId),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -62,7 +67,15 @@ class _JouneyListState extends State<JouneyList> {
                 size: 17,
                 color: Colors.white,
               ),
-              () {},
+              () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ShareJourney(
+                        selectedJourney: journey.uuid ?? "",
+                      );
+                    });
+              },
             ),
             Padding(
               padding: const EdgeInsets.only(left: 5, right: 2),
@@ -74,8 +87,8 @@ class _JouneyListState extends State<JouneyList> {
                 ),
                 () {
                   Navigator.of(context).push(routeSlideFromBottomToTop(
-                    JouneyDetailScreen(
-                      jouneyId: jouney.uuid.toString(),
+                    JourneyDetailScreen(
+                      journeyId: journey.uuid.toString(),
                     ),
                   ));
                 },
@@ -87,13 +100,13 @@ class _JouneyListState extends State<JouneyList> {
     );
   }
 
-  Widget _generateJouneyListWidget(List<Jouney> jouneys, ThemeData theme) {
+  Widget _generateJourneyListWidget(List<Journey> journeys, ThemeData theme) {
     return ListView.builder(
       itemBuilder: (context, index) {
-        final Jouney jouney = jouneys[index];
-        return customJouneyItem(jouney);
+        final journey = journeys[index];
+        return customJourneyItem(journey);
       },
-      itemCount: jouneys.length,
+      itemCount: journeys.length,
     );
   }
 
@@ -114,21 +127,17 @@ class _JouneyListState extends State<JouneyList> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
-    return BlocConsumer<JouneyCubit, JouneyState>(
+    return BlocConsumer<JourneyCubit, JourneyState>(
       listener: (context, state) {
         if (state is Unauthorized) {
           Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
         }
       },
       builder: (context, state) {
-        if (state is FetchJouneysFailed) {
+        if (state is FetchJourneysFailed) {
           return Text(state.message.toString());
-        } else if (state is FetchJouneysSuccessed) {
-          var selectedJouney = state.jouneys.firstWhere((jouney) {
-            return jouney.uuid == selectedJouneyId;
-          });
-
-          return _generateJouneyListWidget(state.jouneys, theme);
+        } else if (state is FetchJourneysSuccessed) {
+          return _generateJourneyListWidget(state.journeys, theme);
         } else {
           return const Center(
             child: CircularProgressIndicator(),

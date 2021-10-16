@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:wru_fe/screens/jouney.screen.dart';
+import 'package:wru_fe/screens/journey.screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -27,12 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _loadPages() async {
     Position? position = await Geolocator.getLastKnownPosition();
-    var jouneyPages = JouneyScreen(
+    var journeyPages = JourneyScreen(
       lastKnowUserLocation: position,
     );
     setState(() {
       _widgetOptions = <Widget>[
-        jouneyPages,
+        journeyPages,
         const Text(
           'Index 2: School',
           style: optionStyle,
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
-            label: 'Jouney',
+            label: 'Journey',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle_outlined),

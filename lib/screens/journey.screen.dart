@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
-import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
+import 'package:wru_fe/cubit/journey/journey_cubit.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/enums.dart';
@@ -15,22 +15,21 @@ import 'package:wru_fe/models/marker.model.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/utils.dart';
 import 'package:wru_fe/widgets/create_marker_drawer.widget.dart';
-import 'package:wru_fe/widgets/jouney_appbar.widget.dart';
+import 'package:wru_fe/widgets/journey_appbar.widget.dart';
 import 'package:wru_fe/widgets/jouneys_drawer.widget.dart';
-import 'package:wru_fe/widgets/jouneys.widget.dart';
 import 'package:wru_fe/widgets/markers.widget.dart';
 
-class JouneyScreen extends StatefulWidget {
-  JouneyScreen({Key? key, this.lastKnowUserLocation}) : super(key: key);
-  static const routeName = "/jouney-screen";
+class JourneyScreen extends StatefulWidget {
+  JourneyScreen({Key? key, this.lastKnowUserLocation}) : super(key: key);
+  static const routeName = "/journey-screen";
   Position? lastKnowUserLocation;
 
   @override
-  _JouneyScreenState createState() => _JouneyScreenState();
+  _JourneyScreenState createState() => _JourneyScreenState();
 }
 
-class _JouneyScreenState extends State<JouneyScreen> {
-  Completer<GoogleMapController> _controller = Completer();
+class _JourneyScreenState extends State<JourneyScreen> {
+  final Completer<GoogleMapController> _controller = Completer();
 
   double initialZoom = 14.4746;
   Set<Marker> checkinMarkers = {};
@@ -40,22 +39,22 @@ class _JouneyScreenState extends State<JouneyScreen> {
     visible: false,
   );
   Circle selectedCircle = Circle(circleId: CircleId("selectCircle"));
-  String selectedJouneyId = "";
+  String selectedJourneyId = "";
   String appBarTitle = "";
   EndDrawerComponentName endDrawerComponentName =
       EndDrawerComponentName.markers;
 
-  StreamSubscription<BoxEvent>? watchLastSeenJouney;
+  StreamSubscription<BoxEvent>? watchLastSeenJourney;
 
   @override
   void initState() {
-    _loadLastSeenJouney();
+    _loadLastSeenJourney();
     _loadUserLocation();
 
     var hiveConfig = getIt<HiveConfig>();
-    watchLastSeenJouney =
-        hiveConfig.storeBox!.watch(key: LAST_SEEN_JOUNEY).listen((event) {
-      _loadLastSeenJouney();
+    watchLastSeenJourney =
+        hiveConfig.storeBox!.watch(key: LAST_SEEN_JOURNEY).listen((event) {
+      _loadLastSeenJourney();
     });
 
     super.initState();
@@ -63,28 +62,28 @@ class _JouneyScreenState extends State<JouneyScreen> {
 
   @override
   void dispose() {
-    if (watchLastSeenJouney != null) {
-      watchLastSeenJouney!.cancel();
+    if (watchLastSeenJourney != null) {
+      watchLastSeenJourney!.cancel();
     }
     super.dispose();
   }
 
-  void _loadLastSeenJouney() async {
-    dynamic lastSeenJouneyId = getValueFromStore(LAST_SEEN_JOUNEY);
-    bool isSameJouney = lastSeenJouneyId == selectedJouneyId;
+  void _loadLastSeenJourney() async {
+    String? lastSeenJourneyId = getValueFromStore(LAST_SEEN_JOURNEY);
+    var isSameJourney = lastSeenJourneyId == selectedJourneyId;
 
-    if (lastSeenJouneyId != null) {
-      var jouney = await context
-          .read<FetchJouneyByIdCubit>()
-          .fetchJouneyById(lastSeenJouneyId.toString());
+    if (lastSeenJourneyId != null) {
+      var journey = await context
+          .read<FetchJourneyByIdCubit>()
+          .fetchJourneyById(lastSeenJourneyId.toString());
 
-      if (jouney != null) {
-        var markers = _generateGGCheckinMakers(jouney.markers);
+      if (journey != null) {
+        var markers = _generateGGCheckinMakers(journey.markers);
         setState(() {
-          selectedJouneyId = jouney.uuid.toString();
+          selectedJourneyId = journey.uuid.toString();
           checkinMarkers = markers;
-          appBarTitle = jouney.name.toString();
-          if (!isSameJouney) {
+          appBarTitle = journey.name.toString();
+          if (!isSameJourney) {
             selectedCircle = Circle(circleId: CircleId("selectCircle"));
           }
         });
@@ -96,6 +95,8 @@ class _JouneyScreenState extends State<JouneyScreen> {
     Position userLocation = await getUserLocation();
     double lat = userLocation.latitude;
     double lng = userLocation.longitude;
+
+    print("abcd $lat  $lng");
 
     var userPinIcon = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(
@@ -154,7 +155,6 @@ class _JouneyScreenState extends State<JouneyScreen> {
   }
 
   Widget _screenContent(
-    MarkerState state,
     Set<Marker> allMarker,
     Circle selectedCircle,
   ) {
@@ -196,11 +196,11 @@ class _JouneyScreenState extends State<JouneyScreen> {
     Widget component = endDrawerComponentName == EndDrawerComponentName.markers
         ? MarkerList(
             moveMapCameraTo: _moveCameraTo,
-            jouneyId: selectedJouneyId,
+            journeyId: selectedJourneyId,
           )
         : CreateMarkerBottomSheet(
-            jouneyId: selectedJouneyId,
-            loadLastSeenJouney: _loadLastSeenJouney,
+            journeyId: selectedJourneyId,
+            loadLastSeenJourney: _loadLastSeenJourney,
           );
 
     return Drawer(
@@ -250,13 +250,12 @@ class _JouneyScreenState extends State<JouneyScreen> {
               Scaffold(
                 backgroundColor: Colors.transparent,
                 extendBodyBehindAppBar: true,
-                appBar: JouneyAppBar(
+                appBar: JourneyAppBar(
                   appBarTitle: appBarTitle,
                   markerCount: checkinMarkers.length,
                 ),
                 drawerScrimColor: Colors.transparent,
                 body: _screenContent(
-                  state,
                   allMarker,
                   selectedCircle,
                 ),
@@ -264,7 +263,7 @@ class _JouneyScreenState extends State<JouneyScreen> {
                   data: theme.copyWith(
                     canvasColor: Colors.transparent,
                   ),
-                  child: JouneyDrawer(),
+                  child: const JourneyDrawer(),
                 ),
                 endDrawer: Theme(
                   data: theme.copyWith(
@@ -288,7 +287,7 @@ class _JouneyScreenState extends State<JouneyScreen> {
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerFloat,
                 floatingActionButton: Builder(builder: (context) {
-                  if (selectedJouneyId == "") return Container();
+                  if (selectedJourneyId == "") return Container();
                   return FloatingActionButton(
                     heroTag: "endDrawer",
                     onPressed: () {

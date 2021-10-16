@@ -51,6 +51,9 @@ dependencies:
   encrypt: ^5.0.1
   pointycastle: ^3.3.4
   rsa_encrypt: ^2.0.0
+  flutter_native_splash: ^1.2.4
+  flutter_launcher_icons: ^0.9.2
+  rxdart: ^0.26.0
 
 dev_dependencies:
   flutter_test:

@@ -4,13 +4,13 @@ import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/marker.model.dart';
 import 'package:wru_fe/models/user.model.dart';
 
-class Jouney {
-  Jouney({
+class Journey {
+  Journey({
     required this.owner,
     required this.name,
   });
 
-  Jouney.fromJson(Map<String, dynamic> json) {
+  Journey.fromJson(Map<String, dynamic> json) {
     name = _getStringValue(json['name']);
     description = _getStringValue(json['description']);
     image = _getImageURL(json['image']);
@@ -35,7 +35,7 @@ class Jouney {
   String? description;
   String? image;
   String? imageName;
-  JouneyVisibility visibility = JouneyVisibility.private;
+  JourneyVisibility visibility = JourneyVisibility.private;
   User? owner;
   int? markerCount;
   List<CustomMarker> markers = [];
@@ -52,12 +52,12 @@ class Jouney {
     return filename != null ? "$IMAGE_URL$filename" : null;
   }
 
-  JouneyVisibility _getVisibility(dynamic visibility) {
+  JourneyVisibility _getVisibility(dynamic visibility) {
     if (visibility == null) {
-      return JouneyVisibility.private;
+      return JourneyVisibility.private;
     }
     return visibility.toString() == "0"
-        ? JouneyVisibility.private
-        : JouneyVisibility.public;
+        ? JourneyVisibility.private
+        : JourneyVisibility.public;
   }
 }

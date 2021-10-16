@@ -4,26 +4,26 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
+import 'package:wru_fe/cubit/journey/journey_cubit.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
-import 'package:wru_fe/dto/update_jouney.dto.dart';
+import 'package:wru_fe/dto/update_journey.dto.dart';
 import 'package:wru_fe/enums.dart';
-import 'package:wru_fe/models/jouney.model.dart';
+import 'package:wru_fe/models/journey.model.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/utils.dart';
 import 'package:wru_fe/widgets/custom_cached_image.widget.dart';
 
-class JouneyDetailScreen extends StatefulWidget {
-  JouneyDetailScreen({Key? key, this.jouneyId}) : super(key: key);
-  static const routeName = "/jouney-details-screen";
-  String? jouneyId;
+class JourneyDetailScreen extends StatefulWidget {
+  JourneyDetailScreen({Key? key, this.journeyId}) : super(key: key);
+  static const routeName = "/journey-details-screen";
+  String? journeyId;
 
   @override
-  _JouneyDetailScreenState createState() => _JouneyDetailScreenState();
+  _JourneyDetailScreenState createState() => _JourneyDetailScreenState();
 }
 
-class _JouneyDetailScreenState extends State<JouneyDetailScreen> {
-  Jouney? jouney;
+class _JourneyDetailScreenState extends State<JourneyDetailScreen> {
+  Journey? journey;
   static String visibilityValue = 'Public';
   String? localImagePath;
   String? uploadedFileName;
@@ -34,8 +34,8 @@ class _JouneyDetailScreenState extends State<JouneyDetailScreen> {
 
   @override
   void initState() {
-    context.read<FetchJouneyByIdCubit>().fetchJouneyById(
-          widget.jouneyId.toString(),
+    context.read<FetchJourneyByIdCubit>().fetchJourneyById(
+          widget.journeyId.toString(),
           details: true,
         );
 
@@ -49,9 +49,9 @@ class _JouneyDetailScreenState extends State<JouneyDetailScreen> {
     super.dispose();
   }
 
-  FlexibleSpaceBar _sliverAppbar(Jouney? jouney) {
+  FlexibleSpaceBar _sliverAppbar(Journey? journey) {
     return FlexibleSpaceBar(
-      title: Text(jouney?.name ?? ""),
+      title: Text(journey?.name ?? ""),
       centerTitle: true,
       background: DecoratedBox(
         position: DecorationPosition.foreground,
@@ -60,7 +60,7 @@ class _JouneyDetailScreenState extends State<JouneyDetailScreen> {
             begin: Alignment.bottomCenter,
             end: Alignment.center,
             colors: [
-              Colors.blue,
+              Colors.black54,
               Colors.transparent,
             ],
           ),
@@ -72,12 +72,12 @@ class _JouneyDetailScreenState extends State<JouneyDetailScreen> {
                 ),
                 fit: BoxFit.cover,
               )
-            : CustomCachedImage(imageUrl: jouney!.image),
+            : CustomCachedImage(imageUrl: journey!.image),
       ),
     );
   }
 
-  Widget _jouneyVisibilitySelector(ThemeData theme) {
+  Widget _journeyVisibilitySelector(ThemeData theme) {
     return DropdownButton(
       value: visibilityValue,
       alignment: Alignment.bottomRight,
@@ -127,31 +127,31 @@ class _JouneyDetailScreenState extends State<JouneyDetailScreen> {
     }
   }
 
-  void _updateData(Jouney? newJouney) {
-    _nameController.text = newJouney!.name ?? "";
-    _descriptionController.text = newJouney.description ?? "";
+  void _updateData(Journey? newJourney) {
+    _nameController.text = newJourney!.name ?? "";
+    _descriptionController.text = newJourney.description ?? "";
     setState(() {
-      jouney = newJouney;
+      journey = newJourney;
 
-      visibilityValue = newJouney.visibility == JouneyVisibility.private
+      visibilityValue = newJourney.visibility == JourneyVisibility.private
           ? "Private"
           : "Public";
-      uploadedFileName = newJouney.imageName;
+      uploadedFileName = newJourney.imageName;
     });
   }
 
   void _submit() {
-    var updateDto = UpdateJouneyDto(jouneyId: jouney!.uuid.toString());
+    var updateDto = UpdateJourneyDto(journeyId: journey!.uuid.toString());
     updateDto.name = _nameController.text;
     updateDto.description = _descriptionController.text;
     updateDto.image = uploadedFileName;
     updateDto.visibility = visibilityValue == "Private"
-        ? JouneyVisibility.private
-        : JouneyVisibility.public;
+        ? JourneyVisibility.private
+        : JourneyVisibility.public;
 
-    context.read<UpdateJouneyCubit>().updateJouney(updateDto).then((value) {
+    context.read<UpdateJourneyCubit>().updateJourney(updateDto).then((value) {
       _updateData(value);
-      context.read<JouneyCubit>().fetchJouneys(null);
+      context.read<JourneyCubit>().fetchJourneys(null);
     });
   }
 
@@ -159,10 +159,10 @@ class _JouneyDetailScreenState extends State<JouneyDetailScreen> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
-    return BlocListener<FetchJouneyByIdCubit, FetchJouneyByIdState>(
+    return BlocListener<FetchJourneyByIdCubit, FetchJourneyByIdState>(
       listener: (context, state) {
-        if (state is FetchJouneyByIdSuccessed) {
-          _updateData(state.jouney);
+        if (state is FetchJourneyByIdSuccessed) {
+          _updateData(state.journey);
         } else if (state is Unauthorized) {
           Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
         }
@@ -185,8 +185,8 @@ class _JouneyDetailScreenState extends State<JouneyDetailScreen> {
                   ),
                 ),
               ],
-              flexibleSpace: jouney != null
-                  ? _sliverAppbar(jouney)
+              flexibleSpace: journey != null
+                  ? _sliverAppbar(journey)
                   : const Center(child: CircularProgressIndicator()),
             ),
             SliverList(
@@ -220,7 +220,7 @@ class _JouneyDetailScreenState extends State<JouneyDetailScreen> {
                                     padding: const EdgeInsets.only(
                                       left: 8,
                                     ),
-                                    child: _jouneyVisibilitySelector(
+                                    child: _journeyVisibilitySelector(
                                       theme,
                                     ),
                                   ),
@@ -242,7 +242,7 @@ class _JouneyDetailScreenState extends State<JouneyDetailScreen> {
                                 children: [
                                   TextButton(
                                     onPressed: () {
-                                      _updateData(jouney);
+                                      _updateData(journey);
                                     },
                                     child: Text(
                                       "Reset",

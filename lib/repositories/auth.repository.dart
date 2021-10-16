@@ -10,8 +10,6 @@ import 'package:wru_fe/dto/signup.dto.dart';
 
 import '../utils.dart';
 
-enum AuthenticationStatus { unknown, authenticated, unauthenticated }
-
 class AuthRepository {
   static const String tokenKey = 'accessToken';
   static const String messageKey = 'message';

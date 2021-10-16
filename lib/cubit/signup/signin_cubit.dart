@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:wru_fe/cubit/group/group_cubit.dart';
-import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
+import 'package:wru_fe/cubit/journey/journey_cubit.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/dto/response.dto.dart';
 import 'package:wru_fe/dto/signin.dto.dart';

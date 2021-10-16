@@ -12,12 +12,12 @@ import 'package:wru_fe/widgets/form_field_custom.widget.dart';
 class CreateMarkerBottomSheet extends StatefulWidget {
   const CreateMarkerBottomSheet({
     Key? key,
-    required this.jouneyId,
-    required this.loadLastSeenJouney,
+    required this.journeyId,
+    required this.loadLastSeenJourney,
   }) : super(key: key);
 
-  final String jouneyId;
-  final Function loadLastSeenJouney;
+  final String journeyId;
+  final Function loadLastSeenJourney;
 
   @override
   _CreateMarkerBottomSheetState createState() =>
@@ -41,8 +41,8 @@ class _CreateMarkerBottomSheetState extends State<CreateMarkerBottomSheet> {
     super.dispose();
   }
 
-  void _submit(BuildContext context, String jouneyId,
-      Function loadLastSeenJouney) async {
+  void _submit(BuildContext context, String journeyId,
+      Function loadLastSeenJourney) async {
     Position useLocation = await getUserLocation();
 
     final CreateMarkerDto createMarkerDto = CreateMarkerDto(
@@ -50,13 +50,13 @@ class _CreateMarkerBottomSheetState extends State<CreateMarkerBottomSheet> {
       lat: useLocation.latitude,
       lng: useLocation.longitude,
       description: _descriptionController.text,
-      jouneyId: jouneyId,
+      journeyId: journeyId,
       image: uploadedFileName,
     );
 
     FocusScope.of(context).unfocus();
     context.read<MarkerCubit>().createMarker(createMarkerDto).then((value) {
-      loadLastSeenJouney();
+      loadLastSeenJourney();
       Navigator.of(context).pop();
     });
   }
@@ -131,13 +131,13 @@ class _CreateMarkerBottomSheetState extends State<CreateMarkerBottomSheet> {
               controller: _descriptionController,
               obscureText: false,
               onFieldSubmitted: (_) {
-                _submit(context, widget.jouneyId, widget.loadLastSeenJouney);
+                _submit(context, widget.journeyId, widget.loadLastSeenJourney);
               },
             ),
             TextButton(
               child: const Text('Checkin'),
               onPressed: () {
-                _submit(context, widget.jouneyId, widget.loadLastSeenJouney);
+                _submit(context, widget.journeyId, widget.loadLastSeenJourney);
               },
             )
           ],

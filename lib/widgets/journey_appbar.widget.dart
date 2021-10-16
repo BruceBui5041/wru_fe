@@ -1,9 +1,9 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:wru_fe/widgets/create_jouney_dialog.widget.dart';
+import 'package:wru_fe/widgets/create_journey_dialog.widget.dart';
 
-class JouneyAppBar extends StatelessWidget with PreferredSizeWidget {
-  const JouneyAppBar({
+class JourneyAppBar extends StatelessWidget with PreferredSizeWidget {
+  const JourneyAppBar({
     Key? key,
     required this.appBarTitle,
     required this.markerCount,
@@ -12,10 +12,10 @@ class JouneyAppBar extends StatelessWidget with PreferredSizeWidget {
   final String appBarTitle;
   final int markerCount;
 
-  void _openCreateJouneyDialog(BuildContext context) {
+  void _openCreateJourneyDialog(BuildContext context) {
     showDialog<String>(
       context: context,
-      builder: (BuildContext context) => const CreateJouneyDialog(),
+      builder: (BuildContext context) => const CreateJourneyDialog(),
     );
   }
 
@@ -33,18 +33,13 @@ class JouneyAppBar extends StatelessWidget with PreferredSizeWidget {
           Builder(
             builder: (context) => TextButton(
               child: Text(
-                "Jouneys",
+                "Journeys",
                 style: TextStyle(
                   fontSize: theme.textTheme.headline4!.fontSize,
                 ),
               ),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
-                // if (appBarTitle == "") {
-                //   _openCreateJouneyDialog(context);
-                // } else {
-                //   Scaffold.of(context).openDrawer();
-                // }
               },
             ),
           ),

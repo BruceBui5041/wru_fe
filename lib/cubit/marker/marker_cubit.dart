@@ -41,7 +41,7 @@ class MarkerCubit extends Cubit<MarkerState> {
 
     emit(FetchMarkersSuccessed(
       markers: markers,
-      jouneyId: fetchMarkerDto.jouneyId,
+      journeyId: fetchMarkerDto.journeyId,
     ));
   }
 
@@ -68,6 +68,6 @@ class MarkerCubit extends Cubit<MarkerState> {
     final CustomMarker marker =
         CustomMarker.fromJson(markerJson as Map<String, dynamic>);
 
-    emit(CreateMarkerSuccessed(jouneyid: marker.jouney!.uuid));
+    emit(CreateMarkerSuccessed(journeyId: marker.journey!.uuid));
   }
 }

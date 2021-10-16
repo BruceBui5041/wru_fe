@@ -1,15 +1,15 @@
 import 'package:graphql/client.dart';
 import 'package:wru_fe/dto/create_jouney.dto.dart';
-import 'package:wru_fe/dto/fetch_jouney.dto.dart';
+import 'package:wru_fe/dto/fetch_journey.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';
-import 'package:wru_fe/dto/update_jouney.dto.dart';
+import 'package:wru_fe/dto/update_journey.dto.dart';
 import 'package:wru_fe/utils.dart';
 
-class JouneyRepository {
-  JouneyRepository({required this.client});
+class JourneyRepository {
+  JourneyRepository({required this.client});
   final GraphQLClient client;
 
-  String fetchJouneyQuery(FetchJouneyDto? fetchJouneyDto) {
+  String fetchJourneyQuery(FetchJourneyDto? fetchJourneyDto) {
     return '''
       query {
         jouneys {
@@ -25,10 +25,10 @@ class JouneyRepository {
       ''';
   }
 
-  String fetchJouneyByIdQuery(String jouneyId) {
+  String fetchJourneyByIdQuery(String journeyId) {
     return '''
       query {
-        jouney (id: "$jouneyId") {
+        jouney (id: "$journeyId") {
           uuid
           name
           markerCount
@@ -46,10 +46,10 @@ class JouneyRepository {
       ''';
   }
 
-  String fetchJouneyDetailsByIdQuery(String jouneyId) {
+  String fetchJourneyDetailsByIdQuery(String journeyId) {
     return '''
       query {
-        jouney (id: "$jouneyId") {
+        jouney (id: "$journeyId") {
           uuid
           name
           image
@@ -68,14 +68,14 @@ class JouneyRepository {
       ''';
   }
 
-  String createJouneyMutation(CreateJouneyDto createJouneyDto) {
+  String createJourneyMutation(CreateJourneyDto createJourneyDto) {
     return '''
       mutation {
         createJouney(
           jouney:{
-            name: "${createJouneyDto.name}", 
-            ${transformString("description", createJouneyDto.description)}
-            ${transformString("image", createJouneyDto.image)}
+            name: "${createJourneyDto.name}", 
+            ${transformString("description", createJourneyDto.description)}
+            ${transformString("image", createJourneyDto.image)}
           }) 
         {
           uuid
@@ -86,16 +86,16 @@ class JouneyRepository {
       ''';
   }
 
-  String updateJouneyMutation(UpdateJouneyDto updateJouneyDto) {
+  String updateJourneyMutation(UpdateJourneyDto updateJourneyDto) {
     return '''
       mutation {
         updateJouney(
-          id: "${updateJouneyDto.jouneyId}",
+          id: "${updateJourneyDto.journeyId}",
           jouney:{
-            ${transformString("name", updateJouneyDto.name)}
-            ${transformString("description", updateJouneyDto.description)}
-            ${transformString("image", updateJouneyDto.image)}
-            ${transformVisibility(updateJouneyDto.visibility)}
+            ${transformString("name", updateJourneyDto.name)}
+            ${transformString("description", updateJourneyDto.description)}
+            ${transformString("image", updateJourneyDto.image)}
+            ${transformVisibility(updateJourneyDto.visibility)}
           }) 
         {
           uuid
@@ -116,9 +116,9 @@ class JouneyRepository {
       ''';
   }
 
-  Future<ResponseDto> fetchJouney(FetchJouneyDto? fetchJouneyDto) async {
+  Future<ResponseDto> fetchJourney(FetchJourneyDto? fetchJourneyDto) async {
     ////////////////////////////////////////
-    final String readRepositories = fetchJouneyQuery(fetchJouneyDto);
+    final String readRepositories = fetchJourneyQuery(fetchJourneyDto);
     /////////////////////////////////////////
 
     print(readRepositories);
@@ -141,9 +141,9 @@ class JouneyRepository {
     );
   }
 
-  Future<ResponseDto> fetchJouneyById(String jouneyId) async {
+  Future<ResponseDto> fetchJourneyById(String journeyId) async {
     ////////////////////////////////////////
-    final String readRepositories = fetchJouneyByIdQuery(jouneyId);
+    final String readRepositories = fetchJourneyByIdQuery(journeyId);
     /////////////////////////////////////////
 
     print(readRepositories);
@@ -166,9 +166,9 @@ class JouneyRepository {
     );
   }
 
-  Future<ResponseDto> fetchJouneyDetailsById(String jouneyId) async {
+  Future<ResponseDto> fetchJourneyDetailsById(String journeyId) async {
     ////////////////////////////////////////
-    final String readRepositories = fetchJouneyDetailsByIdQuery(jouneyId);
+    final String readRepositories = fetchJourneyDetailsByIdQuery(journeyId);
     /////////////////////////////////////////
 
     print(readRepositories);
@@ -191,9 +191,9 @@ class JouneyRepository {
     );
   }
 
-  Future<ResponseDto> createJouney(CreateJouneyDto createJouneyDto) async {
+  Future<ResponseDto> createJourney(CreateJourneyDto createJourneyDto) async {
     ////////////////////////////////////////
-    final String readRepositories = createJouneyMutation(createJouneyDto);
+    final String readRepositories = createJourneyMutation(createJourneyDto);
     /////////////////////////////////////////
 
     print(readRepositories);
@@ -218,9 +218,9 @@ class JouneyRepository {
     );
   }
 
-  Future<ResponseDto> updateJouney(UpdateJouneyDto updateJouneyDto) async {
+  Future<ResponseDto> updateJourney(UpdateJourneyDto updateJourneyDto) async {
     ////////////////////////////////////////
-    final String readRepositories = updateJouneyMutation(updateJouneyDto);
+    final String readRepositories = updateJourneyMutation(updateJourneyDto);
     /////////////////////////////////////////
 
     print(readRepositories);

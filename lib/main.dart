@@ -6,7 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wru_fe/api/graphql/graphql.dart';
 
 import 'package:wru_fe/cubit/group/group_cubit.dart';
-import 'package:wru_fe/cubit/jouney/jouney_cubit.dart';
+import 'package:wru_fe/cubit/journey/journey_cubit.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/cubit/signin/signup_cubit.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
@@ -14,12 +14,12 @@ import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/hive_config.dart';
 import 'package:wru_fe/repositories/auth.repository.dart';
 import 'package:wru_fe/repositories/group.repository.dart';
-import 'package:wru_fe/repositories/jouney.repository.dart';
+import 'package:wru_fe/repositories/journey.repository.dart';
 import 'package:wru_fe/repositories/makers.repository.dart';
 import 'package:wru_fe/screens/group_details.screen.dart';
 import 'package:wru_fe/screens/home.screen.dart';
-import 'package:wru_fe/screens/jouney.screen.dart';
-import 'package:wru_fe/screens/jouney_details.screen.dart';
+import 'package:wru_fe/screens/journey.screen.dart';
+import 'package:wru_fe/screens/journey_details.screen.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/screens/signup.screen.dart';
 import 'package:wru_fe/screens/splash.screen.dart';
@@ -42,8 +42,8 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   final AuthRepository _authRepository = AuthRepository();
-  final JouneyRepository _jouneyRepository =
-      JouneyRepository(client: GraphQLUtil.client());
+  final JourneyRepository _journeyRepository =
+      JourneyRepository(client: GraphQLUtil.client());
   final GroupRepository _groupRepository =
       GroupRepository(client: GraphQLUtil.client());
   final MarkerRepository _markerRepository =
@@ -63,22 +63,22 @@ class MyApp extends StatelessWidget {
       BlocProvider<GroupCubit>(
         create: (BuildContext context) => GroupCubit(_groupRepository),
       ),
-      BlocProvider<JouneyCubit>(
-        create: (BuildContext context) => JouneyCubit(_jouneyRepository),
+      BlocProvider<JourneyCubit>(
+        create: (BuildContext context) => JourneyCubit(_journeyRepository),
       ),
-      BlocProvider<FetchJouneyByIdCubit>(
-        create: (BuildContext context) => FetchJouneyByIdCubit(
-          _jouneyRepository,
+      BlocProvider<FetchJourneyByIdCubit>(
+        create: (BuildContext context) => FetchJourneyByIdCubit(
+          _journeyRepository,
         ),
       ),
-      BlocProvider<UpdateJouneyCubit>(
-        create: (BuildContext context) => UpdateJouneyCubit(
-          _jouneyRepository,
+      BlocProvider<UpdateJourneyCubit>(
+        create: (BuildContext context) => UpdateJourneyCubit(
+          _journeyRepository,
         ),
       ),
-      BlocProvider<CreateJouneyCubit>(
-        create: (BuildContext context) => CreateJouneyCubit(
-          _jouneyRepository,
+      BlocProvider<CreateJourneyCubit>(
+        create: (BuildContext context) => CreateJourneyCubit(
+          _journeyRepository,
         ),
       ),
     ];
@@ -101,8 +101,8 @@ class MyApp extends StatelessWidget {
             SignInScreen.routeName: (_) => SignInScreen(),
             SignUpScreen.routeName: (_) => SignUpScreen(),
             SplashScreen.routeName: (_) => SplashScreen(),
-            JouneyScreen.routeName: (_) => JouneyScreen(),
-            JouneyDetailScreen.routeName: (_) => JouneyDetailScreen()
+            JourneyScreen.routeName: (_) => JourneyScreen(),
+            JourneyDetailScreen.routeName: (_) => JourneyDetailScreen()
           },
         ),
       ),

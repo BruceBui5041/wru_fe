@@ -2,22 +2,22 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wru_fe/global_constants.dart';
-import 'package:wru_fe/models/jouney.model.dart';
+import 'package:wru_fe/models/journey.model.dart';
 import 'package:wru_fe/utils.dart';
 import 'package:wru_fe/widgets/custom_cached_image.widget.dart';
 
-class JouneyItem extends StatelessWidget {
-  const JouneyItem({Key? key, required this.jouney, this.selected = false})
+class JourneyItem extends StatelessWidget {
+  const JourneyItem({Key? key, required this.journey, this.selected = false})
       : super(key: key);
 
-  final Jouney jouney;
+  final Journey journey;
   final bool selected;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final createdAt = DateFormat('MM/dd/yyyy, hh:mm a')
-        .format(DateTime.parse(jouney.createdAt ?? ""));
+        .format(DateTime.parse(journey.createdAt ?? ""));
 
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 3, 5, 5),
@@ -39,7 +39,7 @@ class JouneyItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          setValueToStore(LAST_SEEN_JOUNEY, jouney.uuid!);
+          setValueToStore(LAST_SEEN_JOURNEY, journey.uuid!);
           Navigator.of(context).pop();
         },
         child: Row(
@@ -50,11 +50,11 @@ class JouneyItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    jouney.name ?? "",
+                    journey.name ?? "",
                     style: textTheme.headline4,
                   ),
                   Text(
-                    jouney.description ?? "",
+                    journey.description ?? "",
                     style: textTheme.bodyText1,
                   ),
                   Text(
@@ -62,7 +62,7 @@ class JouneyItem extends StatelessWidget {
                     style: textTheme.subtitle1,
                   ),
                   Text(
-                    jouney.markerCount.toString(),
+                    journey.markerCount.toString(),
                     style: TextStyle(
                       fontSize: textTheme.headline3!.fontSize,
                     ),
@@ -80,7 +80,7 @@ class JouneyItem extends StatelessWidget {
                 child: SizedBox(
                   width: 110,
                   height: 80,
-                  child: CustomCachedImage(imageUrl: jouney.image),
+                  child: CustomCachedImage(imageUrl: journey.image),
                 ),
               ),
             )

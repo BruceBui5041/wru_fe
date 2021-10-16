@@ -3,4 +3,4 @@ enum EndDrawerComponentName {
   markers,
 }
 
-enum JouneyVisibility { private, public }
+enum JourneyVisibility { private, public }
