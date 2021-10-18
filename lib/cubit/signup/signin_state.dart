@@ -45,6 +45,7 @@ class Unauthorized
         MarkerState,
         FetchJourneyByIdState,
         CreateJourneyState,
-        UpdateJourneyState {
+        UpdateJourneyState,
+        UserState {
   const Unauthorized();
 }

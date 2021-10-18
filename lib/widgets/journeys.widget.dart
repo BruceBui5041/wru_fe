@@ -70,8 +70,9 @@ class _JourneyListState extends State<JourneyList> {
               () {
                 showModalBottomSheet(
                     context: context,
+                    isScrollControlled: true,
                     builder: (BuildContext context) {
-                      return ShareJourney(
+                      return ShareJouney(
                         selectedJourney: journey.uuid ?? "",
                       );
                     });

@@ -37,8 +37,8 @@ class LightTheme {
             color: _colorMain, fontSize: 25, fontWeight: FontWeight.bold),
         bodyText1: const TextStyle(fontSize: 11),
         bodyText2: const TextStyle(fontSize: 14),
-        subtitle1: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic),
-        subtitle2: const TextStyle(fontSize: 9, fontStyle: FontStyle.italic),
+        subtitle1: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+        subtitle2: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic),
       ),
       floatingActionButtonTheme:
           FloatingActionButtonThemeData(backgroundColor: _colorMain));

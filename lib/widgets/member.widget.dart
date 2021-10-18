@@ -24,7 +24,7 @@ class MemberWidget extends StatelessWidget {
               child: member.profile == null
                   ? const Text("Img")
                   : Image.network(
-                      member.profile!.avatarUrl.toString(),
+                      member.profile!.image.toString(),
                       fit: BoxFit.cover,
                     ),
             ),

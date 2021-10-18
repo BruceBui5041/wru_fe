@@ -10,12 +10,14 @@ import 'package:wru_fe/cubit/journey/journey_cubit.dart';
 import 'package:wru_fe/cubit/marker/marker_cubit.dart';
 import 'package:wru_fe/cubit/signin/signup_cubit.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
+import 'package:wru_fe/cubit/user/user_cubit.dart';
 import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/hive_config.dart';
 import 'package:wru_fe/repositories/auth.repository.dart';
 import 'package:wru_fe/repositories/group.repository.dart';
 import 'package:wru_fe/repositories/journey.repository.dart';
 import 'package:wru_fe/repositories/makers.repository.dart';
+import 'package:wru_fe/repositories/user.repository.dart';
 import 'package:wru_fe/screens/group_details.screen.dart';
 import 'package:wru_fe/screens/home.screen.dart';
 import 'package:wru_fe/screens/journey.screen.dart';
@@ -48,6 +50,8 @@ class MyApp extends StatelessWidget {
       GroupRepository(client: GraphQLUtil.client());
   final MarkerRepository _markerRepository =
       MarkerRepository(client: GraphQLUtil.client());
+  final UserRepository _userRepository =
+      UserRepository(client: GraphQLUtil.client());
 
   List<BlocProvider> providers() {
     return [
@@ -80,6 +84,9 @@ class MyApp extends StatelessWidget {
         create: (BuildContext context) => CreateJourneyCubit(
           _journeyRepository,
         ),
+      ),
+      BlocProvider<UserCubit>(
+        create: (BuildContext context) => UserCubit(_userRepository),
       ),
     ];
   }
