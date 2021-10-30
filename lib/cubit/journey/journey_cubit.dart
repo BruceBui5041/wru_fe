@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
@@ -6,11 +7,14 @@ import 'package:wru_fe/dto/create_group.dto.dart';
 import 'package:wru_fe/dto/create_jouney.dto.dart';
 import 'package:wru_fe/dto/fetch_journey.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';
+import 'package:wru_fe/dto/share_journey.dto.dart';
 import 'package:wru_fe/dto/update_journey.dto.dart';
+import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/journey.model.dart';
+import 'package:wru_fe/models/shared_journey.model.dart';
 import 'package:wru_fe/repositories/journey.repository.dart';
 
-part 'jouney_state.dart';
+part 'journey_state.dart';
 
 class JourneyCubit extends Cubit<JourneyState> {
   JourneyCubit(this.journeyRepository) : super(const JourneyInitial());
@@ -30,7 +34,7 @@ class JourneyCubit extends Cubit<JourneyState> {
       ));
 
       if (res.errorCode == 401) {
-        emit(const Unauthorized());
+        getIt<SignInCubit>().emit(const Unauthorized());
       }
 
       return;
@@ -69,7 +73,7 @@ class FetchJourneyByIdCubit extends Cubit<FetchJourneyByIdState> {
       ));
 
       if (res.errorCode == 401) {
-        emit(const Unauthorized());
+        getIt<SignInCubit>().emit(const Unauthorized());
       }
 
       return null;
@@ -104,7 +108,7 @@ class CreateJourneyCubit extends Cubit<CreateJourneyState> {
       ));
 
       if (res.errorCode == 401) {
-        emit(const Unauthorized());
+        getIt<SignInCubit>().emit(const Unauthorized());
       }
 
       return null;
@@ -138,7 +142,7 @@ class UpdateJourneyCubit extends Cubit<UpdateJourneyState> {
       ));
 
       if (res.errorCode == 401) {
-        emit(const Unauthorized());
+        getIt<SignInCubit>().emit(const Unauthorized());
       }
 
       return null;
@@ -150,5 +154,39 @@ class UpdateJourneyCubit extends Cubit<UpdateJourneyState> {
 
     emit(UpdateJourneySuccessed(journey: journey));
     return journey;
+  }
+}
+
+class ShareJourneyCubit extends Cubit<ShareJourneyState> {
+  ShareJourneyCubit(this.journeyRepository)
+      : super(const ShareJourneyInitial());
+
+  final JourneyRepository journeyRepository;
+
+  Future<SharedJourney?> shareJourney(ShareJourneyDto shareJourneyDto) async {
+    emit(const ShareJourney());
+
+    final ResponseDto res =
+        await journeyRepository.shareJourney(shareJourneyDto);
+
+    if (res.errorCode != null) {
+      emit(ShareJourneyFailed(
+        error: res.errorCode.toString(),
+        message: res.message.toString(),
+      ));
+
+      if (res.errorCode == 401) {
+        getIt<SignInCubit>().emit(const Unauthorized());
+      }
+
+      return null;
+    }
+
+    final dynamic journeyJson = res.result['shareJouney'] as dynamic;
+    final SharedJourney sharedJourney =
+        SharedJourney.fromJson(journeyJson as Map<String, dynamic>);
+
+    emit(ShareJourneySuccessed(sharedJourney: sharedJourney));
+    return sharedJourney;
   }
 }

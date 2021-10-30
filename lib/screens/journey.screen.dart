@@ -96,8 +96,6 @@ class _JourneyScreenState extends State<JourneyScreen> {
     double lat = userLocation.latitude;
     double lng = userLocation.longitude;
 
-    print("abcd $lat  $lng");
-
     var userPinIcon = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(
         size: Size(48, 48),
@@ -238,11 +236,7 @@ class _JourneyScreenState extends State<JourneyScreen> {
     var allMarker = _getAllMarker();
 
     return BlocConsumer<MarkerCubit, MarkerState>(
-      listener: (context, state) {
-        if (state is Unauthorized) {
-          Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
           body: Stack(

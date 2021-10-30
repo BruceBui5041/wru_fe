@@ -2,6 +2,7 @@ import 'package:graphql/client.dart';
 import 'package:wru_fe/dto/create_jouney.dto.dart';
 import 'package:wru_fe/dto/fetch_journey.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';
+import 'package:wru_fe/dto/share_journey.dto.dart';
 import 'package:wru_fe/dto/update_journey.dto.dart';
 import 'package:wru_fe/utils.dart';
 
@@ -116,6 +117,43 @@ class JourneyRepository {
       ''';
   }
 
+  String shareJourneyMutation(ShareJourneyDto shareJourneyDto) {
+    return '''
+      mutation {
+        shareJouney(
+            jouneyId: "${shareJourneyDto.jouneyId}",
+            userSharedName: "${shareJourneyDto.userSharedName}"
+        ) {
+            uuid
+            jouney {
+              uuid
+              name
+            }
+            
+            jouneyOwner {
+              uuid
+              username
+              email
+              profile {
+                uuid
+                image
+              }
+            }
+            
+            sharedUser {
+              uuid
+              username
+              email
+              profile {
+                uuid
+                image
+              }
+            }
+          }
+        }
+      ''';
+  }
+
   Future<ResponseDto> fetchJourney(FetchJourneyDto? fetchJourneyDto) async {
     ////////////////////////////////////////
     final String readRepositories = fetchJourneyQuery(fetchJourneyDto);
@@ -221,6 +259,33 @@ class JourneyRepository {
   Future<ResponseDto> updateJourney(UpdateJourneyDto updateJourneyDto) async {
     ////////////////////////////////////////
     final String readRepositories = updateJourneyMutation(updateJourneyDto);
+    /////////////////////////////////////////
+
+    print(readRepositories);
+
+    final MutationOptions options =
+        MutationOptions(document: gql(readRepositories));
+
+    final QueryResult result = await client.mutate(options);
+
+    if (result.hasException) {
+      return ResponseDto(
+        errorCode: result.exception?.graphqlErrors[0].extensions?.entries
+            .toList()[1]
+            .value["statusCode"],
+        message: result.exception?.graphqlErrors[0].message,
+        result: result.data,
+      );
+    }
+
+    return ResponseDto(
+      result: result.data,
+    );
+  }
+
+  Future<ResponseDto> shareJourney(ShareJourneyDto shareJourneyDto) async {
+    ////////////////////////////////////////
+    final String readRepositories = shareJourneyMutation(shareJourneyDto);
     /////////////////////////////////////////
 
     print(readRepositories);

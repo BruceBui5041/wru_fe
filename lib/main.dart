@@ -38,12 +38,17 @@ Future<void> main() async {
 
   await getIt<HiveConfig>().initHive();
 
+  getIt.registerSingleton<AuthRepository>(AuthRepository(), signalsReady: true);
+
+  getIt.registerSingleton<SignInCubit>(
+    SignInCubit(getIt<AuthRepository>()),
+  );
+
   print(API_URL);
   return runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final AuthRepository _authRepository = AuthRepository();
   final JourneyRepository _journeyRepository =
       JourneyRepository(client: GraphQLUtil.client());
   final GroupRepository _groupRepository =
@@ -59,10 +64,10 @@ class MyApp extends StatelessWidget {
         create: (BuildContext context) => MarkerCubit(_markerRepository),
       ),
       BlocProvider<SignInCubit>(
-        create: (BuildContext context) => SignInCubit(_authRepository),
+        create: (BuildContext context) => getIt<SignInCubit>(),
       ),
       BlocProvider<SignUpCubit>(
-        create: (BuildContext context) => SignUpCubit(_authRepository),
+        create: (BuildContext context) => SignUpCubit(getIt<AuthRepository>()),
       ),
       BlocProvider<GroupCubit>(
         create: (BuildContext context) => GroupCubit(_groupRepository),
@@ -85,6 +90,11 @@ class MyApp extends StatelessWidget {
           _journeyRepository,
         ),
       ),
+      BlocProvider<ShareJourneyCubit>(
+        create: (BuildContext context) => ShareJourneyCubit(
+          _journeyRepository,
+        ),
+      ),
       BlocProvider<UserCubit>(
         create: (BuildContext context) => UserCubit(_userRepository),
       ),
@@ -94,7 +104,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: _authRepository,
+      value: getIt<AuthRepository>(),
       child: MultiBlocProvider(
         providers: providers(),
         child: MaterialApp(

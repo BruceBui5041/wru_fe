@@ -95,3 +95,27 @@ class UpdateJourneyFailed extends UpdateJourneyState {
   final String? error;
   final String? message;
 }
+
+@immutable
+abstract class ShareJourneyState {
+  const ShareJourneyState();
+}
+
+class ShareJourneyInitial extends ShareJourneyState {
+  const ShareJourneyInitial();
+}
+
+class ShareJourney extends ShareJourneyState {
+  const ShareJourney();
+}
+
+class ShareJourneySuccessed extends ShareJourneyState {
+  const ShareJourneySuccessed({required this.sharedJourney});
+  final SharedJourney sharedJourney;
+}
+
+class ShareJourneyFailed extends ShareJourneyState {
+  const ShareJourneyFailed({this.error, this.message});
+  final String? error;
+  final String? message;
+}

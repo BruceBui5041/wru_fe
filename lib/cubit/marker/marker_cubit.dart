@@ -4,6 +4,7 @@ import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/dto/create_marker.dto.dart';
 import 'package:wru_fe/dto/fetch_marker.dto.dart';
 import 'package:wru_fe/dto/response.dto.dart';
+import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/marker.model.dart';
 import 'package:wru_fe/repositories/makers.repository.dart';
 
@@ -26,7 +27,7 @@ class MarkerCubit extends Cubit<MarkerState> {
       ));
 
       if (res.errorCode == 401) {
-        emit(const Unauthorized());
+        getIt<SignInCubit>().emit(const Unauthorized());
       }
 
       return;
@@ -58,7 +59,7 @@ class MarkerCubit extends Cubit<MarkerState> {
       ));
 
       if (res.errorCode == 401) {
-        emit(const Unauthorized());
+        getIt<SignInCubit>().emit(const Unauthorized());
       }
 
       return;

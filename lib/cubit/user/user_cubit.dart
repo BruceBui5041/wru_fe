@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/dto/response.dto.dart';
+import 'package:wru_fe/global_constants.dart';
 import 'package:wru_fe/models/user.model.dart';
 import 'package:wru_fe/repositories/user.repository.dart';
 
@@ -24,7 +25,7 @@ class UserCubit extends Cubit<UserState> {
       ));
 
       if (res.errorCode == 401) {
-        emit(const Unauthorized());
+        getIt<SignInCubit>().emit(const Unauthorized());
       }
 
       return;

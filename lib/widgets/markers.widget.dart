@@ -88,11 +88,7 @@ class _MarkerListState extends State<MarkerList> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MarkerCubit, MarkerState>(
-      listener: (context, state) {
-        if (state is Unauthorized) {
-          Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         if (state is FetchMarkersSuccessed) {
           return _generateJourneyListWidget(

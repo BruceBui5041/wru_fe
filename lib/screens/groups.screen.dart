@@ -49,11 +49,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
     final textTheme = theme.textTheme;
 
     return BlocConsumer<GroupCubit, GroupState>(
-      listener: (context, state) {
-        // if (state is Unauthorized) {
-        //   Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
-        // }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
           body: Container(

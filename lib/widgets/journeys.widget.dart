@@ -14,7 +14,7 @@ import 'package:wru_fe/screens/journey_details.screen.dart';
 import 'package:wru_fe/screens/signin.screen.dart';
 import 'package:wru_fe/utils.dart';
 import 'package:wru_fe/widgets/journey.widget.dart';
-import 'package:wru_fe/widgets/share_journey.widget.dart';
+import 'package:wru_fe/widgets/search_user_bottom_sheet.widget.dart';
 
 class JourneyList extends StatefulWidget {
   const JourneyList({
@@ -72,8 +72,8 @@ class _JourneyListState extends State<JourneyList> {
                     context: context,
                     isScrollControlled: true,
                     builder: (BuildContext context) {
-                      return ShareJouney(
-                        selectedJourney: journey.uuid ?? "",
+                      return SearchUserBottomSheet(
+                        selectedJourney: journey,
                       );
                     });
               },
@@ -130,8 +130,15 @@ class _JourneyListState extends State<JourneyList> {
 
     return BlocConsumer<JourneyCubit, JourneyState>(
       listener: (context, state) {
-        if (state is Unauthorized) {
-          Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
+        if (state is FetchJourneysFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                state.message!,
+                style: const TextStyle(color: Colors.red),
+              ),
+            ),
+          );
         }
       },
       builder: (context, state) {

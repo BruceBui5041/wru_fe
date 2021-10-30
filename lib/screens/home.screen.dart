@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:wru_fe/cubit/signup/signin_cubit.dart';
 import 'package:wru_fe/screens/journey.screen.dart';
+import 'package:wru_fe/screens/signin.screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -50,8 +53,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: BlocListener<SignInCubit, SignInState>(
+        listener: (context, state) {
+          if (state is Unauthorized) {
+            Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
+          }
+        },
+        child: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

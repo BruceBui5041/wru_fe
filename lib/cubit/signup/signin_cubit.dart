@@ -34,6 +34,7 @@ class SignInCubit extends Cubit<SignInState> {
 
     assert(resDto.result != null);
     emit(const SignedIn());
-    _authRepository.saveAccessToken(resDto.result.toString());
+    _authRepository.saveAccessToken(resDto.result[AuthRepository.tokenKey]);
+    _authRepository.saveUserName(resDto.result[AuthRepository.usernameKey]);
   }
 }

@@ -33,10 +33,9 @@ class AuthRepository {
           json.decode(res.body) as Map<String, dynamic>;
 
       return ResponseDto(
-        errorCode: resJSON[errorKey],
-        message: resJSON[messageKey],
-        result: resJSON[tokenKey] as String,
-      );
+          errorCode: resJSON[errorKey],
+          message: resJSON[messageKey],
+          result: resJSON);
     } catch (err) {
       rethrow;
     }
@@ -91,5 +90,9 @@ class AuthRepository {
   void saveAccessToken(String accessToken) {
     assert(accessToken.isEmpty == false);
     setValueToStore(tokenKey, accessToken);
+  }
+
+  void saveUserName(String username) {
+    setValueToStore(usernameKey, username);
   }
 }

@@ -130,6 +130,7 @@ class _JourneyDetailScreenState extends State<JourneyDetailScreen> {
   void _updateData(Journey? newJourney) {
     _nameController.text = newJourney!.name ?? "";
     _descriptionController.text = newJourney.description ?? "";
+
     setState(() {
       journey = newJourney;
 
@@ -163,8 +164,6 @@ class _JourneyDetailScreenState extends State<JourneyDetailScreen> {
       listener: (context, state) {
         if (state is FetchJourneyByIdSuccessed) {
           _updateData(state.journey);
-        } else if (state is Unauthorized) {
-          Navigator.of(context).pushReplacementNamed(SignInScreen.routeName);
         }
       },
       child: Scaffold(

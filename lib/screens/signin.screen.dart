@@ -20,7 +20,6 @@ class SignInScreen extends StatelessWidget {
       username: _usernameController.text,
       password: _passwordController.text,
     );
-
     context.read<SignInCubit>().signIn(signInDto);
   }
 
@@ -75,10 +74,12 @@ class SignInScreen extends StatelessWidget {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 20),
-                                          child: Text("Login Account",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5),
+                                          child: Text(
+                                            "Login Account",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5,
+                                          ),
                                         ),
                                         FormFieldCustomWidget(
                                           labelText: "Email",
@@ -102,13 +103,17 @@ class SignInScreen extends StatelessWidget {
                                         ),
                                         ButtonLongCustomWidget(
                                           label: "Login",
-                                          onPressed: () {},
-                                        ),
-                                        ButtonLongCustomWidget(
-                                          label: "Login with guess",
                                           onPressed: () {
                                             _submitForm(context);
                                           },
+                                        ),
+                                        ButtonLongCustomWidget(
+                                          label: "Facebook",
+                                          onPressed: () {},
+                                        ),
+                                        ButtonLongCustomWidget(
+                                          label: "Google",
+                                          onPressed: () {},
                                         ),
                                         const Divider(
                                           height: 20,

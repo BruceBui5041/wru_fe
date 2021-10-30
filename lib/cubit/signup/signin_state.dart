@@ -38,7 +38,7 @@ class SignInFail extends SignInState {
   int get hashCode => message.hashCode;
 }
 
-class Unauthorized
+class Unauthorized extends SignInState
     implements
         GroupState,
         JourneyState,
@@ -46,6 +46,7 @@ class Unauthorized
         FetchJourneyByIdState,
         CreateJourneyState,
         UpdateJourneyState,
-        UserState {
+        UserState,
+        ShareJourneyState {
   const Unauthorized();
 }
