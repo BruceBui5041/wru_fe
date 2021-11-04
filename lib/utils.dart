@@ -28,6 +28,14 @@ void setValueToStore(String key, dynamic value) {
   }
 }
 
+Future<int> clearAllDataInStore() {
+  var hiveConfig = getIt<HiveConfig>();
+  if (hiveConfig.storeBox != null) {
+    return hiveConfig.storeBox!.clear();
+  }
+  return Future.value(0);
+}
+
 Future<bool> checkUserLocationPermission() async {
   bool serviceEnabled;
   LocationPermission permission;

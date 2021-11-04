@@ -7,6 +7,8 @@ final Uri SIGNUP_API = Uri.parse('${API_URL!}/auth/signup');
 // ignore: non_constant_identifier_names
 final Uri SIGNIN_API = Uri.parse('${API_URL!}/auth/signin');
 // ignore: non_constant_identifier_names
+final Uri LOGOUT_API = Uri.parse('${API_URL!}/auth/logout');
+// ignore: non_constant_identifier_names
 final Uri VERIFY_TOKEN = Uri.parse('${API_URL!}/auth/verify_token');
 // ignore: non_constant_identifier_names
 final String GRAPHQL_API = '${API_URL!}/graphql';

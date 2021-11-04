@@ -128,16 +128,16 @@ class _JourneyDetailScreenState extends State<JourneyDetailScreen> {
   }
 
   void _updateData(Journey? newJourney) {
-    _nameController.text = newJourney!.name ?? "";
-    _descriptionController.text = newJourney.description ?? "";
+    _nameController.text = newJourney?.name ?? "";
+    _descriptionController.text = newJourney?.description ?? "";
 
     setState(() {
       journey = newJourney;
 
-      visibilityValue = newJourney.visibility == JourneyVisibility.private
+      visibilityValue = newJourney?.visibility == JourneyVisibility.private
           ? "Private"
           : "Public";
-      uploadedFileName = newJourney.imageName;
+      uploadedFileName = newJourney?.imageName;
     });
   }
 

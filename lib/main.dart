@@ -101,6 +101,20 @@ class MyApp extends StatelessWidget {
     ];
   }
 
+  Widget _authRoute(BuildContext context, Widget screen) {
+    return BlocListener<SignInCubit, SignInState>(
+      listener: (context, state) {
+        if (state is Unauthorized) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            SignInScreen.routeName,
+            (route) => false,
+          );
+        }
+      },
+      child: screen,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
@@ -113,13 +127,15 @@ class MyApp extends StatelessWidget {
           theme: LightTheme.themeLight,
           home: SplashScreen(),
           routes: {
-            HomeScreen.routeName: (_) => const HomeScreen(),
+            HomeScreen.routeName: (context) =>
+                _authRoute(context, const HomeScreen()),
             GroupDetailsScreen.routeName: (_) => GroupDetailsScreen(),
             SignInScreen.routeName: (_) => SignInScreen(),
             SignUpScreen.routeName: (_) => SignUpScreen(),
             SplashScreen.routeName: (_) => SplashScreen(),
             JourneyScreen.routeName: (_) => JourneyScreen(),
-            JourneyDetailScreen.routeName: (_) => JourneyDetailScreen()
+            JourneyDetailScreen.routeName: (context) =>
+                _authRoute(context, JourneyDetailScreen())
           },
         ),
       ),

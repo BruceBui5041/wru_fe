@@ -19,6 +19,26 @@ class AuthRepository {
   static const String confirmPassworkKey = 'confirmPassword';
   static const String statusCodeKey = 'statusCode';
 
+  Future<String> callLogoutApi() async {
+    try {
+      final String accessToken = getStoredAccessToken();
+      final String res = await postRequest(
+        url: LOGOUT_API,
+        body: {},
+        jwtToken: accessToken,
+      ).then((value) {
+        clearAllDataInStore();
+        return Future.value("Logout Successfully!");
+      }).onError((error, stackTrace) {
+        return Future.value(error.toString());
+      });
+
+      return res;
+    } catch (err) {
+      rethrow;
+    }
+  }
+
   Future<ResponseDto> callSignInApi(SignInDto signInDto) async {
     try {
       final Response res = await publicPostRequest(
@@ -33,9 +53,10 @@ class AuthRepository {
           json.decode(res.body) as Map<String, dynamic>;
 
       return ResponseDto(
-          errorCode: resJSON[errorKey],
-          message: resJSON[messageKey],
-          result: resJSON);
+        errorCode: resJSON[errorKey],
+        message: resJSON[messageKey],
+        result: resJSON,
+      );
     } catch (err) {
       rethrow;
     }

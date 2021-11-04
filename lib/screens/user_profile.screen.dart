@@ -1,97 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wru_fe/cubit/group/group_cubit.dart';
-import 'package:wru_fe/dto/fetch_group.dto.dart';
-import 'package:wru_fe/screens/home.screen.dart';
+import 'package:wru_fe/api/api.dart';
+import 'package:wru_fe/global_constants.dart';
+import 'package:wru_fe/repositories/auth.repository.dart';
+import 'package:wru_fe/screens/signin.screen.dart';
 
-class GroupDetailsScreen extends StatefulWidget {
-  const GroupDetailsScreen({Key? key}) : super(key: key);
-  static const String routeName = "/group-details-screen";
+class UserProfileScreen extends StatefulWidget {
+  const UserProfileScreen({Key? key}) : super(key: key);
+
   @override
-  _GroupDetailsScreenState createState() => _GroupDetailsScreenState();
+  _UserProfileState createState() => _UserProfileState();
 }
 
-class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    String? groupId = ModalRoute.of(context)?.settings.arguments.toString();
-    context
-        .read<GroupCubit>()
-        .fetchSelectedGroup(FetchGroupDto(own: true, ids: [groupId]));
-    super.didChangeDependencies();
+class _UserProfileState extends State<UserProfileScreen> {
+  void _logout(BuildContext context) {
+    getIt<AuthRepository>().callLogoutApi().then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(value)),
+      );
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        SignInScreen.routeName,
+        (route) => false,
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Group'),
-        leading: GestureDetector(
-            onTap: () {
-              Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
-            },
-            child: const Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            )),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
+    return Center(
+      child: TextButton(
+        child: Text(
+          "Logout",
+          style: Theme.of(context).textTheme.headline4,
+        ),
         onPressed: () {
-          showBottomSheet<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return const SizedBox();
-            },
-          );
-        },
-        label: const Text('Add Member'),
-        icon: const Icon(Icons.add),
-        backgroundColor: Theme.of(context).accentColor,
-      ),
-      body: BlocConsumer<GroupCubit, GroupState>(
-        listener: (context, state) {
-          if (state is FetchSelectedGroup) {
-          } else if (state is FetchSelectedGroupSuccessed) {}
-        },
-        builder: (context, state) {
-          if (state is FetchSelectedGroupSuccessed) {
-            return Stack(
-              clipBehavior: Clip.none,
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.25,
-                  child: state.group.groupImageUrl != null
-                      ? Image.network(
-                          state.group.groupImageUrl.toString(),
-                          fit: BoxFit.fill,
-                        )
-                      : const Text("No Image"),
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: -50,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        width: 70,
-                        height: 70,
-                        child: const Icon(Icons.person),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          }
-          return const Text("Loading .....");
+          _logout(context);
         },
       ),
     );
